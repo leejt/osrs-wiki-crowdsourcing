@@ -3,6 +3,7 @@ package com.Crowdsourcing;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
 
+import com.Crowdsourcing.cooking.CrowdsourcingCooking;
 import lombok.extern.slf4j.Slf4j;
 
 import net.runelite.client.eventbus.EventBus;

@@ -1,4 +1,4 @@
-package com.Crowdsourcing;
+package com.Crowdsourcing.cooking;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;

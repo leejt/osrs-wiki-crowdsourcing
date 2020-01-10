@@ -1,7 +1,8 @@
-package com.Crowdsourcing;
+package com.Crowdsourcing.cooking;
 
 import javax.inject.Inject;
 
+import com.Crowdsourcing.CrowdsourcingManager;
 import net.runelite.api.AnimationID;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
