@@ -10,8 +10,6 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.task.Schedule;
 
-import com.Crowdsourcing.cooking.CrowdsourcingCooking;
-
 @Slf4j
 @PluginDescriptor(
 		name = "OSRS Wiki Crowdsourcing",

@@ -1,4 +1,4 @@
-package com.Crowdsourcing.cooking;
+package com.Crowdsourcing;
 
 import javax.inject.Inject;
 
@@ -15,8 +15,6 @@ import net.runelite.api.ItemID;
 import net.runelite.api.Player;
 import net.runelite.api.Skill;
 import net.runelite.api.Varbits;
-
-import com.Crowdsourcing.CrowdsourcingManager;
 
 
 import net.runelite.client.eventbus.Subscribe;
