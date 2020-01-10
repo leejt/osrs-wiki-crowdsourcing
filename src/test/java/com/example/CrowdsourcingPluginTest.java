@@ -4,7 +4,7 @@ import com.Crowdsourcing.CrowdsourcingPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
-public class OsrsWikiCrowdsourcingPluginTest
+public class CrowdsourcingPluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
