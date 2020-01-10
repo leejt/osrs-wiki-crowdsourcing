@@ -1,4 +1,4 @@
-package com.example;
+package com.Crowdsourcing;
 
 import com.Crowdsourcing.CrowdsourcingPlugin;
 import net.runelite.client.RuneLite;
