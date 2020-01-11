@@ -10,6 +10,6 @@ public class CrowdsourcingCookingData {
     private final boolean hasCookingGauntlets;
     private final boolean inHosidiusKitchen;
     private final boolean kourendElite;
-    private final String animation;
+    private final int lastGameObjectClicked;
     private final int level;
 }
