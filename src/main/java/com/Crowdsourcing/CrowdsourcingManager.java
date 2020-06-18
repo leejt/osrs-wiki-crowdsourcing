@@ -41,48 +41,52 @@ import okhttp3.Response;
 
 @Slf4j
 @Singleton
-public class CrowdsourcingManager {
+public class CrowdsourcingManager
+{
 
-    private static final String CROWDSOURCING_BASE = "https://crowdsource.runescape.wiki/runelite";
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static final Gson GSON = new Gson();
-    private static final OkHttpClient CLIENT = new OkHttpClient.Builder()
-            .pingInterval(30, TimeUnit.SECONDS)
-            .build();
+	private static final String CROWDSOURCING_BASE = "https://crowdsource.runescape.wiki/runelite";
+	private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+	private static final Gson GSON = new Gson();
+	private static final OkHttpClient CLIENT = new OkHttpClient.Builder()
+		.pingInterval(30, TimeUnit.SECONDS)
+		.build();
 
-    private List<Object> data = new ArrayList<>();
+	private List<Object> data = new ArrayList<>();
 
-    public void storeEvent(Object event) {
-        data.add(event);
-    }
+	public void storeEvent(Object event)
+	{
+		data.add(event);
+	}
 
-    protected void submitToAPI() {
-        if (data.isEmpty()) {
-            return;
-        }
+	protected void submitToAPI()
+	{
+		if (data.isEmpty())
+		{
+			return;
+		}
 
-        Request r = new Request.Builder()
-                .url(CROWDSOURCING_BASE)
-                .post(RequestBody.create(JSON, GSON.toJson(this.data)))
-                .build();
+		Request r = new Request.Builder()
+			.url(CROWDSOURCING_BASE)
+			.post(RequestBody.create(JSON, GSON.toJson(this.data)))
+			.build();
 
-        data.clear();
+		data.clear();
 
-        try (Response response = CLIENT.newCall(r).execute())
-        {
-            if (response.isSuccessful())
-            {
-                log.info("Successfully sent crowdsourcing data");
-            }
-            else
-            {
-                log.debug("Error sending crowdsourcing data");
-                log.debug(response.body().toString());
-            }
-        }
-        catch (IOException e)
-        {
-            log.debug("IOException: {}", e.getMessage());
-        }
-    }
+		try (Response response = CLIENT.newCall(r).execute())
+		{
+			if (response.isSuccessful())
+			{
+				log.info("Successfully sent crowdsourcing data");
+			}
+			else
+			{
+				log.debug("Error sending crowdsourcing data");
+				log.debug(response.body().toString());
+			}
+		}
+		catch (IOException e)
+		{
+			log.debug("IOException: {}", e.getMessage());
+		}
+	}
 }

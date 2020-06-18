@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class CrowdsourcingCookingData {
+public class CookingData
+{
     private final String message;
     private final boolean hasCookingGauntlets;
     private final boolean inHosidiusKitchen;
