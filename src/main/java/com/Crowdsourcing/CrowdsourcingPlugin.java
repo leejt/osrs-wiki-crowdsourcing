@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
 
 import com.Crowdsourcing.cooking.CrowdsourcingCooking;
+import com.Crowdsourcing.zmi.CrowdsourcingZMI;
 import lombok.extern.slf4j.Slf4j;
 
 import net.runelite.client.eventbus.EventBus;
@@ -51,6 +52,9 @@ public class CrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingWoodcutting woodcutting;
 
+	@Inject
+	private CrowdsourcingZMI zmi;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -59,6 +63,7 @@ public class CrowdsourcingPlugin extends Plugin
 		eventBus.register(movement);
 		eventBus.register(music);
 		eventBus.register(woodcutting);
+		eventBus.register(zmi);
 	}
 
 	@Override
@@ -69,6 +74,7 @@ public class CrowdsourcingPlugin extends Plugin
 		eventBus.unregister(movement);
 		eventBus.unregister(music);
 		eventBus.unregister(woodcutting);
+		eventBus.unregister(zmi);
 	}
 
 	@Schedule(
