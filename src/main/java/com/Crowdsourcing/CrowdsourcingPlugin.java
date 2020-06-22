@@ -26,10 +26,7 @@ public class CrowdsourcingPlugin extends Plugin
 	// Number of seconds to wait between trying to send data to the wiki.
 	// NOTE: I wanted to make this a config entry but annotation parameters
 	// need to be compile time constants.
-	// I will either completely change the approach (stop using @Schedule) or
-	// massively raise the time (~300 or 600 seconds) before making it widely
-	// available. The current low value is for further testing from wiki editors.
-	private static final int SECONDS_BETWEEN_UPLOADS = 60;
+	private static final int SECONDS_BETWEEN_UPLOADS = 300;
 
 	@Inject
 	private EventBus eventBus;
