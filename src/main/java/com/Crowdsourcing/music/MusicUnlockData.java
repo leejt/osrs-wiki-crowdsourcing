@@ -9,5 +9,6 @@ import net.runelite.api.coords.WorldPoint;
 public class MusicUnlockData
 {
 	private final WorldPoint location;
+	private final boolean isInInstance;
 	private final String message;
 }
