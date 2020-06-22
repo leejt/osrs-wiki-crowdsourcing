@@ -3,8 +3,10 @@ package com.Crowdsourcing.movement;
 import com.Crowdsourcing.CrowdsourcingManager;
 import javax.inject.Inject;
 import net.runelite.api.Client;
+import net.runelite.api.MenuAction;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.eventbus.Subscribe;
 
 public class CrowdsourcingMovement
@@ -18,6 +20,17 @@ public class CrowdsourcingMovement
 	private WorldPoint lastPoint;
 	private int ticksStill;
 	private boolean lastIsInInstance;
+	private MenuOptionClicked lastClick;
+
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked menuOptionClicked)
+	{
+		if (menuOptionClicked.getMenuAction() != MenuAction.WALK
+			&& !menuOptionClicked.getMenuOption().equals("Message"))
+		{
+			lastClick = menuOptionClicked;
+		}
+	}
 
 	@Subscribe
 	public void onGameTick(GameTick tick)
@@ -29,7 +42,7 @@ public class CrowdsourcingMovement
 			int distance = nextPoint.distanceTo(lastPoint);
 			if (distance > 2 || nextIsInInstance != lastIsInInstance)
 			{
-				MovementData data = new MovementData(lastPoint, nextPoint, lastIsInInstance, nextIsInInstance, ticksStill);
+				MovementData data = new MovementData(lastPoint, nextPoint, lastIsInInstance, nextIsInInstance, ticksStill, lastClick);
 				manager.storeEvent(data);
 			}
 			if (distance > 0)
