@@ -35,7 +35,8 @@ public class CrowdsourcingMovement
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
-		WorldPoint nextPoint = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
+		LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+		WorldPoint nextPoint = WorldPoint.fromLocalInstance(client, local);
 		boolean nextIsInInstance = client.isInInstancedRegion();
 		if (lastPoint != null)
 		{
