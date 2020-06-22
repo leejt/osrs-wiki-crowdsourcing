@@ -17,17 +17,19 @@ public class CrowdsourcingMovement
 
 	private WorldPoint lastPoint;
 	private int ticksStill;
+	private boolean lastIsInInstance;
 
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
-		WorldPoint nextPoint = client.getLocalPlayer().getWorldLocation();
+		WorldPoint nextPoint = WorldPoint.fromLocalInstance(client, client.getLocalPlayer().getLocalLocation());
+		boolean nextIsInInstance = client.isInInstancedRegion();
 		if (lastPoint != null)
 		{
 			int distance = nextPoint.distanceTo(lastPoint);
-			if (distance > 2)
+			if (distance > 2 || nextIsInInstance != lastIsInInstance)
 			{
-				MovementData data = new MovementData(lastPoint, nextPoint, ticksStill);
+				MovementData data = new MovementData(lastPoint, nextPoint, lastIsInInstance, nextIsInInstance, ticksStill);
 				manager.storeEvent(data);
 			}
 			if (distance > 0)
@@ -37,5 +39,6 @@ public class CrowdsourcingMovement
 		}
 		ticksStill++;
 		lastPoint = nextPoint;
+		lastIsInInstance = nextIsInInstance;
 	}
 }

@@ -10,5 +10,7 @@ public class MovementData
 {
 	private final WorldPoint start;
 	private final WorldPoint end;
+	private final boolean fromInstance;
+	private final boolean toInstance;
 	private final int ticks;
 }
