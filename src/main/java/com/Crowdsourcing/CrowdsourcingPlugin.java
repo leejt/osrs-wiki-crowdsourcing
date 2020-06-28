@@ -3,6 +3,7 @@ package com.Crowdsourcing;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.movement.CrowdsourcingMovement;
 import com.Crowdsourcing.music.CrowdsourcingMusic;
+import com.Crowdsourcing.thieving.CrowdsourcingThieving;
 import com.Crowdsourcing.woodcutting.CrowdsourcingWoodcutting;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
@@ -47,6 +48,9 @@ public class CrowdsourcingPlugin extends Plugin
 	private CrowdsourcingMusic music;
 
 	@Inject
+	private CrowdsourcingThieving thieving;
+
+	@Inject
 	private CrowdsourcingWoodcutting woodcutting;
 
 	@Inject
@@ -59,6 +63,7 @@ public class CrowdsourcingPlugin extends Plugin
 		eventBus.register(dialogue);
 		eventBus.register(movement);
 		eventBus.register(music);
+		eventBus.register(thieving);
 		eventBus.register(woodcutting);
 		eventBus.register(zmi);
 	}
@@ -70,6 +75,7 @@ public class CrowdsourcingPlugin extends Plugin
 		eventBus.unregister(dialogue);
 		eventBus.unregister(movement);
 		eventBus.unregister(music);
+		eventBus.unregister(thieving);
 		eventBus.unregister(woodcutting);
 		eventBus.unregister(zmi);
 	}
