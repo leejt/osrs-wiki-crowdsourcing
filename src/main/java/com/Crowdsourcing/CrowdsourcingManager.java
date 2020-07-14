@@ -25,6 +25,7 @@
 
 package com.Crowdsourcing;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,9 +50,9 @@ public class CrowdsourcingManager
 	private static final String CROWDSOURCING_BASE = "https://crowdsource.runescape.wiki/runelite";
 	private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 	private static final Gson GSON = new Gson();
-	private static final OkHttpClient CLIENT = new OkHttpClient.Builder()
-		.pingInterval(30, TimeUnit.SECONDS)
-		.build();
+
+	@Inject
+	private OkHttpClient okHttpClient;
 
 	private List<Object> data = new ArrayList<>();
 
@@ -78,7 +79,7 @@ public class CrowdsourcingManager
 			.post(RequestBody.create(JSON, GSON.toJson(temp)))
 			.build();
 
-		CLIENT.newCall(r).enqueue(new Callback()
+		okHttpClient.newCall(r).enqueue(new Callback()
 		{
 			@Override
 			public void onFailure(Call call, IOException e)
