@@ -33,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -65,28 +67,31 @@ public class CrowdsourcingManager
 			return;
 		}
 
+		List<Object> temp;
+		synchronized (this) {
+			temp = data;
+			data = new ArrayList<>();
+		}
+
 		Request r = new Request.Builder()
 			.url(CROWDSOURCING_BASE)
-			.post(RequestBody.create(JSON, GSON.toJson(this.data)))
+			.post(RequestBody.create(JSON, GSON.toJson(temp)))
 			.build();
 
-		data.clear();
+		CLIENT.newCall(r).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.debug("Error sending crowdsourcing data", e);
+			}
 
-		try (Response response = CLIENT.newCall(r).execute())
-		{
-			if (response.isSuccessful())
+			@Override
+			public void onResponse(Call call, Response response)
 			{
-				log.info("Successfully sent crowdsourcing data");
+				log.debug("Successfully sent crowdsourcing data");
+				response.close();
 			}
-			else
-			{
-				log.debug("Error sending crowdsourcing data");
-				log.debug(response.body().toString());
-			}
-		}
-		catch (IOException e)
-		{
-			log.debug("IOException: {}", e.getMessage());
-		}
+		});
 	}
 }
