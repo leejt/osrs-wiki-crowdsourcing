@@ -58,18 +58,19 @@ public class CrowdsourcingManager
 
 	public void storeEvent(Object event)
 	{
-		data.add(event);
+		synchronized (this) {
+			data.add(event);
+		}
 	}
 
 	protected void submitToAPI()
 	{
-		if (data.isEmpty())
-		{
-			return;
-		}
-
 		List<Object> temp;
 		synchronized (this) {
+			if (data.isEmpty())
+			{
+				return;
+			}
 			temp = data;
 			data = new ArrayList<>();
 		}
