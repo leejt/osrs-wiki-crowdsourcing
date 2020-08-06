@@ -10,6 +10,7 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
+import net.runelite.api.Skill;
 import net.runelite.api.Varbits;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
@@ -105,7 +106,8 @@ public class CrowdsourcingThieving
 			int ardougneDiary = getArdougneDiary();
 			boolean silence = hasGlovesOfSilence();
 			boolean thievingCape = hasThievingCape();
-			PickpocketData data = new PickpocketData(lastPickpocketTarget, message, location, silence, thievingCape, ardougneDiary);
+			int thievingLevel = client.getBoostedSkillLevel(Skill.THIEVING);
+			PickpocketData data = new PickpocketData(thievingLevel, lastPickpocketTarget, message, location, silence, thievingCape, ardougneDiary);
 			manager.storeEvent(data);
 		}
 	}

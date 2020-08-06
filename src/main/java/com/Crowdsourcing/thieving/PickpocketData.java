@@ -8,6 +8,7 @@ import net.runelite.api.coords.WorldPoint;
 @AllArgsConstructor
 public class PickpocketData
 {
+	private final int level;
 	private final int target;
 	private final String message;
 	private final WorldPoint location;
