@@ -5,5 +5,6 @@ public enum SkillingState
 	READY,
 	CLICKED,
 	CUTTING,
-	RECOVERING
+	RECOVERING,
+	DISMANTLING
 }
