@@ -4,14 +4,16 @@ import com.Crowdsourcing.CrowdsourcingManager;
 import com.Crowdsourcing.skilling.SkillingState;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import net.runelite.api.*;
+import net.runelite.api.Client;
+import net.runelite.api.MenuAction;
+import net.runelite.api.ObjectID;
+import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.eventbus.Subscribe;
 
 import javax.inject.Inject;
-import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,7 +61,6 @@ public class CrowdsourcingHunter {
     private String name;
     private WorldPoint location;
     private SkillingState state = SkillingState.READY;
-    private SkillingState previousState;
 
     @Subscribe
     public void onMenuOptionClicked(MenuOptionClicked menuOptionClicked)
