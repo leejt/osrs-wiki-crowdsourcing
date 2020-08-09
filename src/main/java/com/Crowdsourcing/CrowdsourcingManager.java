@@ -59,6 +59,7 @@ public class CrowdsourcingManager
 	public void storeEvent(Object event)
 	{
 		synchronized (this) {
+			System.out.println(event);
 			data.add(event);
 		}
 	}

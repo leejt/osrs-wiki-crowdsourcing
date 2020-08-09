@@ -9,7 +9,7 @@ import net.runelite.api.coords.WorldPoint;
 public class HunterData
 {
     private final int level;
-    private final String trapName;
-    private final int trapId;
-    private final WorldPoint trapLocation;
+    private final String name;
+    private final int id;
+    private final WorldPoint location;
 }
