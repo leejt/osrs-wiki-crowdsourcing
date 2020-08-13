@@ -4,7 +4,13 @@ import com.Crowdsourcing.CrowdsourcingManager;
 import com.Crowdsourcing.skilling.SkillingState;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import net.runelite.api.*;
+import net.runelite.api.ChatMessageType;
+import net.runelite.api.Client;
+import net.runelite.api.MenuAction;
+import net.runelite.api.NPC;
+import net.runelite.api.NpcID;
+import net.runelite.api.ObjectID;
+import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
@@ -59,11 +65,10 @@ public class CrowdsourcingHunter {
         build();
 
     private static final Map<Integer, String> ANIMALS = new ImmutableMap.Builder<Integer, String>().
-        put(5531, "Spotted kebbit").
-        put(5532, "Dark kebbit").
-        put(5533, "Dashing kebbit").
+        put(NpcID.SPOTTED_KEBBIT, "Spotted kebbit").
+        put(NpcID.DARK_KEBBIT, "Dark kebbit").
+        put(NpcID.DASHING_KEBBIT, "Dashing kebbit").
         build();
-
 
     private static final Set<Integer> ANIMATIONS = new ImmutableSet.Builder<Integer>().
         add(5212). // Dismantling a box trap
