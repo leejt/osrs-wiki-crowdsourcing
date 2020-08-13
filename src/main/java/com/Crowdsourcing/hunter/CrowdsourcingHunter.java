@@ -25,11 +25,17 @@ public class CrowdsourcingHunter {
     private Client client;
 
     private static final Map<Integer, String> TRAP_OBJECTS = new ImmutableMap.Builder<Integer, String>().
-        put(721, "Black chinchompa box trap"). // Black chin successful box trap
-        put(9382, "Grey chinchompa box trap"). // Grey chin successful box trap
-        put(9383, "Red chinchompa box trap"). // Red chin successful box trap
-        put(9384, "Ferret box trap"). // Ferret successful box trap
-        put(ObjectID.BOX_TRAP_9385, "Failed box trap"). // Failed box trap
+        put(721, "Black chinchompa success").
+        put(9382, "Grey chinchompa success").
+        put(9383, "Red chinchompa success").
+        put(9384, "Ferret box trap").
+        put(ObjectID.BOX_TRAP_9385, "Failed box trap").
+        put(ObjectID.BIRD_SNARE_9379, "Copper longtail success").
+        put(ObjectID.BIRD_SNARE_9377, "Golden warbler success").
+        put(ObjectID.BIRD_SNARE_9375, "Cerulean twitch success").
+        put(ObjectID.BIRD_SNARE_9373, "Crimson switch success").
+        put(ObjectID.BIRD_SNARE_9348, "Tropical wagtail success").
+        put(9344, "Failed bird snare").
 //        put(19253, "Pit (Snow)").
 //        put(19254, "Pit (Snow)").
 //        put(19255, "Pit (Snow)").
@@ -51,8 +57,8 @@ public class CrowdsourcingHunter {
         build();
 
     private static final Set<Integer> ANIMATIONS = new ImmutableSet.Builder<Integer>().
-        add(5212). // Dismantling a trap
-//        add(5207). // Dismantling a net trap and bird snare
+        add(5212). // Dismantling a box trap
+        add(5207). // Dismantling a net trap and bird snare
 //        add(6606). // Butterfly net catching
         build();
 
