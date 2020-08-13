@@ -11,5 +11,6 @@ public class HunterData
     private final int level;
     private final String name;
     private final int id;
+    private final String message;
     private final WorldPoint location;
 }
