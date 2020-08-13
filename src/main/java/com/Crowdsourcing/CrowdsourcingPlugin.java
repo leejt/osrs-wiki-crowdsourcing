@@ -1,6 +1,7 @@
 package com.Crowdsourcing;
 
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
+import com.Crowdsourcing.hunter.CrowdsourcingHunter;
 import com.Crowdsourcing.movement.CrowdsourcingMovement;
 import com.Crowdsourcing.music.CrowdsourcingMusic;
 import com.Crowdsourcing.thieving.CrowdsourcingThieving;
@@ -42,6 +43,9 @@ public class CrowdsourcingPlugin extends Plugin
 	private CrowdsourcingDialogue dialogue;
 
 	@Inject
+	private CrowdsourcingHunter hunter;
+
+	@Inject
 	private CrowdsourcingMovement movement;
 
 	@Inject
@@ -61,6 +65,7 @@ public class CrowdsourcingPlugin extends Plugin
 	{
 		eventBus.register(cooking);
 		eventBus.register(dialogue);
+		eventBus.register(hunter);
 		eventBus.register(movement);
 		eventBus.register(music);
 		eventBus.register(thieving);
@@ -73,6 +78,7 @@ public class CrowdsourcingPlugin extends Plugin
 	{
 		eventBus.unregister(cooking);
 		eventBus.unregister(dialogue);
+		eventBus.unregister(hunter);
 		eventBus.unregister(movement);
 		eventBus.unregister(music);
 		eventBus.unregister(thieving);
