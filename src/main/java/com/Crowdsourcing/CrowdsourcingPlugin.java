@@ -4,6 +4,7 @@ import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.movement.CrowdsourcingMovement;
 import com.Crowdsourcing.music.CrowdsourcingMusic;
 import com.Crowdsourcing.thieving.CrowdsourcingThieving;
+import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import com.Crowdsourcing.woodcutting.CrowdsourcingWoodcutting;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
@@ -51,6 +52,9 @@ public class CrowdsourcingPlugin extends Plugin
 	private CrowdsourcingThieving thieving;
 
 	@Inject
+	private CrowdsourcingVarbits varbits;
+
+	@Inject
 	private CrowdsourcingWoodcutting woodcutting;
 
 	@Inject
@@ -64,8 +68,11 @@ public class CrowdsourcingPlugin extends Plugin
 		eventBus.register(movement);
 		eventBus.register(music);
 		eventBus.register(thieving);
+		eventBus.register(varbits);
 		eventBus.register(woodcutting);
 		eventBus.register(zmi);
+
+		varbits.startUp();
 	}
 
 	@Override
@@ -76,8 +83,11 @@ public class CrowdsourcingPlugin extends Plugin
 		eventBus.unregister(movement);
 		eventBus.unregister(music);
 		eventBus.unregister(thieving);
+		eventBus.unregister(varbits);
 		eventBus.unregister(woodcutting);
 		eventBus.unregister(zmi);
+
+		varbits.shutDown();
 	}
 
 	@Schedule(
