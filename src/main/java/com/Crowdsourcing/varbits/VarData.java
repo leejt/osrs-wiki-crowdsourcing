@@ -6,8 +6,9 @@ import net.runelite.api.coords.WorldPoint;
 
 @Data
 @AllArgsConstructor
-public class VarbitData
+public class VarData
 {
+	private final int varType;
 	private final int varbitNumber;
 	private final int oldValue;
 	private final int newValue;

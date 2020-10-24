@@ -32,11 +32,15 @@ public class CrowdsourcingVarbits
 	private static final int VARBITS_ARCHIVE_ID = 14;
 
 	private int[] oldVarps = null;
+	private int[] oldVarps2 = null;
 	private Multimap<Integer, Integer> varbits;
 
 	private int initializingTick = 0;
 
 	private static HashSet<Integer> blackList;
+
+	private static final int VARBIT = 0;
+	private static final int VARPLAYER = 1;
 
 	public void startUp()
 	{
@@ -48,10 +52,14 @@ public class CrowdsourcingVarbits
 		varbits = HashMultimap.create();
 
 		if(oldVarps == null)
+		{
 			oldVarps = new int[client.getVarps().length];
+			oldVarps2 = new int[client.getVarps().length];
+		}
 
 		// Set oldVarps to be the current varps
 		System.arraycopy(client.getVarps(), 0, oldVarps, 0, oldVarps.length);
+		System.arraycopy(client.getVarps(), 0, oldVarps2, 0, oldVarps2.length);
 
 		// For all varbits, add their ids to the multimap with the varp index as their key
 		clientThread.invoke(() -> {
@@ -107,18 +115,30 @@ public class CrowdsourcingVarbits
 			// don't push out varbit changes. There are too many, and are generally uninteresting.
 			if (oldValue != newValue && tick != initializingTick)
 			{
+				client.setVarbitValue(oldVarps2, i, newValue);
 				if (!blackList.contains(i))
 				{
-					// We should probably ignore the name, since there aren't many, and they can easily be found
-					// in post analysis.
 					WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
-					VarbitData varbitData = new VarbitData(i, oldValue, newValue, tick, playerLocation);
-					crowdsourcingManager.storeEvent(varbitData);
+					VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, playerLocation);
+					log.info(varbitData.toString());
+					// crowdsourcingManager.storeEvent(varbitData);
 				}
 			}
 		}
 
-		System.arraycopy(client.getVarps(), 0, oldVarps, 0, oldVarps.length);
+		int oldValue = oldVarps2[index];
+		int newValue = varps[index];
+
+		if (oldValue != newValue)
+		{
+			WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
+			VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, playerLocation);
+			log.info(varPlayerData.toString());
+			// crowdsourcingManager.storeEvent(varPlayerData);
+		}
+
+		oldVarps[index] = varps[index];
+		oldVarps2[index] = varps[index];
 	}
 
 }
