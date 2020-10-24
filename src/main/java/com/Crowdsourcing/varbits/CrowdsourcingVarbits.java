@@ -3,6 +3,7 @@ package com.Crowdsourcing.varbits;
 import com.Crowdsourcing.CrowdsourcingManager;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import java.util.HashSet;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -35,9 +36,15 @@ public class CrowdsourcingVarbits
 
 	private int initializingTick = 0;
 
+	private static HashSet<Integer> blackList;
+
 	public void startUp()
 	{
 
+		blackList = new HashSet<>();
+		blackList.add(357);
+		blackList.add(5983);
+		blackList.add(8354);
 		varbits = HashMultimap.create();
 
 		if(oldVarps == null)
@@ -73,11 +80,13 @@ public class CrowdsourcingVarbits
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
-		if (gameStateChanged.equals(GameState.HOPPING) || gameStateChanged.equals(GameState.LOGGING_IN))
+		if (gameStateChanged.getGameState().equals(GameState.HOPPING)
+			|| gameStateChanged.getGameState().equals(GameState.LOGGING_IN))
 		{
 			initializingTick = client.getTickCount();
 			shutDown();
 			startUp();
+			log.info("initializing tick set to " + initializingTick);
 		}
 	}
 
@@ -99,12 +108,15 @@ public class CrowdsourcingVarbits
 			// don't push out varbit changes. There are too many, and are generally uninteresting.
 			if (oldValue != newValue && tick != initializingTick)
 			{
+				if (!blackList.contains(i))
+				{
 					// We should probably ignore the name, since there aren't many, and they can easily be found
 					// in post analysis.
 					WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
 					VarbitData varbitData = new VarbitData(i, oldValue, newValue, tick, playerLocation);
 					log.info(varbitData.toString());
 					// crowdsourcingManager.storeEvent(varbitData);
+				}
 			}
 		}
 
