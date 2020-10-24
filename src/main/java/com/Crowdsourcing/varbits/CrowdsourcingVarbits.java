@@ -37,6 +37,7 @@ public class CrowdsourcingVarbits
 
 	public void startUp()
 	{
+
 		varbits = HashMultimap.create();
 
 		if(oldVarps == null)
@@ -47,6 +48,8 @@ public class CrowdsourcingVarbits
 
 		// For all varbits, add their ids to the multimap with the varp index as their key
 		clientThread.invoke(() -> {
+			if (client.getIndexConfig() == null)
+				return false;
 			IndexDataBase indexVarbits = client.getIndexConfig();
 			final int[] varbitIds = indexVarbits.getFileIds(VARBITS_ARCHIVE_ID);
 			for (int id : varbitIds)
@@ -57,6 +60,7 @@ public class CrowdsourcingVarbits
 					varbits.put(varbit.getIndex(), id);
 				}
 			}
+			return true;
 		});
 	}
 
