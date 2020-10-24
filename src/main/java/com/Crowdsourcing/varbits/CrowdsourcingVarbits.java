@@ -86,7 +86,6 @@ public class CrowdsourcingVarbits
 			initializingTick = client.getTickCount();
 			shutDown();
 			startUp();
-			log.info("initializing tick set to " + initializingTick);
 		}
 	}
 
@@ -114,8 +113,7 @@ public class CrowdsourcingVarbits
 					// in post analysis.
 					WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
 					VarbitData varbitData = new VarbitData(i, oldValue, newValue, tick, playerLocation);
-					log.info(varbitData.toString());
-					// crowdsourcingManager.storeEvent(varbitData);
+					crowdsourcingManager.storeEvent(varbitData);
 				}
 			}
 		}
