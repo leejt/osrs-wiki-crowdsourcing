@@ -121,7 +121,7 @@ public class CrowdsourcingVarbits
 					WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
 					VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, playerLocation);
 					log.info(varbitData.toString());
-					// crowdsourcingManager.storeEvent(varbitData);
+					crowdsourcingManager.storeEvent(varbitData);
 				}
 			}
 		}
@@ -134,7 +134,7 @@ public class CrowdsourcingVarbits
 			WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
 			VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, playerLocation);
 			log.info(varPlayerData.toString());
-			// crowdsourcingManager.storeEvent(varPlayerData);
+			crowdsourcingManager.storeEvent(varPlayerData);
 		}
 
 		oldVarps[index] = varps[index];
