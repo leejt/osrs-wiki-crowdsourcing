@@ -129,7 +129,7 @@ public class CrowdsourcingVarbits
 		int oldValue = oldVarps2[index];
 		int newValue = varps[index];
 
-		if (oldValue != newValue)
+		if (oldValue != newValue && tick != initializingTick)
 		{
 			WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
 			VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, playerLocation);
