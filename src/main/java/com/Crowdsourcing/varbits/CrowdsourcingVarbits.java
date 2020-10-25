@@ -34,6 +34,7 @@ import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.IndexDataBase;
 import net.runelite.api.VarbitComposition;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.VarbitChanged;
@@ -142,10 +143,24 @@ public class CrowdsourcingVarbits
 				client.setVarbitValue(oldVarps2, i, newValue);
 				if (!blackList.contains(i))
 				{
-					WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
-					VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, playerLocation);
-					log.info(varbitData.toString());
-					crowdsourcingManager.storeEvent(varbitData);
+					/* Wait a tick before grabbing location.
+					 *
+					 * This seems to cause fewer issues than not waiting a tick.
+					 * Only noticeable issues seem to be in places like Dorgesh-Kaan, where you can go up and down
+					 * stairs quickly to trick it into thinking varbs were updated in a different location.
+					 * Without waiting a tick, certain loads/instances are messed up, including the Dorgesh-Kaan light
+					 * varbs when loading a part of the map you haven't been to.
+					 */
+					clientThread.invokeLater(() ->
+					{
+						LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+						WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+						boolean isInInstance = client.isInInstancedRegion();
+
+						VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, isInInstance, location);
+						crowdsourcingManager.storeEvent(varbitData);
+						// log.info(varbitData.toString());
+					});
 				}
 			}
 		}
@@ -153,12 +168,18 @@ public class CrowdsourcingVarbits
 		int oldValue = oldVarps2[index];
 		int newValue = varps[index];
 
+		// Push out varp changes
 		if (oldValue != newValue && tick != initializingTick)
 		{
-			WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
-			VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, playerLocation);
-			log.info(varPlayerData.toString());
-			crowdsourcingManager.storeEvent(varPlayerData);
+			clientThread.invokeLater(() -> {
+				LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+				WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+				boolean isInInstance = client.isInInstancedRegion();
+
+				VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, isInInstance, location);
+				crowdsourcingManager.storeEvent(varPlayerData);
+				// log.info(varPlayerData.toString());
+			});
 		}
 
 		oldVarps[index] = varps[index];
