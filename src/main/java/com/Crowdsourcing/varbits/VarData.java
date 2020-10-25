@@ -37,5 +37,6 @@ public class VarData
 	private final int oldValue;
 	private final int newValue;
 	private final int tick;
+	private final boolean isInInstance;
 	private final WorldPoint location;
 }
