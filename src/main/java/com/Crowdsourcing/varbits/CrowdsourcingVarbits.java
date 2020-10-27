@@ -70,6 +70,11 @@ public class CrowdsourcingVarbits
 	public void startUp()
 	{
 
+		/* Blacklist certain common varbs that give us little useful data.
+		 * 357 - Equipped weapon type
+		 * 5983 - Dialogue option appear/disappear
+		 * 8354 - 100 tick counter
+		 */
 		blackList = new HashSet<>();
 		blackList.add(357);
 		blackList.add(5983);
