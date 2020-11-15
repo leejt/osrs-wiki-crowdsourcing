@@ -1,14 +1,14 @@
 package com.Crowdsourcing;
 
-import com.Crowdsourcing.CrowdsourcingPlugin;
+import com.Crowdsourcing.AdvancedCrowdsourcingPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
-public class CrowdsourcingPluginTest
+public class AdvancedCrowdsourcingPluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		ExternalPluginManager.loadBuiltin(CrowdsourcingPlugin.class);
+		ExternalPluginManager.loadBuiltin(AdvancedCrowdsourcingPlugin.class);
 		RuneLite.main(args);
 	}
 }
