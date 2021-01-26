@@ -1,5 +1,6 @@
 package com.Crowdsourcing;
 
+import com.Crowdsourcing.mining.CrowdsourcingMining;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
@@ -32,9 +33,13 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingVarbits varbits;
 
+	@Inject
+	private CrowdsourcingMining mining;
+
 	@Override
 	protected void startUp() throws Exception
 	{
+		eventBus.register(mining);
 		eventBus.register(varbits);
 
 		varbits.startUp();
@@ -43,6 +48,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
+		eventBus.unregister(mining);
 		eventBus.unregister(varbits);
 
 		varbits.shutDown();
