@@ -65,9 +65,9 @@ public class CrowdsourcingMLM
 	private static final int MOTHERLODE_MINE_SACK_TEXT_CHILD_ID = 1;
 
 
-	private static final String CHAT_MESSAGE_PAYDIRT = "You manage to mine some pay-dirt.";
-	private static final String MLM_SACK = "You collect your ore from the sack.";
-	private static final String MLM_SACK_EMPTIED = "The sack";
+	private static final String CHAT_MESSAGE_PAYDIRT = "You manage to mine some pay-dirt."; //pay-dirt mined
+	private static final String MLM_SACK = "You collect your ore from the sack."; //ore collected, more remain
+	private static final String MLM_SACK_EMPTIED = "The sack"; //minimum literal string for emptied sack messages
 	private static final int MOTHERLODE_MINE_REGION_ID = 14936;
 	private static final Map<Integer, Integer> PICKAXE_ANIMS = new ImmutableMap.Builder<Integer, Integer>().
 		put(AnimationID.MINING_MOTHERLODE_BRONZE, ItemID.BRONZE_PICKAXE).
@@ -97,7 +97,7 @@ public class CrowdsourcingMLM
 	private boolean pickaxeChanged = false;
 	private boolean ringChanged = false;
 	private boolean diariesChanged = false;
-	private boolean validState = false; //used to ensure the session's data is fresh
+	private boolean sackRefreshed = false; //used to ensure the session's data is fresh
 
 	private Multiset<Integer> previousInventorySnapshot;
 	private Multiset<Integer> rewards;
@@ -110,7 +110,9 @@ public class CrowdsourcingMLM
 			return;
 		}
 
-		setPickaxeData();
+		setPickaxeData(); //set used pickaxe every tick
+
+		//get MLM sack widgets to know when sack is emptied
 		Widget widgetMLM = client.getWidget(MOTHERLODE_MINE_SACK_GROUP_ID, MOTHERLODE_MINE_SACK_TEXT_CHILD_ID);
 		Widget widgetMLMSprite = client.getWidget(WidgetInfo.DIALOG_SPRITE_TEXT);
 		final int tick = client.getTickCount();
@@ -118,22 +120,22 @@ public class CrowdsourcingMLM
 		if ((widgetMLM != null && widgetMLM.getText().startsWith(MLM_SACK_EMPTIED)) ||
 			(widgetMLMSprite != null && widgetMLMSprite.getText().contains(MLM_SACK_EMPTIED)))
 		{
-			if (!validState)
+			if (!sackRefreshed)
 			{
-				validState = true;
-			} else if (tick == invChangedTick)
+				sackRefreshed = true; //ensures sack has been emptied and current data session isn't potentially tainted
+			} else if (tick == invChangedTick) //submit data when sack is looted
 			{
 				setRewardsData();
 				submitData();
-				resetData();
+				resetData(); //we reset the session data since sack has been emptied here
 				return;
 			}
 			return;
 		}
 
-		if (widgetMLMSprite != null && widgetMLMSprite.getText().contains(MLM_SACK))
+		if (widgetMLMSprite != null && widgetMLMSprite.getText().contains(MLM_SACK)) //sack is looted but not emptied
 		{
-			if (validState && tick == invChangedTick)
+			if (sackRefreshed && tick == invChangedTick) //submit data when sack is looted
 			{
 				setRewardsData();
 				submitData();
@@ -142,10 +144,10 @@ public class CrowdsourcingMLM
 			return;
 		}
 
-		previousInventorySnapshot = getInventorySnapshot();
+		previousInventorySnapshot = getInventorySnapshot(); //gets inventory before sack is looted
 	}
 
-
+	//get the game tick when inv changes in MLM; used to compare to same tick sack is looted at
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged event)
 	{
@@ -157,10 +159,12 @@ public class CrowdsourcingMLM
 		invChangedTick = client.getTickCount();
 	}
 
+	//sets mining lvl, ring, and diary data when a pay-dirt is mined, since
+	//pay-dirt rolls are determined at the time they are mined, NOT when the sack gets looted
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-		if (event.getType() != ChatMessageType.SPAM || !validState)
+		if (event.getType() != ChatMessageType.SPAM || !sackRefreshed)
 		{
 			return;
 		}
@@ -173,6 +177,7 @@ public class CrowdsourcingMLM
 		}
 	}
 
+	//gets inventory data by item id and quantity
 	private Multiset<Integer> getInventorySnapshot()
 	{
 		final ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
@@ -199,7 +204,7 @@ public class CrowdsourcingMLM
 		int currLevel = client.getBoostedSkillLevel(Skill.MINING);
 		if (miningBoostedLevel != -1 && miningBoostedLevel != currLevel)
 		{
-			levelChanged = true;
+			levelChanged = true; //lets us know if Mining lvl changed throughout pay-dirt mining session
 		}
 		miningBoostedLevel = currLevel;
 	}
@@ -212,7 +217,7 @@ public class CrowdsourcingMLM
 			int currPickaxe = PICKAXE_ANIMS.get(animId);
 			if (pickaxe != -1 && pickaxe != currPickaxe)
 			{
-				pickaxeChanged = true;
+				pickaxeChanged = true; //lets us know if pickaxe changed throughout pay-dirt mining session
 			}
 			pickaxe = currPickaxe;
 		}
@@ -226,7 +231,7 @@ public class CrowdsourcingMLM
 			int currRingId = equipContainer.getItems()[EquipmentInventorySlot.RING.getSlotIdx()].getId();
 			if (ring != -1 && ring != currRingId)
 			{
-				ringChanged = true;
+				ringChanged = true; //lets us know if ring changed throughout pay-dirt mining session
 			}
 			ring = currRingId;
 		}
@@ -242,7 +247,7 @@ public class CrowdsourcingMLM
 		int currDiaries = easy + 2*medium + 4*hard + 8*elite;
 		if (diaries != -1 && diaries != currDiaries)
 		{
-			diariesChanged = true;
+			diariesChanged = true; //lets us know if diaries changed throughout pay-dirt mining session
 		}
 		diaries = currDiaries;
 	}
@@ -268,6 +273,8 @@ public class CrowdsourcingMLM
 		manager.storeEvent(data);
 	}
 
+	//resets all data to default/null values
+	//this is used to ensure each data submitted session is consistent from start to finish
 	private void resetData()
 	{
 		miningBoostedLevel = -1;
@@ -283,6 +290,7 @@ public class CrowdsourcingMLM
 		rewards = null;
 	}
 
+	//debug printer
 	private void printData()
 	{
 		log.debug("\n===== MLM DATA =====\nLevel: " + miningBoostedLevel + "\nPickaxe: " +
