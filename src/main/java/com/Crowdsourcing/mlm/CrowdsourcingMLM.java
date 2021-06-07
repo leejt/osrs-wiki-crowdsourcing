@@ -127,7 +127,6 @@ public class CrowdsourcingMLM
 		if (event.getMessage().equals(CHAT_MESSAGE_PAYDIRT))
 		{
 			paydirtMineData.add(new PaydirtMineData(
-				client.getRealSkillLevel(Skill.MINING),
 				client.getBoostedSkillLevel(Skill.MINING),
 				getRingId(),
 				getDiaryCompletions(),
