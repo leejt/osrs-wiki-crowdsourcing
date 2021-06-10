@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package net.runelite.client.plugins.crowdsourcing.dialogue;
+package com.Crowdsourcing.dialogue;
 
 import javax.inject.Inject;
 import net.runelite.api.Client;
