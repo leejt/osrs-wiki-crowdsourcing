@@ -1,5 +1,6 @@
 package com.Crowdsourcing;
 
+import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
@@ -30,11 +31,15 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	CrowdsourcingManager manager;
 
 	@Inject
+	private CrowdsourcingDialogue dialogue;
+
+	@Inject
 	private CrowdsourcingVarbits varbits;
 
 	@Override
 	protected void startUp() throws Exception
 	{
+		eventBus.register(dialogue);
 		eventBus.register(varbits);
 
 		varbits.startUp();
@@ -43,6 +48,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
+		eventBus.unregister(dialogue);
 		eventBus.unregister(varbits);
 
 		varbits.shutDown();
