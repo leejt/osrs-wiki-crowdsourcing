@@ -26,17 +26,19 @@
 package com.Crowdsourcing.dialogue;
 
 import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.crowdsourcing.CrowdsourcingManager;
 
+@Slf4j
 public class CrowdsourcingDialogue
 {
-	private static final String USERNAME_TOKEN = "%USERNAME%";
 
 	@Inject
 	private Client client;
@@ -44,46 +46,32 @@ public class CrowdsourcingDialogue
 	@Inject
 	private CrowdsourcingManager manager;
 
-	private String lastNpcDialogueText = null;
-	private String lastPlayerDialogueText = null;
-	private Widget[] dialogueOptions;
-
-	private String sanitize(String dialogue)
-	{
-		String username = client.getLocalPlayer().getName();
-		return dialogue.replaceAll(username, USERNAME_TOKEN);
-	}
+	private String lastSpriteText = null;
+	private int lastItemId;
 
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
-		Widget npcDialogueTextWidget = client.getWidget(WidgetInfo.DIALOG_NPC_TEXT);
-		if (npcDialogueTextWidget != null && !npcDialogueTextWidget.getText().equals(lastNpcDialogueText))
+		Widget spriteWidget = client.getWidget(WidgetInfo.DIALOG_SPRITE_SPRITE);
+		Widget textWidget = client.getWidget(WidgetInfo.DIALOG_SPRITE_TEXT);
+		if (spriteWidget != null && textWidget != null && (!textWidget.getText().equals(lastSpriteText)
+			|| spriteWidget.getItemId() != lastItemId))
 		{
-			lastNpcDialogueText = npcDialogueTextWidget.getText();
-			String npcName = client.getWidget(WidgetInfo.DIALOG_NPC_NAME).getText();
-			NpcDialogueData data = new NpcDialogueData(sanitize(lastNpcDialogueText), npcName);
-			manager.storeEvent(data);
-		}
-
-		Widget playerDialogueTextWidget = client.getWidget(WidgetID.DIALOG_PLAYER_GROUP_ID, 4);
-		if (playerDialogueTextWidget != null && !playerDialogueTextWidget.getText().equals(lastPlayerDialogueText))
-		{
-			lastPlayerDialogueText = playerDialogueTextWidget.getText();
-			PlayerDialogueData data = new PlayerDialogueData(sanitize(lastPlayerDialogueText));
-			manager.storeEvent(data);
-		}
-
-		Widget playerDialogueOptionsWidget = client.getWidget(WidgetID.DIALOG_OPTION_GROUP_ID, 1);
-		if (playerDialogueOptionsWidget != null && playerDialogueOptionsWidget.getChildren() != dialogueOptions)
-		{
-			dialogueOptions = playerDialogueOptionsWidget.getChildren();
-			String[] optionsText = new String[dialogueOptions.length];
-			for (int i = 0; i < dialogueOptions.length; i++)
+			lastItemId = spriteWidget.getItemId();
+			lastSpriteText = textWidget.getText();
+			log.info(String.format("%d: %s", lastItemId, lastSpriteText));
+			if (client == null || client.getLocalPlayer() == null)
 			{
-				optionsText[i] = sanitize(dialogueOptions[i].getText());
+				return;
 			}
-			DialogueOptionsData data = new DialogueOptionsData(optionsText);
+			LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+			if (local == null)
+			{
+				return;
+			}
+			WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+			boolean isInInstance = client.isInInstancedRegion();
+			SpriteTextData data = new SpriteTextData(lastSpriteText, lastItemId, isInInstance, location);
 			manager.storeEvent(data);
 		}
 	}
