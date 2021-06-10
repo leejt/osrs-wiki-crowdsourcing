@@ -31,6 +31,7 @@ import net.runelite.api.Client;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
@@ -73,6 +74,11 @@ public class CrowdsourcingDialogue
 			boolean isInInstance = client.isInInstancedRegion();
 			SpriteTextData data = new SpriteTextData(lastSpriteText, lastItemId, isInInstance, location);
 			manager.storeEvent(data);
+		}
+		else if (spriteWidget == null || textWidget == null)
+		{
+			lastSpriteText = null;
+			lastItemId = -1;
 		}
 	}
 }
