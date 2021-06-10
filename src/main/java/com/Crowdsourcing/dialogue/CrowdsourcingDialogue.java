@@ -59,7 +59,7 @@ public class CrowdsourcingDialogue
 		{
 			lastItemId = spriteWidget.getItemId();
 			lastSpriteText = textWidget.getText();
-			log.info(String.format("%d: %s", lastItemId, lastSpriteText));
+			log.debug(String.format("%d: %s", lastItemId, lastSpriteText));
 			if (client == null || client.getLocalPlayer() == null)
 			{
 				return;
