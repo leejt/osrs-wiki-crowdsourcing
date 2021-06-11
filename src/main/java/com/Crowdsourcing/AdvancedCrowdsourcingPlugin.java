@@ -1,6 +1,7 @@
 package com.Crowdsourcing;
 
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
+import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
@@ -40,12 +41,16 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingMLM mlm;
 
+	@Inject
+	private CrowdsourcingMessages messages;
+
 	@Override
 	protected void startUp() throws Exception
 	{
 		eventBus.register(dialogue);
 		eventBus.register(varbits);
 		eventBus.register(mlm);
+		eventBus.register(messages);
 
 		varbits.startUp();
 	}
@@ -56,6 +61,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(dialogue);
 		eventBus.unregister(varbits);
 		eventBus.unregister(mlm);
+		eventBus.unregister(messages);
 
 		varbits.shutDown();
 	}
