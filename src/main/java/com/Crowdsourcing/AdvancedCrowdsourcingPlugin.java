@@ -44,8 +44,8 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 
 	@Inject
 	private CrowdsourcingScenery scenery;
-  
-  @Inject
+
+	@Inject
 	private CrowdsourcingMessages messages;
 
 	@Override
