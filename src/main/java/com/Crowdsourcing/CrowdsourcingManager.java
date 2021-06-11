@@ -56,6 +56,11 @@ public class CrowdsourcingManager
 
 	private List<Object> data = new ArrayList<>();
 
+	public int size()
+	{
+		return data.size();
+	}
+
 	public void storeEvent(Object event)
 	{
 		synchronized (this) {
