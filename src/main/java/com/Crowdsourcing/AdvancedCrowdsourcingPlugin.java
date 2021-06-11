@@ -1,6 +1,7 @@
 package com.Crowdsourcing;
 
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
+import com.Crowdsourcing.scenery.CrowdsourcingScenery;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
@@ -36,11 +37,15 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingMLM mlm;
 
+	@Inject
+	private CrowdsourcingScenery scenery;
+
 	@Override
 	protected void startUp() throws Exception
 	{
 		eventBus.register(varbits);
 		eventBus.register(mlm);
+		eventBus.register(scenery);
 
 		varbits.startUp();
 	}
@@ -50,6 +55,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	{
 		eventBus.unregister(varbits);
 		eventBus.unregister(mlm);
+		eventBus.unregister(scenery);
 
 		varbits.shutDown();
 	}
