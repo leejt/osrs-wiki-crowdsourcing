@@ -1,5 +1,6 @@
 package com.Crowdsourcing;
 
+import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
@@ -32,6 +33,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	CrowdsourcingManager manager;
 
 	@Inject
+	private CrowdsourcingDialogue dialogue;
+
+	@Inject
 	private CrowdsourcingVarbits varbits;
 
 	@Inject
@@ -43,6 +47,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
+		eventBus.register(dialogue);
 		eventBus.register(varbits);
 		eventBus.register(mlm);
 		eventBus.register(messages);
@@ -53,6 +58,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
+		eventBus.unregister(dialogue);
 		eventBus.unregister(varbits);
 		eventBus.unregister(mlm);
 		eventBus.unregister(messages);
