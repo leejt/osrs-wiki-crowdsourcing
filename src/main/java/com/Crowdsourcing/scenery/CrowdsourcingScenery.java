@@ -26,6 +26,8 @@ public class CrowdsourcingScenery
 
 	private GameState gameState;
 
+	private static final int BLACKLIST_OVERRIDE_RATE = 100;
+
 	// List of objects we don't care about, even if they are loaded later. Mostly POH.
 	private final ImmutableSet<Integer> blacklist = ImmutableSet.of(
 		// All in POH...
@@ -54,16 +56,30 @@ public class CrowdsourcingScenery
 
 	private void addObjectThisTick(SceneryEventType type, WorldPoint baseLocation, int id)
 	{
-		if (gameState != GameState.LOGGED_IN || manager.size() > 10000 || blacklist.contains(id))
+		if (gameState != GameState.LOGGED_IN || manager.size() > 10000)
 		{
 			// Ignore any objects sent when game state is LOADING. This should ignore all spawns that happen
 			// while reading the maps index.
 			// If for whatever reason this is an ineffective check, don't let it grow unbounded...
 			return;
 		}
+
+		int rate = 1;
+		if (blacklist.contains(id))
+		{
+			// Still keep blacklisted entries *some* of the time...
+			if (Math.random() < 1.0 / BLACKLIST_OVERRIDE_RATE)
+			{
+				rate = BLACKLIST_OVERRIDE_RATE;
+			}
+			else
+			{
+				return;
+			}
+		}
 		LocalPoint local = LocalPoint.fromWorld(client, baseLocation);
 		WorldPoint location = WorldPoint.fromLocalInstance(client, local);
-		manager.storeEvent(new SceneryEvent(type, location, id));
+		manager.storeEvent(new SceneryEvent(type, location, id, rate));
 	}
 
 	@Subscribe

@@ -11,4 +11,5 @@ public class SceneryEvent
 	private final SceneryEventType type;
 	private final WorldPoint location;
 	private final int id;
+	private final int rate;
 }
