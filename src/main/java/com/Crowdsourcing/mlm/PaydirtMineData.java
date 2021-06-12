@@ -32,6 +32,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class PaydirtMineData
 {
+	private final int baseLevel;
 	private final int boostedLevel;
 	private final int ring;
 	private final int diary;

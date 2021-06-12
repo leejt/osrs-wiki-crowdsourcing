@@ -30,6 +30,7 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
 import com.google.common.collect.EvictingQueue;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.InventoryID;
+import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuAction;
@@ -97,7 +99,7 @@ public class CrowdsourcingMLM
 			final Multiset<Integer> rewards = Multisets.difference(currentInventorySnapshot, prevInventorySnapshot);
 			final int currentSackCount = client.getVar(Varbits.SACK_NUMBER);
 			MLMData event = new MLMData(
-				paydirtMineData,
+				new ArrayList(paydirtMineData),
 				rewards,
 				currentSackCount,
 				currentInventorySnapshot.count(ItemID.PAYDIRT)
@@ -127,6 +129,7 @@ public class CrowdsourcingMLM
 		if (event.getMessage().equals(CHAT_MESSAGE_PAYDIRT))
 		{
 			paydirtMineData.add(new PaydirtMineData(
+				client.getRealSkillLevel(Skill.MINING),
 				client.getBoostedSkillLevel(Skill.MINING),
 				getRingId(),
 				getDiaryCompletions(),
@@ -154,7 +157,12 @@ public class CrowdsourcingMLM
 		ItemContainer equipContainer = client.getItemContainer(InventoryID.EQUIPMENT);
 		if (equipContainer != null)
 		{
-			return equipContainer.getItems()[EquipmentInventorySlot.RING.getSlotIdx()].getId();
+			final Item[] items = equipContainer.getItems();
+			int idx = EquipmentInventorySlot.RING.getSlotIdx();
+			if (idx < items.length)
+			{
+				return equipContainer.getItems()[idx].getId();
+			}
 		}
 		return -1;
 	}
