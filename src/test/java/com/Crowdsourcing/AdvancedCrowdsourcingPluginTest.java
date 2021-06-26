@@ -1,6 +1,5 @@
 package com.Crowdsourcing;
 
-import com.Crowdsourcing.AdvancedCrowdsourcingPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
