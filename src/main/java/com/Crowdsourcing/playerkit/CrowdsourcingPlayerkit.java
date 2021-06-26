@@ -61,8 +61,8 @@ public class CrowdsourcingPlayerkit
 			int poseAnim = client.getLocalPlayer().getIdlePoseAnimation();
 			PlayerkitData playerkitData = new PlayerkitData(playerkit, poseAnim);
 			manager.storeEvent(playerkitData);
-			log.info("playerkit: " + Arrays.toString(playerkit));
-			log.info("idle_pose_anim: " + poseAnim);
+			log.debug("playerkit: " + Arrays.toString(playerkit));
+			log.debug("idle_pose_anim: " + poseAnim);
 		}
 		catch (NullPointerException e)
 		{
