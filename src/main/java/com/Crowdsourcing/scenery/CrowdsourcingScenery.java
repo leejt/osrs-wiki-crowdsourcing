@@ -56,7 +56,7 @@ public class CrowdsourcingScenery
 
 	private void addObjectThisTick(SceneryEventType type, WorldPoint baseLocation, int id)
 	{
-		if (gameState != GameState.LOGGED_IN || manager.size() > 10000)
+		if (gameState != GameState.LOGGED_IN)
 		{
 			// Ignore any objects sent when game state is LOADING. This should ignore all spawns that happen
 			// while reading the maps index.
