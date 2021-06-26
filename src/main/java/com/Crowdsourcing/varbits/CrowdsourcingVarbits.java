@@ -81,7 +81,12 @@ public class CrowdsourcingVarbits
 		blackList.add(8354);
 		varbits = HashMultimap.create();
 
-		if(oldVarps == null)
+		if (client.getGameState() == GameState.STARTING || client.getGameState() == GameState.UNKNOWN)
+		{
+			return;
+		}
+
+		if (oldVarps == null)
 		{
 			oldVarps = new int[client.getVarps().length];
 			oldVarps2 = new int[client.getVarps().length];
@@ -94,7 +99,9 @@ public class CrowdsourcingVarbits
 		// For all varbits, add their ids to the multimap with the varp index as their key
 		clientThread.invoke(() -> {
 			if (client.getIndexConfig() == null)
+			{
 				return false;
+			}
 			IndexDataBase indexVarbits = client.getIndexConfig();
 			final int[] varbitIds = indexVarbits.getFileIds(VARBITS_ARCHIVE_ID);
 			for (int id : varbitIds)
