@@ -4,6 +4,7 @@ import com.Crowdsourcing.clues.CrowdsourcingClues;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
+import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
@@ -50,7 +51,10 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	private CrowdsourcingMessages messages;
 
 	@Inject
-	CrowdsourcingClues clues;
+	private CrowdsourcingPlayerkit playerkit;
+
+	@Inject
+	private CrowdsourcingClues clues;
 
 	@Override
 	protected void startUp() throws Exception
@@ -60,6 +64,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(mlm);
 		eventBus.register(scenery);
 		eventBus.register(messages);
+		eventBus.register(playerkit);
 		eventBus.register(clues);
 
 		varbits.startUp();
@@ -73,6 +78,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(mlm);
 		eventBus.unregister(scenery);
 		eventBus.unregister(messages);
+		eventBus.unregister(playerkit);
 		eventBus.register(clues);
 
 		varbits.shutDown();
