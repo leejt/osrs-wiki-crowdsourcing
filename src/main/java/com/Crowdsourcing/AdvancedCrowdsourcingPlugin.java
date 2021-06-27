@@ -1,8 +1,10 @@
 package com.Crowdsourcing;
 
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
+import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
+import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
@@ -52,6 +54,12 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingPlayerkit playerkit;
 
+	@Inject
+	private CrowdsourcingNpcSighting npcSighting;
+
+	@Inject
+	private CrowdsourcingItemSighting itemSighting;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -61,6 +69,8 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(scenery);
 		eventBus.register(messages);
 		eventBus.register(playerkit);
+		eventBus.register(npcSighting);
+		eventBus.register(itemSighting);
 
 		varbits.startUp();
 	}
@@ -74,6 +84,8 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(scenery);
 		eventBus.unregister(messages);
 		eventBus.unregister(playerkit);
+		eventBus.unregister(npcSighting);
+		eventBus.unregister(itemSighting);
 
 		varbits.shutDown();
 	}
