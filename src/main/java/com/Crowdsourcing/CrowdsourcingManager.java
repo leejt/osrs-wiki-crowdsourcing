@@ -50,6 +50,7 @@ public class CrowdsourcingManager
 	private static final String CROWDSOURCING_BASE = "https://crowdsource.runescape.wiki/runelite";
 	private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 	private static final Gson GSON = new Gson();
+	private static final int MAX_LENGTH = 10000;
 
 	@Inject
 	private OkHttpClient okHttpClient;
@@ -63,7 +64,13 @@ public class CrowdsourcingManager
 
 	public void storeEvent(Object event)
 	{
-		synchronized (this) {
+		if (this.size() > MAX_LENGTH)
+		{
+			return;
+		}
+
+		synchronized (this)
+		{
 			data.add(event);
 		}
 	}
@@ -71,7 +78,8 @@ public class CrowdsourcingManager
 	protected void submitToAPI()
 	{
 		List<Object> temp;
-		synchronized (this) {
+		synchronized (this)
+		{
 			if (data.isEmpty())
 			{
 				return;
