@@ -65,9 +65,12 @@ public class CrowdsourcingManager
 	public void storeEvent(Object event)
 	{
 		if (this.size() > MAX_LENGTH)
+		{
 			return;
+		}
 
-		synchronized (this) {
+		synchronized (this)
+		{
 			data.add(event);
 		}
 	}
@@ -75,7 +78,8 @@ public class CrowdsourcingManager
 	protected void submitToAPI()
 	{
 		List<Object> temp;
-		synchronized (this) {
+		synchronized (this)
+		{
 			if (data.isEmpty())
 			{
 				return;
