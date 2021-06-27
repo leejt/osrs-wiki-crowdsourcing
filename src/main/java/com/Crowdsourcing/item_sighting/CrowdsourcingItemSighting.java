@@ -25,7 +25,7 @@ public class CrowdsourcingItemSighting
 	);
 
 	// Cache seen items so we avoid sending them more than once
-	private static HashSet<Integer> blacklist = new HashSet<>();
+	private static HashSet<Integer> seenItems = new HashSet<>();
 
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged itemContainerChanged)
@@ -34,7 +34,7 @@ public class CrowdsourcingItemSighting
 
 		for (Item item : items)
 		{
-			if (!whitelist.contains(item.getId()) || blacklist.contains(item.getId()))
+			if (!whitelist.contains(item.getId()) || seenItems.contains(item.getId()))
 			{
 				log.debug(String.format("Skipped item: (%d\t%d)", item.getId(), itemContainerChanged.getContainerId()));
 				continue;
@@ -43,7 +43,7 @@ public class CrowdsourcingItemSighting
 			ItemSightingData data = new ItemSightingData(item.getId(), itemContainerChanged.getContainerId());
 			manager.storeEvent(data);
 			log.debug(String.format("Stored event: (%d\t%d)", item.getId(), itemContainerChanged.getContainerId()));
-			blacklist.add(item.getId());
+			seenItems.add(item.getId());
 		}
 	}
 }
