@@ -9,8 +9,10 @@ import net.runelite.api.coords.WorldPoint;
 public class NpcSightingData
 {
 	private int npcId;
+	private int npcIndex;
 	private int rate;
 	private boolean isSpawn;
+	private int world;
 	private boolean isInInstance;
 	private WorldPoint location;
 }

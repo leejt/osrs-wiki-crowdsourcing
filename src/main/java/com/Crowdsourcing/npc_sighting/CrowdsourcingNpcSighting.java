@@ -44,7 +44,9 @@ public class CrowdsourcingNpcSighting
 	private void processNpc(NPC npc, boolean isSpawn)
 	{
 		int id = npc.getComposition().getId();
+		int index = npc.getIndex();
 		int rate = 1;
+		int world = client.getWorld();
 
 		// If the id is not in the whitelist and doesn't succeed the roll, drop it. Otherwise update rate and store.
 		if (!whitelist.contains(id))
@@ -67,7 +69,7 @@ public class CrowdsourcingNpcSighting
 		}
 		WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 		boolean isInInstance = client.isInInstancedRegion();
-		NpcSightingData data = new NpcSightingData(id, rate, isSpawn, isInInstance, location);
+		NpcSightingData data = new NpcSightingData(id, index, rate, isSpawn, world, isInInstance, location);
 		manager.storeEvent(data);
 		log.debug(String.format("Stored event: (%d\t%d)", id, rate));
 	}
