@@ -14,5 +14,5 @@ public class NpcSightingData
 	private boolean isSpawn;
 	private int world;
 	private boolean isInInstance;
-	private WorldPoint location;
+	private WorldPoint npcLocation;
 }
