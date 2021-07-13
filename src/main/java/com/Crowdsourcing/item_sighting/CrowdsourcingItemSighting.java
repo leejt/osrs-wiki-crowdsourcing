@@ -36,7 +36,7 @@ public class CrowdsourcingItemSighting
 		{
 			if (!whitelist.contains(item.getId()) || seenItems.contains(item.getId()))
 			{
-				log.debug(String.format("Skipped item: (%d\t%d)", item.getId(), itemContainerChanged.getContainerId()));
+				log.trace(String.format("Skipped item: (%d\t%d)", item.getId(), itemContainerChanged.getContainerId()));
 				continue;
 			}
 
