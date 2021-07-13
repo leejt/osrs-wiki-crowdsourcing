@@ -57,7 +57,7 @@ public class CrowdsourcingNpcSighting
 			}
 			else
 			{
-				log.debug(String.format("Skipping non-whitelisted id: %d", id));
+				log.trace(String.format("Skipping non-whitelisted id: %d", id));
 				return;
 			}
 		}
