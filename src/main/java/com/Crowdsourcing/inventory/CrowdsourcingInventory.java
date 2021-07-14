@@ -24,8 +24,8 @@ public class CrowdsourcingInventory
     public Client client;
 
     private static final ImmutableSet<Integer> blacklist = ImmutableSet.of(
-            InventoryID.INVENTORY.getId(), InventoryID.BANK.getId(), InventoryID.EQUIPMENT.getId(),
-            InventoryID.TRADE.getId(), InventoryID.TRADEOTHER.getId()
+        InventoryID.INVENTORY.getId(), InventoryID.BANK.getId(), InventoryID.EQUIPMENT.getId(),
+        InventoryID.TRADE.getId(), InventoryID.TRADEOTHER.getId()
     );
 
     // Cache seen inventories so we avoid sending them more than once

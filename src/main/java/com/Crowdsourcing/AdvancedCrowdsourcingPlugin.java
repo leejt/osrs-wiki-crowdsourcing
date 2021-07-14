@@ -21,8 +21,8 @@ import net.runelite.client.task.Schedule;
 
 @Slf4j
 @PluginDescriptor(
-		name = "OSRS Wiki Crowdsourcing (advanced)",
-		description = "Help figure out varbits, quest states, and more. See osrs.wiki/RS:CROWD"
+	name = "OSRS Wiki Crowdsourcing (advanced)",
+	description = "Help figure out varbits, quest states, and more. See osrs.wiki/RS:CROWD"
 )
 public class AdvancedCrowdsourcingPlugin extends Plugin
 {
@@ -97,9 +97,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	}
 
 	@Schedule(
-			period = SECONDS_BETWEEN_UPLOADS,
-			unit = ChronoUnit.SECONDS,
-			asynchronous = true
+		period = SECONDS_BETWEEN_UPLOADS,
+		unit = ChronoUnit.SECONDS,
+		asynchronous = true
 	)
 	public void submitToAPI()
 	{
