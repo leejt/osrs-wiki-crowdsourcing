@@ -1,5 +1,6 @@
 package com.Crowdsourcing;
 
+import com.Crowdsourcing.clues.CrowdsourcingClues;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.inventory.CrowdsourcingInventory;
 import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
@@ -29,7 +30,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	// Number of seconds to wait between trying to send data to the wiki.
 	// NOTE: I wanted to make this a config entry but annotation parameters
 	// need to be compile time constants.
-	private static final int SECONDS_BETWEEN_UPLOADS = 300;
+	private static final int SECONDS_BETWEEN_UPLOADS = 5;
 
 	@Inject
 	private EventBus eventBus;
@@ -64,6 +65,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingInventory inventory;
 
+	@Inject
+	private CrowdsourcingClues clues;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -76,6 +80,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(npcSighting);
 		eventBus.register(itemSighting);
 		eventBus.register(inventory);
+		eventBus.register(clues);
 
 		varbits.startUp();
 	}
@@ -92,6 +97,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(npcSighting);
 		eventBus.unregister(itemSighting);
 		eventBus.unregister(inventory);
+		eventBus.unregister(clues);
 
 		varbits.shutDown();
 	}
