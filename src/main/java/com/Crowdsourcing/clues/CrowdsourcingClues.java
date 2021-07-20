@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.ItemComposition;
 
+import net.runelite.api.ItemID;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.WidgetLoaded;
@@ -46,7 +47,9 @@ public class CrowdsourcingClues {
             if (itemComposition.getName().startsWith("Clue scroll") || itemComposition.getName().startsWith("Challenge scroll")) {
                 if (!seenClues.contains(itemComposition.getId())) {
                     clueId = itemComposition.getId();
-                    seenClues.add(clueId);
+                    if (clueId != ItemID.CLUE_SCROLL_MASTER) {
+                        seenClues.add(clueId);
+                    }
                 }
             }
         }
@@ -74,7 +77,12 @@ public class CrowdsourcingClues {
        }
        final Widget clueTextWidget = client.getWidget(WidgetInfo.CLUE_SCROLL_TEXT);
        if (clueTextWidget != null) {
-           clueText = clueTextWidget.getText();
+           String candidateClueText = clueTextWidget.getText();
+           if (clueId == ItemID.CLUE_SCROLL_MASTER && candidateClueText.equals(clueText)) {
+               clueId = -1;
+               return;
+           }
+           clueText = candidateClueText;
            submitClue();
            return;
        }
@@ -92,6 +100,7 @@ public class CrowdsourcingClues {
                         child.getModelZoom()
                 ));
             }
+            clueText = "";
             submitClue();
         }
     }
@@ -100,7 +109,6 @@ public class CrowdsourcingClues {
         manager.storeEvent(new ClueData(clueId, clueText, parts));
         log.info("{}, {}, {}", clueId, clueText, parts);
         clueId = -1;
-        clueText = "";
         parts = null;
         mapClueWidgetParent = null;
 
