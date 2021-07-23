@@ -62,6 +62,7 @@ public class CrowdsourcingNpcRespawn {
             }
             manager.storeEvent(new NpcRespawnData(index, npc.getId(), respawnTime, location, isInInstance));
             seenNpcs.add(index);
+            npcDespawnTimes.remove(index);
         }
     }
 
