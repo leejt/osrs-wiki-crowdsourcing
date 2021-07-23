@@ -71,7 +71,9 @@ public class CrowdsourcingAnimation
 			// Calculate a key for the blacklist
 			int key = (seenNpcComposition.getId() << 16) + seenNpc.getAnimation();
 			if (seenNpcAnims.contains(key))
+			{
 				return;
+			}
 			seenNpcAnims.add(key);
 			clientThread.invokeLater(() ->
 			{
