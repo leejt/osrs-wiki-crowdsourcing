@@ -37,13 +37,14 @@ public class CrowdsourcingAnimation
 		if (event.getActor() instanceof Player)
 		{
 			Player p = (Player) event.getActor();
-			if (p == null || seenPlayerAnims.contains(p.getAnimation()))
+			if (seenPlayerAnims.contains(p.getAnimation()))
 			{
 				return;
 			}
 			seenPlayerAnims.add(p.getAnimation());
 			clientThread.invokeLater(() ->
 			{
+				// Grab the player's location
 				LocalPoint local = LocalPoint.fromWorld(client, p.getWorldLocation());
 				if (local == null)
 				{
@@ -51,6 +52,8 @@ public class CrowdsourcingAnimation
 				}
 				WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 				boolean isInInstance = client.isInInstancedRegion();
+
+				// Create and send the animation data
 				AnimationData data = new AnimationData(p.getAnimation(), -1, true, isInInstance, location);
 				log.trace("Player anim id: {} stored", p.getAnimation());
 				manager.storeEvent(data);
@@ -58,29 +61,32 @@ public class CrowdsourcingAnimation
 		}
 		else if (event.getActor() instanceof NPC)
 		{
-			NPC n = (NPC) event.getActor();
-			NPCComposition nc = n.getTransformedComposition();
-			if (nc == null)
+			NPC seenNpc = (NPC) event.getActor();
+			NPCComposition seenNpcComposition = seenNpc.getTransformedComposition();
+			if (seenNpcComposition == null || seenNpcComposition.getId() == -1 || seenNpc.getAnimation() == -1)
 			{
 				return;
 			}
-			if (nc.getId() == -1 || n.getAnimation() == -1 || seenNpcAnims.contains((nc.getId() << 16) + n.getAnimation()))
-			{
+
+			// Calculate a key for the blacklist
+			int key = (seenNpcComposition.getId() << 16) + seenNpc.getAnimation();
+			if (seenNpcAnims.contains(key))
 				return;
-			}
-			n.getWorldLocation();
-			seenNpcAnims.add((nc.getId() << 16) + n.getAnimation());
+			seenNpcAnims.add(key);
 			clientThread.invokeLater(() ->
 			{
-				LocalPoint local = LocalPoint.fromWorld(client, n.getWorldLocation());
+				// Grab the NPC's location
+				LocalPoint local = LocalPoint.fromWorld(client, seenNpc.getWorldLocation());
 				if (local == null)
 				{
 					return;
 				}
 				WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 				boolean isInInstance = client.isInInstancedRegion();
-				AnimationData data = new AnimationData(n.getAnimation(), nc.getId(), false, isInInstance, location);
-				log.trace("NPC id {}: anim id {} stored", nc.getId(), n.getAnimation());
+
+				// Create and send the animation data
+				AnimationData data = new AnimationData(seenNpc.getAnimation(), seenNpcComposition.getId(), false, isInInstance, location);
+				log.trace("NPC id {}: anim id {} stored", seenNpcComposition.getId(), seenNpc.getAnimation());
 				manager.storeEvent(data);
 			});
 		}
