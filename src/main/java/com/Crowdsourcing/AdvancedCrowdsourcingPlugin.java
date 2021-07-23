@@ -8,6 +8,7 @@ import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
+import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
@@ -72,6 +73,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingAnimation animation;
 
+	@Inject
+	private CrowdsourcingNpcRespawn npcRespawn;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -86,6 +90,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(inventory);
 		eventBus.register(clues);
 		eventBus.register(animation);
+		eventBus.register(npcRespawn);
 
 		varbits.startUp();
 	}
@@ -104,6 +109,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(inventory);
 		eventBus.unregister(clues);
 		eventBus.unregister(animation);
+		eventBus.unregister(npcRespawn);
 
 		varbits.shutDown();
 	}
