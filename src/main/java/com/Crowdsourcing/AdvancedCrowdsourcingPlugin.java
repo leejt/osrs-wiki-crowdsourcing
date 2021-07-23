@@ -1,5 +1,6 @@
 package com.Crowdsourcing;
 
+import com.Crowdsourcing.animation.CrowdsourcingAnimation;
 import com.Crowdsourcing.clues.CrowdsourcingClues;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.inventory.CrowdsourcingInventory;
@@ -68,6 +69,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingClues clues;
 
+	@Inject
+	private CrowdsourcingAnimation animation;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -81,6 +85,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(itemSighting);
 		eventBus.register(inventory);
 		eventBus.register(clues);
+		eventBus.register(animation);
 
 		varbits.startUp();
 	}
@@ -98,6 +103,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(itemSighting);
 		eventBus.unregister(inventory);
 		eventBus.unregister(clues);
+		eventBus.unregister(animation);
 
 		varbits.shutDown();
 	}
