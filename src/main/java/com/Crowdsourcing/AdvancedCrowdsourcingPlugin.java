@@ -7,9 +7,11 @@ import com.Crowdsourcing.inventory.CrowdsourcingInventory;
 import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
+import com.Crowdsourcing.monster_examine.MonsterExamine;
 import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
+import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
@@ -17,7 +19,9 @@ import java.time.temporal.ChronoUnit;
 
 import lombok.extern.slf4j.Slf4j;
 
+import net.runelite.api.events.CommandExecuted;
 import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.task.Schedule;
@@ -76,6 +80,12 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingNpcRespawn npcRespawn;
 
+	@Inject
+	private Respawns respawns;
+
+	@Inject
+	private MonsterExamine monsterExamine;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -122,5 +132,33 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	public void submitToAPI()
 	{
 		manager.submitToAPI();
+	}
+
+	@Subscribe
+	public void onCommandExecuted(CommandExecuted commandExecuted)
+	{
+		String cmd = commandExecuted.getCommand();
+		switch (cmd) {
+			case "respawnon":
+				eventBus.register(respawns);
+				manager.sendMessage("Turned on respawns logger.");
+				npcRespawn.setLogging(true);
+				break;
+			case "respawnoff":
+				eventBus.unregister(respawns);
+				manager.sendMessage("Turned off respawns logger.");
+				npcRespawn.setLogging(false);
+				break;
+			case "monsteron":
+				eventBus.register(monsterExamine);
+				monsterExamine.startUp();
+				manager.sendMessage("Turned on monster examine logger.");
+				break;
+			case "monsteroff":
+				eventBus.unregister(monsterExamine);
+				monsterExamine.shutDown();
+				manager.sendMessage("Turned off monster examine logger.");
+				break;
+		}
 	}
 }

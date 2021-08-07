@@ -34,6 +34,11 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
+import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.chat.ChatMessageBuilder;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -54,6 +59,9 @@ public class CrowdsourcingManager
 
 	@Inject
 	private OkHttpClient okHttpClient;
+
+	@Inject
+	private ChatMessageManager chatMessageManager;
 
 	private List<Object> data = new ArrayList<>();
 
@@ -108,5 +116,18 @@ public class CrowdsourcingManager
 				response.close();
 			}
 		});
+	}
+
+	public void sendMessage(String message)
+	{
+		final ChatMessageBuilder chatMessage = new ChatMessageBuilder()
+				.append(ChatColorType.HIGHLIGHT)
+				.append(message)
+				.append(ChatColorType.NORMAL);
+
+		chatMessageManager.queue(QueuedMessage.builder()
+				.type(ChatMessageType.ITEM_EXAMINE)
+				.runeLiteFormattedMessage(chatMessage.build())
+				.build());
 	}
 }

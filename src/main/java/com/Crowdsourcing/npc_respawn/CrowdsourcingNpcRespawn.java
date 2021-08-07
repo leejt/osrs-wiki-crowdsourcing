@@ -22,12 +22,18 @@ public class CrowdsourcingNpcRespawn {
     private WorldPoint lastPlayerLocation;
     private HashMap<Integer, Integer> npcDespawnTimes = new HashMap<>();
     private HashSet<Integer> seenNpcs = new HashSet<>();
+    private boolean logging = false;
 
     @Inject
     private Client client;
 
     @Inject
     public CrowdsourcingManager manager;
+
+    public void setLogging(boolean logging)
+    {
+        this.logging = logging;
+    }
 
     private static boolean isInViewRange(WorldPoint wp1, WorldPoint wp2)
     {
@@ -61,6 +67,10 @@ public class CrowdsourcingNpcRespawn {
                 isInInstance = client.isInInstancedRegion();
             }
             manager.storeEvent(new NpcRespawnData(index, npc.getId(), respawnTime, location, isInInstance));
+            if (logging)
+            {
+                manager.sendMessage(String.format("NPC %d: %d ticks", npc.getId(), respawnTime+1));
+            }
             seenNpcs.add(index);
             npcDespawnTimes.remove(index);
         }
