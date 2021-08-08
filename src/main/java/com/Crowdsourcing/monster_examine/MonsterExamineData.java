@@ -12,4 +12,5 @@ public class MonsterExamineData {
     String aggressive;
     String defensive;
     String other;
+    String username;
 }

@@ -71,7 +71,7 @@ public class MonsterExamine
             String defensive = client.getWidget(522, 24).getText();
             String other = client.getWidget(522, 26).getText();
             httpClient.submitToAPI(
-                    new MonsterExamineData(lastId, name, stats ,aggressive, defensive, other));
+                    new MonsterExamineData(lastId, name, stats ,aggressive, defensive, other, client.getLocalPlayer().getName()));
         }
     }
 
