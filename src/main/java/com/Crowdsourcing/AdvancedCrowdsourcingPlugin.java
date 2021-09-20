@@ -10,6 +10,7 @@ import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.monster_examine.MonsterExamine;
 import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
+import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
@@ -86,6 +87,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private MonsterExamine monsterExamine;
 
+	@Inject
+	private CrowdsourcingOverheadDialogue overheadDialogue;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -101,6 +105,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(clues);
 		eventBus.register(animation);
 		eventBus.register(npcRespawn);
+		eventBus.register(overheadDialogue);
 
 		varbits.startUp();
 	}
@@ -120,6 +125,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(clues);
 		eventBus.unregister(animation);
 		eventBus.unregister(npcRespawn);
+		eventBus.unregister(overheadDialogue);
 
 		varbits.shutDown();
 	}
