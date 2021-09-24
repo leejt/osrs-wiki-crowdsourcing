@@ -7,6 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class QuestLogData
 {
-		private int animationId;
-		private int npcId;
+	private String qlName;
+	private boolean qlIsVarbit;
+	private int qlVarbIndex;
+	private int qlVarbValue;
+	private String qlText;
 }
