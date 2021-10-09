@@ -1,14 +1,19 @@
 package com.Crowdsourcing.overhead_dialogue;
 
 import com.Crowdsourcing.CrowdsourcingManager;
-import com.google.common.collect.EvictingQueue;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 import javax.inject.Inject;
+
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.events.OverheadTextChanged;
-import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.Subscribe;
+
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 public class CrowdsourcingOverheadDialogue
@@ -19,12 +24,30 @@ public class CrowdsourcingOverheadDialogue
 	@Inject
 	public Client client;
 
-	EvictingQueue recentlySeen = EvictingQueue.<Tuple>create(30);
 
-	static class Tuple {
+	public static CacheLoader<Tuple, Boolean> loader;
+	public static LoadingCache<Tuple, Boolean> recentlySeen;
+
+	static
+	{
+		loader = new CacheLoader<Tuple, Boolean>()
+		{
+			@Override
+			public Boolean load(Tuple key)
+			{
+				return true;
+			}
+		};
+		recentlySeen = CacheBuilder.newBuilder().maximumSize(100).build(loader);
+	}
+
+	static class Tuple
+	{
 		public final int npcId;
 		public final String text;
-		public Tuple(int npcId, String text) {
+
+		public Tuple(int npcId, String text)
+		{
 			this.npcId = npcId;
 			this.text = text;
 		}
@@ -33,7 +56,9 @@ public class CrowdsourcingOverheadDialogue
 		public boolean equals(Object o)
 		{
 			if (!(o instanceof Tuple))
+			{
 				return false;
+			}
 			Tuple t = (Tuple) o;
 			return ((this.npcId == t.npcId) && (this.text.equals(t.text)));
 		}
@@ -51,7 +76,7 @@ public class CrowdsourcingOverheadDialogue
 		NPC npc = (NPC) event.getActor();
 		Tuple npcPair = new Tuple(npc.getComposition().getId(), event.getOverheadText());
 		// If we have seen this npc, text pair recently, do not send it.
-		if (recentlySeen.contains(npcPair))
+		if (recentlySeen.getIfPresent(npcPair) != null)
 		{
 			log.debug("Already saw this pair in the last 30 sightings");
 			return;
@@ -61,7 +86,14 @@ public class CrowdsourcingOverheadDialogue
 		OverheadDialogueData data = new OverheadDialogueData(npc.getComposition().getId(), event.getOverheadText());
 
 		manager.storeEvent(data);
-		recentlySeen.add(npcPair);
+		try
+		{
+			recentlySeen.get(npcPair);
+		}
+		catch (ExecutionException e)
+		{
+			log.debug("ExecutionException caught");
+		}
 	}
 
 }
