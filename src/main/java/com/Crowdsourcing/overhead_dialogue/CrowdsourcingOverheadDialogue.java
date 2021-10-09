@@ -62,6 +62,14 @@ public class CrowdsourcingOverheadDialogue
 			Tuple t = (Tuple) o;
 			return ((this.npcId == t.npcId) && (this.text.equals(t.text)));
 		}
+
+		@Override
+		public int hashCode() {
+			int hash = 17;
+			hash = hash * 486187739 + this.npcId;
+			hash = hash * 486187739 + this.text.hashCode();
+			return hash;
+		}
 	}
 
 	@Subscribe
@@ -78,7 +86,7 @@ public class CrowdsourcingOverheadDialogue
 		// If we have seen this npc, text pair recently, do not send it.
 		if (recentlySeen.getIfPresent(npcPair) != null)
 		{
-			log.debug("Already saw this pair in the last 30 sightings");
+			log.debug("Already saw this pair in the last 100 sightings");
 			return;
 		}
 		// Note that we actually get dialogue for all variants of an NPC, even if they are not visible due to varbits.
@@ -88,6 +96,7 @@ public class CrowdsourcingOverheadDialogue
 		manager.storeEvent(data);
 		try
 		{
+			log.debug("Message recorded from NPC id: " + npc.getComposition().getId());
 			recentlySeen.get(npcPair);
 		}
 		catch (ExecutionException e)
