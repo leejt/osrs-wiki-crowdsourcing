@@ -12,6 +12,7 @@ import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
+import com.Crowdsourcing.pottery.CrowdsourcingPottery;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
@@ -94,6 +95,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingOverheadDialogue overheadDialogue;
 
+	@Inject
+	private CrowdsourcingPottery pottery;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -111,6 +115,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(npcRespawn);
 		eventBus.register(questLog);
 		eventBus.register(overheadDialogue);
+		eventBus.register(pottery);
 
 		varbits.startUp();
 	}
@@ -132,6 +137,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(npcRespawn);
 		eventBus.unregister(questLog);
 		eventBus.unregister(overheadDialogue);
+		eventBus.unregister(pottery);
 
 		varbits.shutDown();
 	}
