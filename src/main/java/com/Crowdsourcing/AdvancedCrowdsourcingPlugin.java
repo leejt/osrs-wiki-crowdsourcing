@@ -39,7 +39,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	// Number of seconds to wait between trying to send data to the wiki.
 	// NOTE: I wanted to make this a config entry but annotation parameters
 	// need to be compile time constants.
-	private static final int SECONDS_BETWEEN_UPLOADS = 5;
+	private static final int SECONDS_BETWEEN_UPLOADS = 300;
 
 	@Inject
 	private EventBus eventBus;
