@@ -79,9 +79,9 @@ public class CrowdsourcingNex {
     @Subscribe
     public void onStatChanged(StatChanged statChanged)
     {
-//        if (!inChamber) {
-//            return;
-//        }
+        if (!inChamber) {
+            return;
+        }
         Skill skill = statChanged.getSkill();
         int index = skills.indexOf(skill);
         if (index != -1) {
