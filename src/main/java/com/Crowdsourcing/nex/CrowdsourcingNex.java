@@ -29,6 +29,8 @@ public class CrowdsourcingNex {
     int[] skillLevels = new int[skills.size()];
     int[] skillXp = new int[skills.size()];
     int oldBossHp = 0;
+    int oldAttackStyle = 0;
+    int oldSpecEnergy = 0;
 
     private void addData(Object data) {
         session.add(new NexDataEntry(client.getTickCount(), data));
@@ -138,6 +140,18 @@ public class CrowdsourcingNex {
             addData(10000000 + newBossHp);
             oldBossHp = newBossHp;
         }
+
+        int newAttackStyle = client.getVar(VarPlayer.ATTACK_STYLE);
+        if (newAttackStyle != oldAttackStyle) {
+            addData(20000000 + newAttackStyle);
+            oldAttackStyle = newAttackStyle;
+        }
+
+        int newSpecEnergy = client.getVar(VarPlayer.SPECIAL_ATTACK_PERCENT);
+        if (newSpecEnergy != oldSpecEnergy) {
+            addData(30000000 + newSpecEnergy);
+            oldSpecEnergy = newSpecEnergy;
+        }
     }
 
     @Subscribe
@@ -179,6 +193,8 @@ public class CrowdsourcingNex {
                 if (equipContainer != null) {
                     addData(equipContainer.getItems());
                 }
+                oldAttackStyle = client.getVar(VarPlayer.ATTACK_STYLE);
+                oldSpecEnergy = client.getVar(VarPlayer.SPECIAL_ATTACK_PERCENT);
             }
             addData(message);
         }
