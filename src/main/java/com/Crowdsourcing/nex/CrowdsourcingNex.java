@@ -195,7 +195,9 @@ public class CrowdsourcingNex {
                     addData(equipContainer.getItems());
                 }
                 oldAttackStyle = client.getVar(VarPlayer.ATTACK_STYLE);
+                addData(20000000 + oldAttackStyle);
                 oldSpecEnergy = client.getVar(VarPlayer.SPECIAL_ATTACK_PERCENT);
+                addData(30000000 + oldSpecEnergy);
             }
             addData(message);
         }
