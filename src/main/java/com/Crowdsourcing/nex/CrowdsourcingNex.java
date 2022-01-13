@@ -79,9 +79,9 @@ public class CrowdsourcingNex {
     @Subscribe
     public void onStatChanged(StatChanged statChanged)
     {
-        if (!inChamber) {
-            return;
-        }
+//        if (!inChamber) {
+//            return;
+//        }
         Skill skill = statChanged.getSkill();
         int index = skills.indexOf(skill);
         if (index != -1) {
@@ -89,7 +89,7 @@ public class CrowdsourcingNex {
             int newBoostedLevel = statChanged.getBoostedLevel();
             if (newXp != skillXp[index]) {
                 // XP drop
-                Actor interacting = client.getLocalPlayer().getInteracting().getInteracting();
+                Actor interacting = client.getLocalPlayer().getInteracting();
                 if (interacting instanceof NPC) {
                     NPC npc = (NPC) interacting;
                     addData(new XPDropData(skill, newXp - skillXp[index],
