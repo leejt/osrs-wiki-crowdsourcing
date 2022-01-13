@@ -1,6 +1,7 @@
 package com.Crowdsourcing.nex;
 
 import com.Crowdsourcing.CrowdsourcingManager;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 public class CrowdsourcingNex {
 
     @Inject
@@ -97,7 +99,7 @@ public class CrowdsourcingNex {
             }
             if (newBoostedLevel != skillLevels[index]) {
                 // Level change
-                addData(index << 16 + statChanged.getBoostedLevel());
+                addData((index << 16) + statChanged.getBoostedLevel());
                 skillLevels[index] = newBoostedLevel;
             }
         }
@@ -123,7 +125,6 @@ public class CrowdsourcingNex {
             NPC npc = (NPC) actor;
             addData(new HitsplatData(npc.getId(), type, hitsplatApplied.getHitsplat().getAmount(),
                     npc.getHealthRatio(), npc.getHealthScale()));
-
         }
     }
 
