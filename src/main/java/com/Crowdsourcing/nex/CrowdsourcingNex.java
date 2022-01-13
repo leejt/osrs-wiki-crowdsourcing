@@ -29,7 +29,7 @@ public class CrowdsourcingNex {
     int oldBossHp = 0;
 
     private void addData(Object data) {
-        manager.storeEvent(new NexDataEntry(client.getTickCount(), data));
+        session.add(new NexDataEntry(client.getTickCount(), data));
     }
 
     @Subscribe
