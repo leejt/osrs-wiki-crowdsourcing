@@ -114,7 +114,8 @@ public class CrowdsourcingNex {
 
         Hitsplat.HitsplatType type = hitsplatApplied.getHitsplat().getHitsplatType();
         if (type != Hitsplat.HitsplatType.BLOCK_ME && type != Hitsplat.HitsplatType.BLOCK_OTHER
-        && type != Hitsplat.HitsplatType.DAMAGE_ME && type != Hitsplat.HitsplatType.DAMAGE_OTHER) {
+        && type != Hitsplat.HitsplatType.DAMAGE_ME && type != Hitsplat.HitsplatType.DAMAGE_OTHER
+        && type != Hitsplat.HitsplatType.HEAL) {
             return;
         }
 
