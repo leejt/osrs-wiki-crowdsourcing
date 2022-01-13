@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Slf4j
 public class CrowdsourcingNex {
 
     @Inject
@@ -24,7 +23,7 @@ public class CrowdsourcingNex {
 
     static final List<Skill> skills = Arrays.asList(Skill.ATTACK, Skill.STRENGTH, Skill.DEFENCE,
             Skill.RANGED, Skill.MAGIC);
-    static final int VERSION_NUMBER = 1;
+    static final int VERSION_NUMBER = 2;
     List<NexDataEntry> session = new ArrayList<>();
     boolean inChamber = false;
     int[] skillLevels = new int[skills.size()];
@@ -38,7 +37,6 @@ public class CrowdsourcingNex {
     @Subscribe
     public void onGameTick(GameTick event)
     {
-        manager.storeEvent(new NexData(new ArrayList<NexDataEntry>(), 0));
         if (client == null || client.getLocalPlayer() == null)
         {
             return;

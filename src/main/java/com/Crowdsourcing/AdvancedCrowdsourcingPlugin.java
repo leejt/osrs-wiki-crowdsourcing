@@ -32,7 +32,7 @@ import net.runelite.client.task.Schedule;
 
 @Slf4j
 @PluginDescriptor(
-	name = "V4 Wiki Crowdsourcing (advanced)",
+	name = "Wiki Crowdsourcing (advanced)",
 	description = "Help figure out varbits, quest states, and more. See osrs.wiki/RS:CROWD"
 )
 public class AdvancedCrowdsourcingPlugin extends Plugin
