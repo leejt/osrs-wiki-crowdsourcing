@@ -119,6 +119,9 @@ public class CrowdsourcingNex {
     @Subscribe
     public void onVarbitChanged(VarbitChanged event)
     {
+        if (!inChamber) {
+            return;
+        }
         // BOSS_HP varbit
         int newBossHp = client.getVarbitValue(6099);
         if (newBossHp != oldBossHp) {
