@@ -8,6 +8,7 @@ import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.monster_examine.MonsterExamine;
+import com.Crowdsourcing.nex.CrowdsourcingNex;
 import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
@@ -98,6 +99,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingPottery pottery;
 
+	@Inject
+	private CrowdsourcingNex nex;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -116,6 +120,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(questLog);
 		eventBus.register(overheadDialogue);
 		eventBus.register(pottery);
+		eventBus.register(nex);
 
 		varbits.startUp();
 	}
@@ -138,6 +143,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(questLog);
 		eventBus.unregister(overheadDialogue);
 		eventBus.unregister(pottery);
+		eventBus.unregister(nex);
 
 		varbits.shutDown();
 	}
