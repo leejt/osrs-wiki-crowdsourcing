@@ -2,6 +2,7 @@ package com.Crowdsourcing.nex;
 
 import com.Crowdsourcing.CrowdsourcingManager;
 import net.runelite.api.*;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
 import net.runelite.client.eventbus.Subscribe;
@@ -35,7 +36,17 @@ public class CrowdsourcingNex {
     @Subscribe
     public void onGameTick(GameTick event)
     {
-        WorldPoint playerLocation = client.getLocalPlayer().getWorldLocation();
+        manager.storeEvent(new NexData(new ArrayList<NexDataEntry>(), 0));
+        if (client == null || client.getLocalPlayer() == null)
+        {
+            return;
+        }
+        LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+        if (local == null)
+        {
+            return;
+        }
+        WorldPoint playerLocation = WorldPoint.fromLocalInstance(client, local);
         if (playerLocation.getX() >= 2909 && playerLocation.getX() <= 2943
         && playerLocation.getY() >= 5188 && playerLocation.getY() <= 5218) {
             inChamber = true;
@@ -152,11 +163,9 @@ public class CrowdsourcingNex {
         if (!inChamber) {
             return;
         }
-
         if (chatMessage.getType() != ChatMessageType.GAMEMESSAGE && chatMessage.getType() != ChatMessageType.SPAM) {
             return;
         }
-
         String message = chatMessage.getMessage();
         if (message.startsWith("Nex: ")) {
             if (message.contains("Fill my soul with smoke!")) {
