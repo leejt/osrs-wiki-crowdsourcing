@@ -9,4 +9,5 @@ public class AnimationData
 {
     boolean isMe;
     int animationId;
+    int npcId;
 }

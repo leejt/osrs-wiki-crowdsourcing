@@ -1,7 +1,6 @@
 package com.Crowdsourcing.nex;
 
 import com.Crowdsourcing.CrowdsourcingManager;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -23,7 +22,7 @@ public class CrowdsourcingNex {
 
     static final List<Skill> skills = Arrays.asList(Skill.ATTACK, Skill.STRENGTH, Skill.DEFENCE,
             Skill.RANGED, Skill.MAGIC);
-    static final int VERSION_NUMBER = 3;
+    static final int VERSION_NUMBER = 4;
     List<NexDataEntry> session = new ArrayList<>();
     boolean inChamber = false;
     int[] skillLevels = new int[skills.size()];
@@ -172,9 +171,15 @@ public class CrowdsourcingNex {
             Player player = (Player) actor;
             boolean isMe = actor == client.getLocalPlayer();
             int animationId = player.getAnimation();
+            int npcId = -1;
+            Actor interacting = player.getInteracting();
+            if (interacting instanceof NPC) {
+                NPC npc = (NPC) interacting;
+                npcId = npc.getId();
+            }
             if (isMe || animationId == 7643 || animationId == 1378) {
                 // BGS and DWH
-                addData(new AnimationData(isMe, animationId));
+                addData(new AnimationData(isMe, animationId, npcId));
             }
         }
     }
