@@ -23,7 +23,7 @@ public class CrowdsourcingNex {
 
     static final List<Skill> skills = Arrays.asList(Skill.ATTACK, Skill.STRENGTH, Skill.DEFENCE,
             Skill.RANGED, Skill.MAGIC);
-    static final int VERSION_NUMBER = 2;
+    static final int VERSION_NUMBER = 3;
     List<NexDataEntry> session = new ArrayList<>();
     boolean inChamber = false;
     int[] skillLevels = new int[skills.size()];
