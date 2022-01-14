@@ -181,9 +181,6 @@ public class CrowdsourcingNex {
 
     @Subscribe
     public void onChatMessage(ChatMessage chatMessage) {
-        System.out.println(chatMessage);
-
-
         if (!inChamber) {
             return;
         }
