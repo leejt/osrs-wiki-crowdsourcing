@@ -31,6 +31,7 @@ public class CrowdsourcingNex {
     int oldBossHp = 0;
     int oldAttackStyle = 0;
     int oldSpecEnergy = 0;
+    int oldActivePrayers = 0;
 
     private void addData(Object data) {
         session.add(new NexDataEntry(client.getTickCount(), data));
@@ -153,6 +154,12 @@ public class CrowdsourcingNex {
             addData(30000000 + newSpecEnergy);
             oldSpecEnergy = newSpecEnergy;
         }
+
+        int newActivePrayers = client.getVarbitValue(4101);
+        if (newActivePrayers != oldActivePrayers) {
+            addData(new PrayerData(newActivePrayers));
+            oldActivePrayers = newActivePrayers;
+        }
     }
 
     @Subscribe
@@ -174,6 +181,9 @@ public class CrowdsourcingNex {
 
     @Subscribe
     public void onChatMessage(ChatMessage chatMessage) {
+        System.out.println(chatMessage);
+
+
         if (!inChamber) {
             return;
         }
@@ -198,6 +208,9 @@ public class CrowdsourcingNex {
                 addData(20000000 + oldAttackStyle);
                 oldSpecEnergy = client.getVar(VarPlayer.SPECIAL_ATTACK_PERCENT);
                 addData(30000000 + oldSpecEnergy);
+                oldActivePrayers = client.getVarbitValue(4101);
+                addData(new PrayerData(oldActivePrayers));
+
             }
             addData(message);
         }
