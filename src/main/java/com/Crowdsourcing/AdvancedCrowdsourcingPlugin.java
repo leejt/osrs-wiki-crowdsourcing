@@ -1,6 +1,7 @@
 package com.Crowdsourcing;
 
 import com.Crowdsourcing.animation.CrowdsourcingAnimation;
+import com.Crowdsourcing.brewing.CrowdsourcingBrewing;
 import com.Crowdsourcing.clues.CrowdsourcingClues;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.inventory.CrowdsourcingInventory;
@@ -102,6 +103,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingNex nex;
 
+	@Inject
+	private CrowdsourcingBrewing brewing;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -121,6 +125,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(overheadDialogue);
 		eventBus.register(pottery);
 		eventBus.register(nex);
+		eventBus.register(brewing);
 
 		varbits.startUp();
 	}
@@ -144,6 +149,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(overheadDialogue);
 		eventBus.unregister(pottery);
 		eventBus.unregister(nex);
+		eventBus.unregister(brewing);
 
 		varbits.shutDown();
 	}
