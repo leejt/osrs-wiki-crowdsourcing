@@ -8,9 +8,13 @@ import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.monster_examine.MonsterExamine;
+import com.Crowdsourcing.nex.CrowdsourcingNex;
 import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
+import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
+import com.Crowdsourcing.pottery.CrowdsourcingPottery;
+import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
@@ -36,7 +40,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	// Number of seconds to wait between trying to send data to the wiki.
 	// NOTE: I wanted to make this a config entry but annotation parameters
 	// need to be compile time constants.
-	private static final int SECONDS_BETWEEN_UPLOADS = 5;
+	private static final int SECONDS_BETWEEN_UPLOADS = 300;
 
 	@Inject
 	private EventBus eventBus;
@@ -86,6 +90,18 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private MonsterExamine monsterExamine;
 
+	@Inject
+	private CrowdsourcingQuestLog questLog;
+
+	@Inject
+	private CrowdsourcingOverheadDialogue overheadDialogue;
+
+	@Inject
+	private CrowdsourcingPottery pottery;
+
+	@Inject
+	private CrowdsourcingNex nex;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -101,6 +117,10 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(clues);
 		eventBus.register(animation);
 		eventBus.register(npcRespawn);
+		eventBus.register(questLog);
+		eventBus.register(overheadDialogue);
+		eventBus.register(pottery);
+		eventBus.register(nex);
 
 		varbits.startUp();
 	}
@@ -120,6 +140,10 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(clues);
 		eventBus.unregister(animation);
 		eventBus.unregister(npcRespawn);
+		eventBus.unregister(questLog);
+		eventBus.unregister(overheadDialogue);
+		eventBus.unregister(pottery);
+		eventBus.unregister(nex);
 
 		varbits.shutDown();
 	}
