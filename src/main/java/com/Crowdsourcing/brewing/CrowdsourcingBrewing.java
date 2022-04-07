@@ -27,7 +27,6 @@ package com.Crowdsourcing.brewing;
 
 import com.Crowdsourcing.CrowdsourcingManager;
 import javax.inject.Inject;
-import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.api.Skill;
