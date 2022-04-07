@@ -63,27 +63,11 @@ public class CrowdsourcingBrewing
 
 			BrewingData data;
 			if (regionID == 11679) {
-				data = new BrewingData(message, regionID, this.theStuffKeldagrim, cookingLevel);
+				data = new BrewingData(message, regionID, client.getVarbitValue(2294), cookingLevel);
 			} else {
-				data = new BrewingData(message, regionID, this.theStuffPortPhasmatys, cookingLevel);
+				data = new BrewingData(message, regionID, client.getVarbitValue(2295), cookingLevel);
 			}
 			manager.storeEvent(data);
-		}
-	}
-
-	@Subscribe
-	private void onVarbitChanged(VarbitChanged ev)
-	{
-		if (this.client.getVarbitValue(2294) == 1) {
-			this.theStuffKeldagrim = true;
-		} else {
-			this.theStuffKeldagrim = false;
-		}
-
-		if (this.client.getVarbitValue(2295) == 1) {
-			this.theStuffPortPhasmatys = true;
-		} else {
-			this.theStuffPortPhasmatys = false;
 		}
 	}
 }
