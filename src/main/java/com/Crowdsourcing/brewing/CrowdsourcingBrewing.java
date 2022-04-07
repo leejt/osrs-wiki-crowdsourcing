@@ -25,23 +25,19 @@
 
 package com.Crowdsourcing.brewing;
 
+import com.Crowdsourcing.CrowdsourcingManager;
 import javax.inject.Inject;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
-import net.runelite.api.ItemContainer;
-import net.runelite.api.ItemID;
-import net.runelite.api.MenuAction;
 import net.runelite.api.Player;
 import net.runelite.api.Skill;
-import net.runelite.api.Varbits;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.events.ChatMessage;
-import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.plugins.crowdsourcing.CrowdsourcingManager;
 
 public class CrowdsourcingBrewing
 {
+
 	private boolean theStuffPortPhasmatys;
 	private boolean theStuffKeldagrim;
 
@@ -54,9 +50,12 @@ public class CrowdsourcingBrewing
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-		if (event.getType() != ChatMessageType.SPAM)
+
+		if (!ChatMessageType.SPAM.equals(event.getType()))
 		{
-			
+
+			final String message = event.getMessage();
+
 			if (message.startsWith("The barrel is now full"))
 			{
 				int regionID = -1;
@@ -68,21 +67,15 @@ public class CrowdsourcingBrewing
 
 				int cookingLevel = client.getBoostedSkillLevel(Skill.COOKING);
 
+				BrewingData data;
 				if (regionID == 11679) {
-                    			BrewingData data = new BrewingData(message, regionID, this.theStuffKeldagrim, cookingLevel);
-                		} else {
-					BrewingData data = new BrewingData(message, regionID, this.theStuffPortPhasmatys, cookingLevel);
-                		}
-
-				//manager.storeEvent(data);
-				System.out.print(message);
-				System.out.print(regionID);
- 				System.out.print(this.theStuffKeldagrim);
-				System.out.print(this.theStuffPortPhasmatys);
-				System.out.print(cookingLevel);
+					data = new BrewingData(message, regionID, this.theStuffKeldagrim, cookingLevel);
+				} else {
+					data = new BrewingData(message, regionID, this.theStuffPortPhasmatys, cookingLevel);
+				}
+				manager.storeEvent(data);
 			}
 		}
-
 	}
 
 	@Subscribe
