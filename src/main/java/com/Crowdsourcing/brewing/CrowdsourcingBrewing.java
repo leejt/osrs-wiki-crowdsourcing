@@ -51,30 +51,24 @@ public class CrowdsourcingBrewing
 	public void onChatMessage(ChatMessage event)
 	{
 
-		if (!ChatMessageType.SPAM.equals(event.getType()))
-		{
+		final String message = event.getMessage();
 
-			final String message = event.getMessage();
-
-			if (message.startsWith("The barrel is now full"))
-			{
-				int regionID = -1;
-				Player local = client.getLocalPlayer();
-				if (local != null)
-				{
-					regionID = local.getWorldLocation().getRegionID();
-				}
-
-				int cookingLevel = client.getBoostedSkillLevel(Skill.COOKING);
-
-				BrewingData data;
-				if (regionID == 11679) {
-					data = new BrewingData(message, regionID, this.theStuffKeldagrim, cookingLevel);
-				} else {
-					data = new BrewingData(message, regionID, this.theStuffPortPhasmatys, cookingLevel);
-				}
-				manager.storeEvent(data);
+		if (message.startsWith("The barrel is now full")) {
+			int regionID = -1;
+			Player local = client.getLocalPlayer();
+			if (local != null) {
+				regionID = local.getWorldLocation().getRegionID();
 			}
+
+			int cookingLevel = client.getBoostedSkillLevel(Skill.COOKING);
+
+			BrewingData data;
+			if (regionID == 11679) {
+				data = new BrewingData(message, regionID, this.theStuffKeldagrim, cookingLevel);
+			} else {
+				data = new BrewingData(message, regionID, this.theStuffPortPhasmatys, cookingLevel);
+			}
+			manager.storeEvent(data);
 		}
 	}
 
