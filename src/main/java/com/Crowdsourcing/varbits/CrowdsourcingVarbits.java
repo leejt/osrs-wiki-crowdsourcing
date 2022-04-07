@@ -128,7 +128,7 @@ public class CrowdsourcingVarbits
 		if (gameStateChanged.getGameState().equals(GameState.HOPPING)
 			|| gameStateChanged.getGameState().equals(GameState.LOGGING_IN))
 		{
-			initializingTick = client.getTickCount();
+			initializingTick = client.getTickCount() + 5;
 			shutDown();
 			startUp();
 		}
