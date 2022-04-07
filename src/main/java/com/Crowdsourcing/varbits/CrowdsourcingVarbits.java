@@ -150,7 +150,7 @@ public class CrowdsourcingVarbits
 
 			// If the varbit is being changed on an initializing tick (when logging in),
 			// don't push out varbit changes. There are too many, and are generally uninteresting.
-			if (oldValue != newValue && tick != initializingTick)
+			if (oldValue != newValue && tick > initializingTick)
 			{
 				client.setVarbitValue(oldVarps2, i, newValue);
 				if (!blackList.contains(i))
@@ -181,7 +181,7 @@ public class CrowdsourcingVarbits
 		int newValue = varps[index];
 
 		// Push out varp changes
-		if (oldValue != newValue && tick != initializingTick)
+		if (oldValue != newValue && tick > initializingTick)
 		{
 			clientThread.invokeLater(() -> {
 				LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
