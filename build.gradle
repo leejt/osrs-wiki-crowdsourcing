@@ -10,17 +10,17 @@ repositories {
 	mavenCentral()
 }
 
-def runeLiteVersion = '1.8.9'
+def runeLiteVersion = '1.8.16'
 
 dependencies {
-	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
+    compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
 
-	compileOnly 'org.projectlombok:lombok:1.18.20'
-	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-	testImplementation 'junit:junit:4.12'
-	testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion
-    testImplementation group: 'net.runelite', name: 'jshell', version: runeLiteVersion
+    testImplementation 'junit:junit:4.12'
+    testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion
+    testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
 }
 
 group = 'com.Crowdsourcing'
