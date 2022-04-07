@@ -1,1 +1,0 @@
-See [RuneScape:Crowdsourcing](https://oldschool.runescape.wiki/w/RuneScape:Crowdsourcing) on the OSRS Wiki for more details.
