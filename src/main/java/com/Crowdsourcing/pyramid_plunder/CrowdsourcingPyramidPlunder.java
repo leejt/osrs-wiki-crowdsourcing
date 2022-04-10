@@ -16,6 +16,8 @@ import net.runelite.api.ItemID;
 import static net.runelite.api.MenuAction.GAME_OBJECT_FIRST_OPTION;
 import static net.runelite.api.MenuAction.GAME_OBJECT_SECOND_OPTION;
 import static net.runelite.api.MenuAction.ITEM_FIRST_OPTION;
+import static net.runelite.api.MenuAction.NPC_THIRD_OPTION;
+import net.runelite.api.NPCComposition;
 import net.runelite.api.ObjectComposition;
 import net.runelite.api.Skill;
 import net.runelite.api.World;
@@ -149,6 +151,18 @@ public class CrowdsourcingPyramidPlunder
 				PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(id, objectComposition.getId(), event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
 				log.error(data.toString());
 			}
+		}
+		// Guardian mummy event
+		else if (event.getMenuAction() == NPC_THIRD_OPTION)
+		{
+			log.error(event.getMenuTarget());
+			if (!event.getMenuTarget().equals("<col=ffff00>Guardian mummy"))
+				return;
+			int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
+			int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
+			WorldPoint w = client.getLocalPlayer().getWorldLocation();
+			PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(1779, 1779, event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
+			log.error(data.toString());
 		}
 	}
 
