@@ -89,6 +89,10 @@ public class CrowdsourcingPyramidPlunder
 		}
 	}
 
+	private final WorldArea inside = new WorldArea(1916, 4418, 70, 62, 0);
+	private final WorldArea insideFloor1 = new WorldArea(1916, 4418, 70, 62, 1);
+	private final WorldArea insideFloor2 = new WorldArea(1916, 4418, 70, 62, 2);
+	private final WorldArea outside = new WorldArea(3281, 2787, 16, 17, 0);
 	@Subscribe
 	public void onChatMessage(ChatMessage chatMessage)
 	{
@@ -104,10 +108,6 @@ public class CrowdsourcingPyramidPlunder
 		int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 		int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 		WorldPoint w = client.getLocalPlayer().getWorldLocation();
-		WorldArea inside = new WorldArea(1916, 4418, 70, 62, 0);
-		WorldArea insideFloor1 = new WorldArea(1916, 4418, 70, 62, 1);
-		WorldArea insideFloor2 = new WorldArea(1916, 4418, 70, 62, 2);
-		WorldArea outside = new WorldArea(3281, 2787, 16, 17, 0);
 		if (!w.isInArea(inside) && !w.isInArea(insideFloor1) && !w.isInArea(insideFloor2) && !w.isInArea(outside))
 		{
 			return;
