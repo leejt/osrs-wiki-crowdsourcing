@@ -151,7 +151,7 @@ public class CrowdsourcingPyramidPlunder
 			{
 				int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 				int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
-				WorldPoint w = client.getLocalPlayer().getWorldLocation();
+				WorldPoint w = WorldPoint.fromScene(client, event.getParam0(), event.getParam1(), client.getPlane());
 				PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(id, objectComposition.getId(), event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
 				// log.error(data.toString());
 				manager.storeEvent(data);
@@ -162,7 +162,7 @@ public class CrowdsourcingPyramidPlunder
 		{
 			int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 			int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
-			WorldPoint w = client.getLocalPlayer().getWorldLocation();
+			WorldPoint w = WorldPoint.fromScene(client, event.getParam0(), event.getParam1(), client.getPlane());
 			PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(1779, 1779, event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
 			// log.error(data.toString());
 			manager.storeEvent(data);
