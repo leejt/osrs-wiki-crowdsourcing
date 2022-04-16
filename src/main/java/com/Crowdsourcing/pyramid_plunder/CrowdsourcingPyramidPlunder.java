@@ -89,8 +89,8 @@ public class CrowdsourcingPyramidPlunder
 				if (isInPyramidPlunder(w))
 				{
 					PyramidPlunderVarbData data = new PyramidPlunderVarbData(varbIndex, oldVarbVal, newVarbVal, w, unboostedLevel, boostedLevel);
-					log.error(data.toString());
-					// manager.storeEvent(data);
+					//log.error(data.toString());
+					manager.storeEvent(data);
 				}
 			}
 		}
@@ -115,8 +115,8 @@ public class CrowdsourcingPyramidPlunder
 		if (isInPyramidPlunder(w))
 		{
 			PyramidPlunderMessageData data = new PyramidPlunderMessageData(message, w, unboostedLevel, boostedLevel);
-			log.error(data.toString());
-			// manager.storeEvent(data);
+			// log.error(data.toString());
+			manager.storeEvent(data);
 		}
 	}
 
@@ -137,6 +137,7 @@ public class CrowdsourcingPyramidPlunder
 		.add(20931).add(20932).build();
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event) {
+		// TODO: Is there some way to get the location of the thing clicked on? Right now this tracks player loc
 		if (event.getMenuAction() == GAME_OBJECT_FIRST_OPTION || event.getMenuAction() == GAME_OBJECT_SECOND_OPTION)
 		{
 			ObjectComposition objectComposition = client.getObjectDefinition(event.getId());
@@ -152,7 +153,8 @@ public class CrowdsourcingPyramidPlunder
 				int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 				WorldPoint w = client.getLocalPlayer().getWorldLocation();
 				PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(id, objectComposition.getId(), event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
-				log.error(data.toString());
+				// log.error(data.toString());
+				manager.storeEvent(data);
 			}
 		}
 		// Guardian mummy event
@@ -162,7 +164,8 @@ public class CrowdsourcingPyramidPlunder
 			int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 			WorldPoint w = client.getLocalPlayer().getWorldLocation();
 			PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(1779, 1779, event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
-			log.error(data.toString());
+			// log.error(data.toString());
+			manager.storeEvent(data);
 		}
 	}
 
