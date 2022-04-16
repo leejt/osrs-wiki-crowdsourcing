@@ -1,27 +1,17 @@
 package com.Crowdsourcing.pyramid_plunder;
 
 import com.Crowdsourcing.CrowdsourcingManager;
-import com.Crowdsourcing.messages.MessagesData;
-import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.HashMap;
-import java.util.Map;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.ItemComposition;
-import net.runelite.api.ItemID;
 import static net.runelite.api.MenuAction.GAME_OBJECT_FIRST_OPTION;
 import static net.runelite.api.MenuAction.GAME_OBJECT_SECOND_OPTION;
-import static net.runelite.api.MenuAction.ITEM_FIRST_OPTION;
 import static net.runelite.api.MenuAction.NPC_THIRD_OPTION;
-import net.runelite.api.NPCComposition;
 import net.runelite.api.ObjectComposition;
 import net.runelite.api.Skill;
-import net.runelite.api.World;
-import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
@@ -40,6 +30,11 @@ public class CrowdsourcingPyramidPlunder
 	public Client client;
 
 
+	private final WorldArea inside = new WorldArea(1916, 4418, 70, 62, 0);
+	private final WorldArea insideFloor1 = new WorldArea(1916, 4418, 70, 62, 1);
+	private final WorldArea insideFloor2 = new WorldArea(1916, 4418, 70, 62, 2);
+	private final WorldArea outside = new WorldArea(3281, 2787, 16, 17, 0);
+
 	ImmutableSet<Integer> varbsToTrack = ImmutableSet.<Integer>builder()
 		// Urns
 		.add(2346).add(2347).add(2348).add(2349).add(2350).add(2351).add(2352).add(2353).add(2354).add(2355)
@@ -56,12 +51,20 @@ public class CrowdsourcingPyramidPlunder
 		if (client == null)
 			return;
 
+		// There's probably some way to init varbVals with these values so we don't need this function
 		for (Integer varbIndex : varbsToTrack)
 		{
 			if (varbIndex == null)
 				continue;
 			varbVals.put(varbIndex, 0);
 		}
+	}
+
+	private boolean isInPyramidPlunder(WorldPoint w)
+	{
+		if (w.isInArea(inside) || w.isInArea(insideFloor1) || w.isInArea(insideFloor2) || w.isInArea(outside))
+			return true;
+		return false;
 	}
 
 	@Subscribe
@@ -82,17 +85,17 @@ public class CrowdsourcingPyramidPlunder
 				WorldPoint w = client.getLocalPlayer().getWorldLocation();
 				int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 				int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
-				PyramidPlunderVarbData data = new PyramidPlunderVarbData(varbIndex, oldVarbVal, newVarbVal, w, unboostedLevel, boostedLevel);
-				log.error(data.toString());
-				// manager.storeEvent(data);
+				// Only send data if we are in or right outside PP. Still track changes in map though
+				if (isInPyramidPlunder(w))
+				{
+					PyramidPlunderVarbData data = new PyramidPlunderVarbData(varbIndex, oldVarbVal, newVarbVal, w, unboostedLevel, boostedLevel);
+					log.error(data.toString());
+					// manager.storeEvent(data);
+				}
 			}
 		}
 	}
 
-	private final WorldArea inside = new WorldArea(1916, 4418, 70, 62, 0);
-	private final WorldArea insideFloor1 = new WorldArea(1916, 4418, 70, 62, 1);
-	private final WorldArea insideFloor2 = new WorldArea(1916, 4418, 70, 62, 2);
-	private final WorldArea outside = new WorldArea(3281, 2787, 16, 17, 0);
 	@Subscribe
 	public void onChatMessage(ChatMessage chatMessage)
 	{
@@ -108,13 +111,13 @@ public class CrowdsourcingPyramidPlunder
 		int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 		int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 		WorldPoint w = client.getLocalPlayer().getWorldLocation();
-		if (!w.isInArea(inside) && !w.isInArea(insideFloor1) && !w.isInArea(insideFloor2) && !w.isInArea(outside))
+		// Only store message info if we are in or nearby PP
+		if (isInPyramidPlunder(w))
 		{
-			return;
+			PyramidPlunderMessageData data = new PyramidPlunderMessageData(message, w, unboostedLevel, boostedLevel);
+			log.error(data.toString());
+			// manager.storeEvent(data);
 		}
-		PyramidPlunderMessageData data = new PyramidPlunderMessageData(message, w, unboostedLevel, boostedLevel);
-		log.error(data.toString());
-		// manager.storeEvent(data);
 	}
 
 	// 20956, 20974, 20975, 20976, 20977, 20978, 20979, 20987, 21251, 21252, 21253, 21254 (outside doors)
@@ -153,11 +156,8 @@ public class CrowdsourcingPyramidPlunder
 			}
 		}
 		// Guardian mummy event
-		else if (event.getMenuAction() == NPC_THIRD_OPTION)
+		else if (event.getMenuAction() == NPC_THIRD_OPTION && event.getMenuTarget().equals("<col=ffff00>Guardian mummy"))
 		{
-			log.error(event.getMenuTarget());
-			if (!event.getMenuTarget().equals("<col=ffff00>Guardian mummy"))
-				return;
 			int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 			int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 			WorldPoint w = client.getLocalPlayer().getWorldLocation();
