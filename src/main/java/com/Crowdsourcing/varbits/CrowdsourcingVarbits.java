@@ -169,6 +169,7 @@ public class CrowdsourcingVarbits
 						WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 						boolean isInInstance = client.isInInstancedRegion();
 
+						log.info("Added varb " + i + " with value " + newValue);
 						VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, isInInstance, location);
 						crowdsourcingManager.storeEvent(varbitData);
 						// log.info(varbitData.toString());
@@ -188,6 +189,7 @@ public class CrowdsourcingVarbits
 				WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 				boolean isInInstance = client.isInInstancedRegion();
 
+				log.info("Added varp " + index + " with value " + newValue);
 				VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, isInInstance, location);
 				crowdsourcingManager.storeEvent(varPlayerData);
 				// log.info(varPlayerData.toString());
