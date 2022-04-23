@@ -1,5 +1,8 @@
 package com.Crowdsourcing.mahogany_homes;
 
+import com.google.common.collect.ImmutableSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
@@ -11,8 +14,8 @@ import net.runelite.client.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
+import net.runelite.client.util.Text;
 
 @Slf4j
 public class CrowdsourcingMahoganyHomes {
@@ -21,53 +24,9 @@ public class CrowdsourcingMahoganyHomes {
     public Client client;
 
     private static int lastAction = -1;
-    private String lastNpcName = null;
+    private String contractorName = null;
 
-    private final WorldPoint AMY_WORLDPOINT = new WorldPoint(2989, 3366, 0);
-    private final WorldPoint MARLO_WORLDPOINT = new WorldPoint(3240, 3471, 0);
-    private final WorldPoint ELLIE_WORLDPOINT = new WorldPoint(2636, 3293, 0);
-    private final WorldPoint ANGELO_WORLDPOINT = new WorldPoint(1782, 3626, 0);
     private final String[] strs = {"Expert Contract (Requires 70 Construction)"};
-    private final HashSet<String> l = new HashSet<>(Arrays.asList(strs));
-    private void handle2379()
-    {
-        Widget dialogueOptionsWidget = client.getWidget(WidgetInfo.DIALOG_OPTION_OPTIONS);
-        if (dialogueOptionsWidget == null || dialogueOptionsWidget.getChildren() == null)
-            return;
-        Widget[] options = dialogueOptionsWidget.getChildren();
-        String text = options[lastAction].getText();
-        if (!l.contains(text))
-            return;
-        if (lastAction != -1 && lastAction < options.length)
-            if (client.getLocalPlayer() == null)
-                return;
-            WorldPoint wp = client.getLocalPlayer().getWorldLocation();
-            String guessedName;
-            if (lastNpcName == null)
-            {
-                // We need to take a guess here:
-                if (wp.distanceTo(AMY_WORLDPOINT) < 10)
-                    guessedName = "Amy";
-                else if(wp.distanceTo(MARLO_WORLDPOINT) < 10)
-                    guessedName = "Marlo";
-                else if(wp.distanceTo(ELLIE_WORLDPOINT) < 10)
-                    guessedName = "Ellie";
-                else if(wp.distanceTo(ANGELO_WORLDPOINT) < 10)
-                    guessedName = "Angelo";
-                else
-                    guessedName = "Amy via NPC contact";
-            }
-            else if("Amy".equals(lastNpcName))
-            {
-                if (wp.distanceTo(AMY_WORLDPOINT) < 10)
-                    guessedName = "Amy";
-                else
-                    guessedName = "Amy via NPC contact";
-            }
-            else
-                guessedName = lastNpcName;
-            log.info("[GUESS] " + guessedName + ": " + options[lastAction].getText());
-    }
 
     @Subscribe
     private void onScriptPreFired(ScriptPreFired event)
@@ -76,7 +35,8 @@ public class CrowdsourcingMahoganyHomes {
             Widget dialogueNpcName = client.getWidget(WidgetInfo.DIALOG_NPC_NAME);
             if (dialogueNpcName == null)
                 return;
-            lastNpcName = dialogueNpcName.getText();
+            contractorName = dialogueNpcName.getText();
+			log.error("Stored npc name: " + contractorName);
         }
     }
 
@@ -85,14 +45,64 @@ public class CrowdsourcingMahoganyHomes {
     {
         if (widgetLoaded.getGroupId() != WidgetInfo.DIALOG_NPC_NAME.getGroupId())
             return;
-        lastNpcName = null;
+        contractorName = null;
     }
+
+	private static final String CONTACT_STRING = "NPC Contact";
+	private static final ImmutableSet<String> NPC_NAMES = ImmutableSet.<String>builder()
+		.add("Amy").add("Angelo").add("Ellie").add("Marlo").build();
 
     @Subscribe
     public void onMenuOptionClicked(MenuOptionClicked menuOptionClicked) {
-        if (menuOptionClicked.getMenuAction() == MenuAction.WIDGET_TYPE_6 && menuOptionClicked.getMenuOption().equals("Continue")) {
-            lastAction = menuOptionClicked.getParam0();
-            handle2379();
-        }
+		if (menuOptionClicked.getMenuAction().equals(MenuAction.CC_OP))
+		{
+			if (Text.removeTags(menuOptionClicked.getMenuTarget()).equals(CONTACT_STRING))
+			{
+				contractorName = "Amy";
+				log.error("Stored npc: " + contractorName);
+			}
+		}
+		if (menuOptionClicked.getMenuAction().equals(MenuAction.NPC_FIRST_OPTION) ||
+				menuOptionClicked.getMenuAction().equals(MenuAction.NPC_THIRD_OPTION))
+		{
+			String target = Text.removeTags(menuOptionClicked.getMenuTarget());
+
+			if (NPC_NAMES.contains(target) && !target.equals(contractorName))
+			{
+				contractorName = target;
+				log.error("Stored npc: " + contractorName);
+			}
+		}
     }
+
+	// Yoinked and adapted this function from https://github.com/TheStonedTurtle/Mahogany-Homes/blob/a9e118c1a07df4f4bd07e259ec23b6bef5f26206/src/main/java/thestonedturtle/mahoganyhomes/MahoganyHomesPlugin.java
+	// Check for NPC dialog assigning or reminding us of a contract
+	static final Pattern CONTRACT_PATTERN = Pattern.compile("(Please could you g|G)o see (\\w*)[ ,][\\w\\s,-]*[?.] You can get another job once you have furnished \\w* home\\.");
+	private static final ImmutableSet<String> HOMEOWNER_NAMES = ImmutableSet.<String>builder()
+		.add("Jess").add("Noella").add("Ross").add("Larry").add("Norman").add("Tau").add("Barbara").add("Leela")
+		.add("Mariah").add("Bob").add("Jeff").add("Sarah").build();
+	private String currentHomeowner = null;
+
+	@Subscribe
+	private void onGameTick(GameTick tick)
+	{
+		final Widget dialog = client.getWidget(WidgetInfo.DIALOG_NPC_TEXT);
+		if (dialog == null)
+		{
+			return;
+		}
+
+		final String npcText = Text.sanitizeMultilineText(dialog.getText());
+		final Matcher startContractMatcher = CONTRACT_PATTERN.matcher(npcText);
+		if (startContractMatcher.matches())
+		{
+			final String name = startContractMatcher.group(2);
+			if (HOMEOWNER_NAMES.contains(name) && name.equals(currentHomeowner))
+			{
+				currentHomeowner = name;
+				log.error("Home owner name set to: " + currentHomeowner);
+				log.error("This task was given by: " + contractorName);
+			}
+		}
+	}
 }

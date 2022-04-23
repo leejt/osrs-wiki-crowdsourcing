@@ -5,6 +5,7 @@ import com.Crowdsourcing.clues.CrowdsourcingClues;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
 import com.Crowdsourcing.inventory.CrowdsourcingInventory;
 import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
+import com.Crowdsourcing.mahogany_homes.CrowdsourcingMahoganyHomes;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.monster_examine.MonsterExamine;
@@ -102,6 +103,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingNex nex;
 
+	@Inject
+	private CrowdsourcingMahoganyHomes homes;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -121,6 +125,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(overheadDialogue);
 		eventBus.register(pottery);
 		eventBus.register(nex);
+		eventBus.register(homes);
 
 		varbits.startUp();
 	}
@@ -144,6 +149,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(overheadDialogue);
 		eventBus.unregister(pottery);
 		eventBus.unregister(nex);
+		eventBus.unregister(homes);
 
 		varbits.shutDown();
 	}
