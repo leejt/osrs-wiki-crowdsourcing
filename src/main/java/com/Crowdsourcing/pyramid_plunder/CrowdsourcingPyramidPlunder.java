@@ -88,7 +88,7 @@ public class CrowdsourcingPyramidPlunder
 				// Only send data if we are in or right outside PP. Still track changes in map though
 				if (isInPyramidPlunder(w))
 				{
-					PyramidPlunderVarbData data = new PyramidPlunderVarbData(varbIndex, oldVarbVal, newVarbVal, w, unboostedLevel, boostedLevel);
+					PyramidPlunderVarbData data = new PyramidPlunderVarbData(varbIndex, oldVarbVal, newVarbVal, w, unboostedLevel, boostedLevel, client.getTickCount());
 					//log.error(data.toString());
 					manager.storeEvent(data);
 				}
@@ -114,7 +114,7 @@ public class CrowdsourcingPyramidPlunder
 		// Only store message info if we are in or nearby PP
 		if (isInPyramidPlunder(w))
 		{
-			PyramidPlunderMessageData data = new PyramidPlunderMessageData(message, w, unboostedLevel, boostedLevel);
+			PyramidPlunderMessageData data = new PyramidPlunderMessageData(message, w, unboostedLevel, boostedLevel, client.getTickCount());
 			// log.error(data.toString());
 			manager.storeEvent(data);
 		}
@@ -137,7 +137,7 @@ public class CrowdsourcingPyramidPlunder
 		.add(20931).add(20932).build();
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event) {
-		// TODO: Is there some way to get the location of the thing clicked on? Right now this tracks player loc
+		int tick = client.getTickCount();
 		if (event.getMenuAction() == GAME_OBJECT_FIRST_OPTION || event.getMenuAction() == GAME_OBJECT_SECOND_OPTION)
 		{
 			ObjectComposition objectComposition = client.getObjectDefinition(event.getId());
@@ -152,7 +152,7 @@ public class CrowdsourcingPyramidPlunder
 				int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 				int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 				WorldPoint w = WorldPoint.fromScene(client, event.getParam0(), event.getParam1(), client.getPlane());
-				PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(id, objectComposition.getId(), event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
+				PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(id, objectComposition.getId(), event.getMenuAction().getId(), w, unboostedLevel, boostedLevel, tick);
 				// log.error(data.toString());
 				manager.storeEvent(data);
 			}
@@ -163,7 +163,7 @@ public class CrowdsourcingPyramidPlunder
 			int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 			int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 			WorldPoint w = WorldPoint.fromScene(client, event.getParam0(), event.getParam1(), client.getPlane());
-			PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(1779, 1779, event.getMenuAction().getId(), w, unboostedLevel, boostedLevel);
+			PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(1779, 1779, event.getMenuAction().getId(), w, unboostedLevel, boostedLevel, tick);
 			// log.error(data.toString());
 			manager.storeEvent(data);
 		}

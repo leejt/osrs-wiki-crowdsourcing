@@ -12,4 +12,5 @@ public class PyramidPlunderMessageData
 	private WorldPoint ppLocation;
 	private int ppThievingLevel;
 	private int ppBoostedThievingLevel;
+	private int ppTick;
 }
