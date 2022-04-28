@@ -59,6 +59,11 @@ public class CrowdsourcingExperience
 			return;
 
 		int experienceDiff = event.getXp() - lastExperience;
+
+		// Ignore things that are not experience changes
+		if (experienceDiff == 0)
+			return;
+
 		log.error("Stat change " + event.getSkill().getName() + " " + (event.getXp() - lastExperience));
 		WorldPoint w = client.getLocalPlayer().getWorldLocation();
 
