@@ -64,7 +64,7 @@ public class CrowdsourcingExperience
 		if (experienceDiff == 0)
 			return;
 
-		log.error("Stat change " + event.getSkill().getName() + " " + (event.getXp() - lastExperience));
+		log.debug("Stat change " + event.getSkill().getName() + " " + (event.getXp() - lastExperience));
 		WorldPoint w = client.getLocalPlayer().getWorldLocation();
 
 		// Check map and if val is different, roll to store
@@ -75,7 +75,7 @@ public class CrowdsourcingExperience
 	private void resetState()
 	{
 		// Set all of the skills to either the current experience (if logged in) or 0 (if not)
-		log.info("Resetting state");
+		log.debug("Resetting state");
 		skillExperience.clear();
 		for (Skill s : Skill.values())
 		{
@@ -83,7 +83,7 @@ public class CrowdsourcingExperience
 				continue;
 			if (client != null)
 			{
-				log.info("Putting skill exp " + s.getName() + " " + client.getSkillExperience(s));
+				log.debug("Putting skill exp " + s.getName() + " " + client.getSkillExperience(s));
 				skillExperience.put(s.getName(), client.getSkillExperience(s));
 			}
 			else
