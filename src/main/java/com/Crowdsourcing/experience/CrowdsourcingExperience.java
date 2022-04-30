@@ -9,6 +9,7 @@ import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
 import net.runelite.api.Skill;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
@@ -65,10 +66,12 @@ public class CrowdsourcingExperience
 			return;
 
 		log.debug("Stat change " + event.getSkill().getName() + " " + (event.getXp() - lastExperience));
+		int currentLevel = client.getRealSkillLevel(event.getSkill());
 		WorldPoint w = client.getLocalPlayer().getWorldLocation();
+		boolean isInInstance = client.isInInstancedRegion();
 
 		// Check map and if val is different, roll to store
-		ExperienceData data = new ExperienceData(event.getSkill(), experienceDiff, w, lastClick);
+		ExperienceData data = new ExperienceData(event.getSkill(), currentLevel, experienceDiff, w, isInInstance, lastClick);
 		manager.storeEvent(data);
 	}
 

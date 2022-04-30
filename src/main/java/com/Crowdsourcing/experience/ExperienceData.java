@@ -12,6 +12,8 @@ public class ExperienceData
 {
 	private Skill expSkill;
 	private int expAmount;
+	private int expCurrentLevel;
 	private WorldPoint expPoint;
+	private boolean expIsInInstance;
 	private MenuOptionClicked expLastOption;
 }
