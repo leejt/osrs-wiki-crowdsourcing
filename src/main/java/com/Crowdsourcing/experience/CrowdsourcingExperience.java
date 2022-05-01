@@ -71,7 +71,9 @@ public class CrowdsourcingExperience
 		boolean isInInstance = client.isInInstancedRegion();
 
 		// Check map and if val is different, roll to store
-		ExperienceData data = new ExperienceData(event.getSkill(), currentLevel, experienceDiff, w, isInInstance, lastClick);
+		ExperienceData data = new ExperienceData(event.getSkill(), currentLevel, experienceDiff, w, isInInstance,
+												 lastClick.getMenuAction(), lastClick.getId(), lastClick.getMenuOption(),
+												 lastClick.getMenuTarget(), lastClick.getParam0(), lastClick.getParam1());
 		manager.storeEvent(data);
 	}
 
