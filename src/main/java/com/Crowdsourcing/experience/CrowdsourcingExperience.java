@@ -65,16 +65,20 @@ public class CrowdsourcingExperience
 		if (experienceDiff == 0)
 			return;
 
-		log.debug("Stat change " + event.getSkill().getName() + " " + (event.getXp() - lastExperience));
+		log.trace("Stat change " + event.getSkill().getName() + " " + (event.getXp() - lastExperience));
 		int currentLevel = client.getRealSkillLevel(event.getSkill());
 		WorldPoint w = client.getLocalPlayer().getWorldLocation();
 		boolean isInInstance = client.isInInstancedRegion();
 
 		// Check map and if val is different, roll to store
-		ExperienceData data = new ExperienceData(event.getSkill(), currentLevel, experienceDiff, w, isInInstance,
-												 lastClick.getMenuAction(), lastClick.getId(), lastClick.getMenuOption(),
-												 lastClick.getMenuTarget(), lastClick.getParam0(), lastClick.getParam1());
-		manager.storeEvent(data);
+		if (Math.random() < 1.0 / 100 || event.getSkill() == Skill.AGILITY)
+		{
+			ExperienceData data = new ExperienceData(event.getSkill(), experienceDiff, currentLevel, w, isInInstance,
+				lastClick.getMenuAction(), lastClick.getId(), lastClick.getMenuOption(),
+				lastClick.getMenuTarget(), lastClick.getParam0(), lastClick.getParam1());
+			manager.storeEvent(data);
+			log.debug("Stored the following data: " + data.toString());
+		}
 	}
 
 	private void resetState()
