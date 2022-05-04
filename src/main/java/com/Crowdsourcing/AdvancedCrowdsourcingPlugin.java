@@ -127,6 +127,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(nex);
 		eventBus.register(homes);
 
+		homes.startUp();
 		varbits.startUp();
 	}
 
@@ -151,6 +152,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(nex);
 		eventBus.unregister(homes);
 
+		homes.shutDown();
 		varbits.shutDown();
 	}
 
