@@ -3,6 +3,7 @@ package com.Crowdsourcing;
 import com.Crowdsourcing.animation.CrowdsourcingAnimation;
 import com.Crowdsourcing.clues.CrowdsourcingClues;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
+import com.Crowdsourcing.experience.CrowdsourcingExperience;
 import com.Crowdsourcing.inventory.CrowdsourcingInventory;
 import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
@@ -104,7 +105,11 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	private CrowdsourcingNex nex;
 
 	@Inject
+	private CrowdsourcingExperience experience;
+
+  @Inject
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
+
 
 	@Override
 	protected void startUp() throws Exception
@@ -125,9 +130,11 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(overheadDialogue);
 		eventBus.register(pottery);
 		eventBus.register(nex);
+		eventBus.register(experience);
 		eventBus.register(pyramidPlunder);
 
 		varbits.startUp();
+		experience.startUp();
 		pyramidPlunder.startUp();
 	}
 
@@ -150,6 +157,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(overheadDialogue);
 		eventBus.unregister(pottery);
 		eventBus.unregister(nex);
+		eventBus.unregister(experience);
 		eventBus.unregister(pyramidPlunder);
 
 		varbits.shutDown();
