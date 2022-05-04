@@ -59,6 +59,7 @@ public class CrowdsourcingMahoganyHomes {
 
     @Subscribe
     public void onMenuOptionClicked(MenuOptionClicked menuOptionClicked) {
+		// Temporarily hold the last contractor we think we talked to. This will be frozen in a new var when we get a task.
 		if (menuOptionClicked.getMenuAction().equals(MenuAction.CC_OP))
 		{
 			if (Text.removeTags(menuOptionClicked.getMenuTarget()).equals(CONTACT_STRING))
@@ -84,16 +85,21 @@ public class CrowdsourcingMahoganyHomes {
 	@Subscribe
 	public void onVarbitChanged(VarbitChanged event)
 	{
+		// Copied this pattern from stonedturtle, handle the changes in onGameTick to do it all at once.
 		varbChanged = true;
 	}
 
 	private int updateVarbMap()
 	{
+		// Return the number of things changed so we can tell how many tasks we have in a contract.
+		// This could give more specific info, like which varbs changed and to what values
 		int numChanged = 0;
 		for (final Hotspot spot : Hotspot.values())
 		{
 			int newValue = client.getVarbitValue(spot.getVarb());
 			// If we have a contract and we see a non-zero change, we must be in the right spot.
+			// TODO: Test this, this seems like the weakest link, though I think this works.
+			// May not need hasContract, and that might actually not work in the edge case that you are in the area for an assignment when you get it (is hasContract set first or do the varb changes happen first?)
 			if (hasContract && varbMap.get(spot.getVarb()) != newValue && newValue != 0)
 				numChanged += 1;
 			varbMap.put(spot.getVarb(), newValue);
@@ -170,6 +176,7 @@ public class CrowdsourcingMahoganyHomes {
 		{
 			int tier = getTierOfCompletedTask();
 			log.info("You just finished a tier " + tier + " contract, fixing " + currentJobTasks + " objects for " + currentHomeowner + " assigned by " + currentContractor);
+			// This should give more info than just the number of tasks done
 			MahoganyHomesData data = new MahoganyHomesData(currentContractor, currentHomeowner, tier, currentJobTasks);
 
 			hasContract = false;
