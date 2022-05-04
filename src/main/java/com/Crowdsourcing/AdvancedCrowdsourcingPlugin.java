@@ -106,15 +106,14 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	private CrowdsourcingNex nex;
 
 	@Inject
-<<<<<<< HEAD
 	private CrowdsourcingMahoganyHomes homes;
-=======
+
+	@Inject
 	private CrowdsourcingExperience experience;
 
-  @Inject
+	@Inject
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
 
->>>>>>> master
 
 	@Override
 	protected void startUp() throws Exception
