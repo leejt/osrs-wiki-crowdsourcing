@@ -15,6 +15,7 @@ import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
 import com.Crowdsourcing.pottery.CrowdsourcingPottery;
+import com.Crowdsourcing.pyramid_plunder.CrowdsourcingPyramidPlunder;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
@@ -106,6 +107,10 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingExperience experience;
 
+  @Inject
+	private CrowdsourcingPyramidPlunder pyramidPlunder;
+
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -126,9 +131,11 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(pottery);
 		eventBus.register(nex);
 		eventBus.register(experience);
+		eventBus.register(pyramidPlunder);
 
 		varbits.startUp();
 		experience.startUp();
+		pyramidPlunder.startUp();
 	}
 
 	@Override
@@ -151,6 +158,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(pottery);
 		eventBus.unregister(nex);
 		eventBus.unregister(experience);
+		eventBus.unregister(pyramidPlunder);
 
 		varbits.shutDown();
 	}
