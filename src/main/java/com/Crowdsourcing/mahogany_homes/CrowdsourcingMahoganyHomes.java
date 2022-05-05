@@ -1,7 +1,33 @@
+/*
+ * Copyright (c) 2022, andmcadams
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.Crowdsourcing.mahogany_homes;
 
+import com.Crowdsourcing.CrowdsourcingManager;
 import com.google.common.collect.ImmutableSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +51,16 @@ public class CrowdsourcingMahoganyHomes {
 	@Inject
 	public ClientThread clientThread;
 
-    private static int lastAction = -1;
+	@Inject
+	public CrowdsourcingManager manager;
+
 	private boolean hasContract = false;
     private String lastContractorTalkedTo = null;
 	private String currentContractor = null;
 	private String currentHomeowner = null;
-	private int currentJobTasks = 0;
+	private HashSet<Integer> currentJobTaskVarbs;
 
 	private final HashMap<Integer, Integer> varbMap = new HashMap<>();
-    private final String[] strs = {"Expert Contract (Requires 70 Construction)"};
 
 	private static final String CONTACT_STRING = "NPC Contact";
 	private static final ImmutableSet<String> NPC_NAMES = ImmutableSet.<String>builder()
@@ -54,7 +81,7 @@ public class CrowdsourcingMahoganyHomes {
 		lastContractorTalkedTo = null;
 		currentContractor = null;
 		currentHomeowner = null;
-		currentJobTasks = 0;
+		currentJobTaskVarbs = null;
 	}
 
     @Subscribe
@@ -89,11 +116,11 @@ public class CrowdsourcingMahoganyHomes {
 		varbChanged = true;
 	}
 
-	private int updateVarbMap()
+	private HashSet<Integer> updateVarbMap()
 	{
-		// Return the number of things changed so we can tell how many tasks we have in a contract.
+		// Return the varbs that changed so we can tell how many tasks we have in a contract.
 		// This could give more specific info, like which varbs changed and to what values
-		int numChanged = 0;
+		HashSet<Integer> varbsChanged = new HashSet<>();
 		for (final Hotspot spot : Hotspot.values())
 		{
 			int newValue = client.getVarbitValue(spot.getVarb());
@@ -101,10 +128,12 @@ public class CrowdsourcingMahoganyHomes {
 			// TODO: Test this, this seems like the weakest link, though I think this works.
 			// May not need hasContract, and that might actually not work in the edge case that you are in the area for an assignment when you get it (is hasContract set first or do the varb changes happen first?)
 			if (hasContract && varbMap.get(spot.getVarb()) != newValue && newValue != 0)
-				numChanged += 1;
+			{
+				varbsChanged.add(spot.getVarb());
+			}
 			varbMap.put(spot.getVarb(), newValue);
 		}
-		return numChanged;
+		return varbsChanged;
 	}
 
 	@Subscribe
@@ -113,9 +142,10 @@ public class CrowdsourcingMahoganyHomes {
 		if (varbChanged)
 		{
 			varbChanged = false;
-			int numChanged = updateVarbMap();
+			HashSet<Integer> varbsChanged = updateVarbMap();
 			if (currentContractor != null)
-				currentJobTasks = Math.max(currentJobTasks, numChanged);
+				if (currentJobTaskVarbs == null ||varbsChanged.size() >= currentJobTaskVarbs.size())
+					currentJobTaskVarbs = varbsChanged;
 		}
 	}
 
@@ -175,15 +205,16 @@ public class CrowdsourcingMahoganyHomes {
 		else if (CONTRACT_FINISHED.matcher(Text.removeTags(e.getMessage())).matches())
 		{
 			int tier = getTierOfCompletedTask();
-			log.info("You just finished a tier " + tier + " contract, fixing " + currentJobTasks + " objects for " + currentHomeowner + " assigned by " + currentContractor);
+			log.info("You just finished a tier " + tier + " contract, fixing " + currentJobTaskVarbs.toString() + " objects for " + currentHomeowner + " assigned by " + currentContractor);
 			// This should give more info than just the number of tasks done
-			MahoganyHomesData data = new MahoganyHomesData(currentContractor, currentHomeowner, tier, currentJobTasks);
-
+			MahoganyHomesData data = new MahoganyHomesData(currentContractor, currentHomeowner, tier, currentJobTaskVarbs);
+			manager.storeEvent(data);
+			log.info(data.toString());
 			hasContract = false;
 			lastContractorTalkedTo = null;
 			currentContractor = null;
 			currentHomeowner = null;
-			currentJobTasks = 0;
+			currentJobTaskVarbs = null;
 		}
 	}
 
