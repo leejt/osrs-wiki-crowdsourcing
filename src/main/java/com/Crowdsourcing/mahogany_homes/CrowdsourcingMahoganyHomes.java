@@ -25,6 +25,7 @@
 package com.Crowdsourcing.mahogany_homes;
 
 import com.Crowdsourcing.CrowdsourcingManager;
+import static com.google.common.base.MoreObjects.firstNonNull;
 import com.google.common.collect.ImmutableSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.MenuAction;
 import net.runelite.api.events.*;
 import net.runelite.client.callback.ClientThread;
+import net.runelite.client.config.RuneScapeProfileType;
 import net.runelite.client.eventbus.Subscribe;
 
 import javax.inject.Inject;
@@ -77,6 +79,11 @@ public class CrowdsourcingMahoganyHomes {
 	public void shutDown()
 	{
 		varbMap.clear();
+		resetContract();
+	}
+
+	private void resetContract()
+	{
 		hasContract = false;
 		lastContractorTalkedTo = null;
 		currentContractor = null;
@@ -92,7 +99,7 @@ public class CrowdsourcingMahoganyHomes {
 			if (Text.removeTags(menuOptionClicked.getMenuTarget()).equals(CONTACT_STRING))
 			{
 				lastContractorTalkedTo = "Amy";
-				log.error("Stored npc: " + lastContractorTalkedTo);
+				log.debug("Stored npc: " + lastContractorTalkedTo);
 			}
 		}
 		if (menuOptionClicked.getMenuAction().equals(MenuAction.NPC_FIRST_OPTION) ||
@@ -103,7 +110,7 @@ public class CrowdsourcingMahoganyHomes {
 			if (NPC_NAMES.contains(target) && !target.equals(lastContractorTalkedTo))
 			{
 				lastContractorTalkedTo = target;
-				log.error("Stored npc: " + lastContractorTalkedTo);
+				log.debug("Stored npc: " + lastContractorTalkedTo);
 			}
 		}
     }
@@ -125,7 +132,6 @@ public class CrowdsourcingMahoganyHomes {
 		{
 			int newValue = client.getVarbitValue(spot.getVarb());
 			// If we have a contract and we see a non-zero change, we must be in the right spot.
-			// TODO: Test this, this seems like the weakest link, though I think this works.
 			// May not need hasContract, and that might actually not work in the edge case that you are in the area for an assignment when you get it (is hasContract set first or do the varb changes happen first?)
 			if (hasContract && varbMap.get(spot.getVarb()) != newValue && newValue != 0)
 			{
@@ -193,7 +199,7 @@ public class CrowdsourcingMahoganyHomes {
 			String homeownerName = m.group(1);
 			if (HOMEOWNER_NAMES.contains(homeownerName))
 			{
-				log.info("Contract set for " + homeownerName);
+				log.debug("Contract set for " + homeownerName);
 				hasContract = true;
 				currentContractor = lastContractorTalkedTo;
 				currentHomeowner = homeownerName;
@@ -202,20 +208,49 @@ public class CrowdsourcingMahoganyHomes {
 				log.error("Matched a contract message pattern but could not extract a valid name");
 		}
 
-		else if (CONTRACT_FINISHED.matcher(Text.removeTags(e.getMessage())).matches())
+		else if (hasContract && CONTRACT_FINISHED.matcher(Text.removeTags(e.getMessage())).matches())
 		{
 			int tier = getTierOfCompletedTask();
-			log.info("You just finished a tier " + tier + " contract, fixing " + currentJobTaskVarbs.toString() + " objects for " + currentHomeowner + " assigned by " + currentContractor);
+			log.debug("You just finished a tier " + tier + " contract, fixing " + currentJobTaskVarbs.toString() + " objects for " + currentHomeowner + " assigned by " + currentContractor);
 			// This should give more info than just the number of tasks done
 			MahoganyHomesData data = new MahoganyHomesData(currentContractor, currentHomeowner, tier, currentJobTaskVarbs);
 			manager.storeEvent(data);
-			log.info(data.toString());
-			hasContract = false;
-			lastContractorTalkedTo = null;
-			currentContractor = null;
-			currentHomeowner = null;
-			currentJobTaskVarbs = null;
+			resetContract();
 		}
 	}
 
+	private long lastAccountHash;
+	private RuneScapeProfileType lastWorldType;
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		// If logged in to a new account, go ahead and clear the contract.
+		GameState state = event.getGameState();
+		if (state == GameState.LOGGED_IN)
+		{
+			// LOGGED_IN is triggered between region changes too.
+			// Check that the username changed or the world type changed.
+			RuneScapeProfileType type = RuneScapeProfileType.getCurrent(client);
+
+			if (client.getAccountHash() != lastAccountHash || lastWorldType != type)
+			{
+				// Reset
+				log.debug("World change: {} -> {}, {} -> {}",
+					lastAccountHash, client.getAccountHash(),
+					firstNonNull(lastWorldType, "<unknown>"),
+					firstNonNull(type, "<unknown>"));
+
+				lastAccountHash = client.getAccountHash();
+				lastWorldType = type;
+				varbMap.clear();
+				clientThread.invoke(this::updateVarbMap);
+				resetContract();
+			}
+		}
+		// Reset if logged out since we have no clue if they logged in on mobile or something
+		if (event.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			resetContract();
+		}
+	}
 }
