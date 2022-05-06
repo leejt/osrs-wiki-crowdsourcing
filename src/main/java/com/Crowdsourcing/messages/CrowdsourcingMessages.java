@@ -7,6 +7,11 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.EquipmentInventorySlot;
+import net.runelite.api.InventoryID;
+import net.runelite.api.Item;
+import net.runelite.api.ItemContainer;
+import net.runelite.api.ItemID;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -126,6 +131,22 @@ public class CrowdsourcingMessages
 
 		if (ZOGRE_COFFIN_SUCCESS.equals(message) || ZOGRE_COFFIN_FAIL.equals(message) || ZOGRE_COFFIN_LOCKPICK_SNAPS.equals(message))
 		{
+			boolean hasLockpick = false;
+			boolean hasHairClip = false;
+			ItemContainer equipContainer = client.getItemContainer(InventoryID.INVENTORY);
+			if (equipContainer != null)
+			{
+				final Item[] items = equipContainer.getItems();
+				for (Item item : items)
+				{
+					if (item.getId() == ItemID.LOCKPICK)
+						hasLockpick = true;
+					else if (item.getId() == ItemID.HAIR_CLIP)
+						hasHairClip = true;
+				}
+			}
+			h.put("Lockpick", hasLockpick);
+			h.put("Hairclip", hasHairClip);
 			addSkillToMap(h, Skill.THIEVING);
 		}
 
@@ -168,6 +189,7 @@ public class CrowdsourcingMessages
 		boolean isInInstance = client.isInInstancedRegion();
 		HashMap<Object, Object> metadata = getMetadataForMessage(message);
 		MessagesData data = new MessagesData(message, isInInstance, location, metadata);
+		log.debug("" + data);
 		manager.storeEvent(data);
 	}
 }
