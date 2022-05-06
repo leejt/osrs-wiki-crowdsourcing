@@ -35,6 +35,7 @@ public class CrowdsourcingMessages
 	private static final String STEPPING_STONE_FAIL = "You slip over on the slimy stone.";
 
 	// Lava dragon scales, store herblore level and hard diary completion
+	private static final int HARD_WILDERNESS_DIARY_VARBIT = 4509;
 	private static final Pattern LAVA_DRAGON_SCALE_GRIND = Pattern.compile("You grind the lava dragon scale into \\d shards\\.");
 
 	// Sacred eel -> Zulrah scales, cooking level
@@ -81,11 +82,67 @@ public class CrowdsourcingMessages
 		// For each message, check if we need to add metadata. If so, add it to the hashmap to be returned.
 		HashMap<Object, Object> h = new HashMap<>();
 
+		// Should these just be a bunch of ImmutableSets and checks on contains?
 		if (CAIRN_ISLE_SUCCESS.equals(message) || CAIRN_ISLE_FAIL.equals(message))
 		{
 			addSkillToMap(h, Skill.AGILITY);
 		}
 
+		if (LOG_SUCCESS.equals(message) || LOG_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.AGILITY);
+		}
+
+		if (STEPPING_STONE_ATTEMPT.equals(message) || STEPPING_STONE_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.AGILITY);
+		}
+
+		if (LAVA_DRAGON_SCALE_GRIND.matcher(message).matches())
+		{
+			addSkillToMap(h, Skill.HERBLORE);
+			h.put("Diarycomplete", client.getVarbitValue(HARD_WILDERNESS_DIARY_VARBIT));
+		}
+
+		if (SACRED_EEL_DISSECTION.matcher(message).matches())
+		{
+			addSkillToMap(h, Skill.COOKING);
+		}
+
+		if (UNDEAD_TWIGS_SUCCESS.equals(message) || UNDEAD_TWIGS_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.WOODCUTTING);
+		}
+
+		if (WIRE_MACHINE_SUCCESS.equals(message) || WIRE_MACHINE_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.THIEVING);
+		}
+
+		if (VYRE_DISTRACTION_SUCCESS.equals(message) || VYRE_DISTRACTION_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.THIEVING);
+		}
+
+		if (ZOGRE_COFFIN_SUCCESS.equals(message) || ZOGRE_COFFIN_FAIL.equals(message) || ZOGRE_COFFIN_LOCKPICK_SNAPS.equals(message))
+		{
+			addSkillToMap(h, Skill.THIEVING);
+		}
+
+		if (VIYELDI_ROCK_MINING_SUCCESS.equals(message) || VIYELDI_ROCK_MINING_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.MINING);
+		}
+
+		if (VIYELDI_JAGGED_WALL_SUCCESS.equals(message) || VIYELDI_JAGGED_WALL_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.AGILITY);
+		}
+
+		if (ENTRANA_CANDLE_SUCCESS.equals(message) || ENTRANA_CANDLE_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.THIEVING);
+		}
 
 		return h;
 	}
@@ -109,8 +166,8 @@ public class CrowdsourcingMessages
 		}
 		WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 		boolean isInInstance = client.isInInstancedRegion();
-		MessagesData data = new MessagesData(message, isInInstance, location);
-		log.info("Storing data: " + message);
+		HashMap<Object, Object> metadata = getMetadataForMessage(message);
+		MessagesData data = new MessagesData(message, isInInstance, location, metadata);
 		manager.storeEvent(data);
 	}
 }
