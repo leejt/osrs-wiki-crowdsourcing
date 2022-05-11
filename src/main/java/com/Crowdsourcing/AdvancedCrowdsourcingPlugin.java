@@ -4,6 +4,7 @@ import com.Crowdsourcing.animation.CrowdsourcingAnimation;
 import com.Crowdsourcing.brewing.CrowdsourcingBrewing;
 import com.Crowdsourcing.clues.CrowdsourcingClues;
 import com.Crowdsourcing.dialogue.CrowdsourcingDialogue;
+import com.Crowdsourcing.experience.CrowdsourcingExperience;
 import com.Crowdsourcing.inventory.CrowdsourcingInventory;
 import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
@@ -15,6 +16,7 @@ import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
 import com.Crowdsourcing.pottery.CrowdsourcingPottery;
+import com.Crowdsourcing.pyramid_plunder.CrowdsourcingPyramidPlunder;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
@@ -105,6 +107,12 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 
 	@Inject
 	private CrowdsourcingBrewing brewing;
+  
+  @Inject
+	private CrowdsourcingExperience experience;
+
+  @Inject
+	private CrowdsourcingPyramidPlunder pyramidPlunder;
 
 	@Override
 	protected void startUp() throws Exception
@@ -126,8 +134,12 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(pottery);
 		eventBus.register(nex);
 		eventBus.register(brewing);
+		eventBus.register(experience);
+		eventBus.register(pyramidPlunder);
 
 		varbits.startUp();
+		experience.startUp();
+		pyramidPlunder.startUp();
 	}
 
 	@Override
@@ -150,6 +162,8 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(pottery);
 		eventBus.unregister(nex);
 		eventBus.unregister(brewing);
+		eventBus.unregister(experience);
+		eventBus.unregister(pyramidPlunder);
 
 		varbits.shutDown();
 	}
