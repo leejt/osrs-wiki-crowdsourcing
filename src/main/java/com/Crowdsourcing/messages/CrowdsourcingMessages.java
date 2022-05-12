@@ -75,6 +75,31 @@ public class CrowdsourcingMessages
 	private static final String ENTRANA_CANDLE_SUCCESS = "You steal a candle.";
 	private static final String ENTRANA_CANDLE_FAIL = "A higher power smites you.";
 
+	// Underground Pass things
+	private static final String UP_ROCKSLIDE_SUCCESS = "You climb over the rocks.";
+	private static final String UP_ROCKSLIDE_FAIL = "You slip and hurt yourself.";
+
+	private static final String UP_FIREARROW_SUCCESS = "...the arrow impales the rope support.";
+	private static final String UP_FIREARROW_FAIL = "...but the arrow just misses the rope.";
+
+	private static final String UP_ROPESWING_SUCCESS = "...and skillfully swing across.";
+	private static final String UP_ROPESWING_FAIL = "...but you fall into the darkness.";
+
+	private static final String UP_MARKINGS_TRAP_SUCCESS = "...and succeed, you quickly walk past.";
+	private static final String UP_MARKINGS_TRAP_FAIL = "... and fail, activating the trap!";
+
+	private static final String UP_SLAVE_CAGE_LOCKPICK_SUCCESS = "You successfully pick the lock.";
+	private static final String UP_SLAVE_CAGE_LOCKPICK_FAIL = "You attempt to pick the lock but fail to do so.";
+
+	private static final String UP_LEDGE_WALK_SUCCESS = "...you make it across safely.";
+	private static final String UP_LEDGE_WALK_FAIL = "...but you fall into the rat pit.";
+
+	private static final String UP_STONE_BRIDGE_SUCCESS = "...and make it.";
+	private static final String UP_STONE_BRIDGE_FAIL = "...and fall off it.";
+
+	private static final String UP_BRIDGE_SUCCESS = "...you manage to cross safely.";
+	private static final String UP_BRIDGE_FAIL = "...but you tumble into the darkness.";
+
 
 	private void addSkillToMap(HashMap<Object, Object> h, Skill s)
 	{
@@ -161,6 +186,26 @@ public class CrowdsourcingMessages
 		}
 
 		if (ENTRANA_CANDLE_SUCCESS.equals(message) || ENTRANA_CANDLE_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.THIEVING);
+		}
+
+		if (UP_ROCKSLIDE_SUCCESS.equals(message) || UP_ROCKSLIDE_FAIL.equals(message)
+			|| UP_ROPESWING_SUCCESS.equals(message) || UP_ROPESWING_FAIL.equals(message)
+			|| UP_LEDGE_WALK_SUCCESS.equals(message) || UP_LEDGE_WALK_FAIL.equals(message)
+			|| UP_STONE_BRIDGE_SUCCESS.equals(message) || UP_STONE_BRIDGE_FAIL.equals(message)
+			|| UP_BRIDGE_SUCCESS.equals(message) || UP_BRIDGE_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.AGILITY);
+		}
+
+		if (UP_FIREARROW_SUCCESS.equals(message) || UP_FIREARROW_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.RANGED);
+		}
+
+		if (UP_SLAVE_CAGE_LOCKPICK_SUCCESS.equals(message) || UP_SLAVE_CAGE_LOCKPICK_FAIL.equals(message)
+			|| UP_MARKINGS_TRAP_SUCCESS.equals(message) || UP_MARKINGS_TRAP_FAIL.equals(message))
 		{
 			addSkillToMap(h, Skill.THIEVING);
 		}
