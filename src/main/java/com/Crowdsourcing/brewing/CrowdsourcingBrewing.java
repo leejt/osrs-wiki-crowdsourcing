@@ -45,7 +45,7 @@ public class CrowdsourcingBrewing
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-
+		
 		final String message = event.getMessage();
 
 		if (message.startsWith("The barrel is now full")) {
@@ -59,9 +59,9 @@ public class CrowdsourcingBrewing
 
 			BrewingData data;
 			if (regionID == 11679) {
-				data = new BrewingData(message, regionID, client.getVarbitValue(2294), cookingLevel);
+				data = new BrewingData(message, regionID, client.getVarbitValue(2294), client.getVarbitValue(736), cookingLevel);
 			} else {
-				data = new BrewingData(message, regionID, client.getVarbitValue(2295), cookingLevel);
+				data = new BrewingData(message, regionID, client.getVarbitValue(2295), client.getVarbitValue(737), cookingLevel);
 			}
 			manager.storeEvent(data);
 		}

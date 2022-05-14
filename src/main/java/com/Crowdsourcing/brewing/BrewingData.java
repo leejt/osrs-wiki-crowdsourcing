@@ -35,5 +35,6 @@ public class BrewingData
 	private final String message;
 	private final int regionID;
 	private final int usedTheStuff;
+	private final int aleType;
 	private final int cookingLevel;
 }
