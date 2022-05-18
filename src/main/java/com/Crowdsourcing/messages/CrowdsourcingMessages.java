@@ -100,6 +100,9 @@ public class CrowdsourcingMessages
 	private static final String UP_BRIDGE_SUCCESS = "...you manage to cross safely.";
 	private static final String UP_BRIDGE_FAIL = "...but you tumble into the darkness.";
 
+	// Control
+	private static final String TUNA_SUCCESS = "You manage to cook a tuna.";
+	private static final String TUNA_FAIL = "You accidentally burn the tuna.";
 
 	private void addSkillToMap(HashMap<Object, Object> h, Skill s)
 	{
@@ -208,6 +211,11 @@ public class CrowdsourcingMessages
 			|| UP_MARKINGS_TRAP_SUCCESS.equals(message) || UP_MARKINGS_TRAP_FAIL.equals(message))
 		{
 			addSkillToMap(h, Skill.THIEVING);
+		}
+
+		if (TUNA_SUCCESS.equals(message) || TUNA_FAIL.equals(message))
+		{
+			addSkillToMap(h, Skill.COOKING);
 		}
 
 		return h;
