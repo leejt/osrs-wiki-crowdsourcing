@@ -12,5 +12,5 @@ public class MessagesData
 	private String message;
 	private boolean isInInstance;
 	private WorldPoint location;
-	private HashMap<Object, Object> metadata;
+	private HashMap<String, Object> metadata;
 }

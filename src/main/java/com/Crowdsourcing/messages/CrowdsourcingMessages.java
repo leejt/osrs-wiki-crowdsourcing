@@ -104,57 +104,59 @@ public class CrowdsourcingMessages
 	private static final String TUNA_SUCCESS = "You manage to cook a tuna.";
 	private static final String TUNA_FAIL = "You accidentally burn the tuna.";
 
-	private void addSkillToMap(HashMap<Object, Object> h, Skill s)
+	private HashMap<String, Object> createSkillMap(Skill s)
 	{
+		HashMap<String, Object> h = new HashMap<>();
 		h.put(s.getName(), client.getRealSkillLevel(s));
 		h.put("B" + s.getName(), client.getBoostedSkillLevel(s));
+		return h;
 	}
 
-	public HashMap<Object, Object> getMetadataForMessage(String message)
+	public HashMap<String, Object> getMetadataForMessage(String message)
 	{
 		// For each message, check if we need to add metadata. If so, add it to the hashmap to be returned.
-		HashMap<Object, Object> h = new HashMap<>();
 
 		// Should these just be a bunch of ImmutableSets and checks on contains?
 		if (CAIRN_ISLE_SUCCESS.equals(message) || CAIRN_ISLE_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.AGILITY);
+			return createSkillMap(Skill.AGILITY);
 		}
 
 		if (LOG_SUCCESS.equals(message) || LOG_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.AGILITY);
+			return createSkillMap(Skill.AGILITY);
 		}
 
 		if (STEPPING_STONE_ATTEMPT.equals(message) || STEPPING_STONE_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.AGILITY);
+			return createSkillMap(Skill.AGILITY);
 		}
 
 		if (LAVA_DRAGON_SCALE_GRIND.matcher(message).matches())
 		{
-			addSkillToMap(h, Skill.HERBLORE);
+			HashMap<String, Object> h = createSkillMap(Skill.HERBLORE);
 			h.put("Diarycomplete", client.getVarbitValue(HARD_WILDERNESS_DIARY_VARBIT));
+			return h;
 		}
 
 		if (SACRED_EEL_DISSECTION.matcher(message).matches())
 		{
-			addSkillToMap(h, Skill.COOKING);
+			return createSkillMap(Skill.COOKING);
 		}
 
 		if (UNDEAD_TWIGS_SUCCESS.equals(message) || UNDEAD_TWIGS_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.WOODCUTTING);
+			return createSkillMap(Skill.WOODCUTTING);
 		}
 
 		if (WIRE_MACHINE_SUCCESS.equals(message) || WIRE_MACHINE_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.THIEVING);
+			return createSkillMap(Skill.THIEVING);
 		}
 
 		if (VYRE_DISTRACTION_SUCCESS.equals(message) || VYRE_DISTRACTION_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.THIEVING);
+			return createSkillMap(Skill.THIEVING);
 		}
 
 		if (ZOGRE_COFFIN_SUCCESS.equals(message) || ZOGRE_COFFIN_FAIL.equals(message) || ZOGRE_COFFIN_LOCKPICK_SNAPS.equals(message))
@@ -173,24 +175,25 @@ public class CrowdsourcingMessages
 						hasHairClip = true;
 				}
 			}
+			HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
 			h.put("Lockpick", hasLockpick);
 			h.put("Hairclip", hasHairClip);
-			addSkillToMap(h, Skill.THIEVING);
+			return h;
 		}
 
 		if (VIYELDI_ROCK_MINING_SUCCESS.equals(message) || VIYELDI_ROCK_MINING_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.MINING);
+			return createSkillMap(Skill.MINING);
 		}
 
 		if (VIYELDI_JAGGED_WALL_SUCCESS.equals(message) || VIYELDI_JAGGED_WALL_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.AGILITY);
+			return createSkillMap(Skill.AGILITY);
 		}
 
 		if (ENTRANA_CANDLE_SUCCESS.equals(message) || ENTRANA_CANDLE_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.THIEVING);
+			return createSkillMap(Skill.THIEVING);
 		}
 
 		if (UP_ROCKSLIDE_SUCCESS.equals(message) || UP_ROCKSLIDE_FAIL.equals(message)
@@ -199,26 +202,26 @@ public class CrowdsourcingMessages
 			|| UP_STONE_BRIDGE_SUCCESS.equals(message) || UP_STONE_BRIDGE_FAIL.equals(message)
 			|| UP_BRIDGE_SUCCESS.equals(message) || UP_BRIDGE_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.AGILITY);
+			return createSkillMap(Skill.AGILITY);
 		}
 
 		if (UP_FIREARROW_SUCCESS.equals(message) || UP_FIREARROW_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.RANGED);
+			return createSkillMap(Skill.RANGED);
 		}
 
 		if (UP_SLAVE_CAGE_LOCKPICK_SUCCESS.equals(message) || UP_SLAVE_CAGE_LOCKPICK_FAIL.equals(message)
 			|| UP_MARKINGS_TRAP_SUCCESS.equals(message) || UP_MARKINGS_TRAP_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.THIEVING);
+			return createSkillMap(Skill.THIEVING);
 		}
 
 		if (TUNA_SUCCESS.equals(message) || TUNA_FAIL.equals(message))
 		{
-			addSkillToMap(h, Skill.COOKING);
+			return createSkillMap(Skill.COOKING);
 		}
 
-		return h;
+		return null;
 	}
 
 	@Subscribe
@@ -240,9 +243,9 @@ public class CrowdsourcingMessages
 		}
 		WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 		boolean isInInstance = client.isInInstancedRegion();
-		HashMap<Object, Object> metadata = getMetadataForMessage(message);
+		HashMap<String, Object> metadata = getMetadataForMessage(message);
 		MessagesData data = new MessagesData(message, isInInstance, location, metadata);
-		log.debug("" + data);
+		// log.debug("" + data);
 		manager.storeEvent(data);
 	}
 }
