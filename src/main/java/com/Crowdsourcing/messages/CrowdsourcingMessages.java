@@ -100,6 +100,15 @@ public class CrowdsourcingMessages
 	private static final String UP_BRIDGE_SUCCESS = "...you manage to cross safely.";
 	private static final String UP_BRIDGE_FAIL = "...but you tumble into the darkness.";
 
+	private static final String CACTUS_SUCCESS_1 = "You top up your skin with water from the cactus.";
+	private static final String CACTUS_SUCCESS_2 = "You fill your skin with water from the cactus.";
+	private static final String CACTUS_SUCCESS_3 = "You have no empty waterskins to put the water in.";
+	private static final String CACTUS_FAIL = "You fail to cut the cactus correctly and it gives no water this time.";
+
+	// This message gives us number of successes without a fragment
+	private static final String VM_BOULDER_SUCCESS = "You chip off a part of the boulder.";
+	private static final Pattern VM_BOULDER_REWARDS = Pattern.compile("You mine out .*");
+
 	// Control
 	private static final String TUNA_SUCCESS = "You manage to cook a tuna.";
 	private static final String TUNA_FAIL = "You accidentally burn the tuna.";
@@ -144,7 +153,9 @@ public class CrowdsourcingMessages
 			return createSkillMap(Skill.COOKING);
 		}
 
-		if (UNDEAD_TWIGS_SUCCESS.equals(message) || UNDEAD_TWIGS_FAIL.equals(message))
+		if (UNDEAD_TWIGS_SUCCESS.equals(message) || UNDEAD_TWIGS_FAIL.equals(message)
+			|| CACTUS_SUCCESS_1.equals(message) || CACTUS_SUCCESS_2.equals(message) || CACTUS_SUCCESS_3.equals(message)
+			|| CACTUS_FAIL.equals(message))
 		{
 			return createSkillMap(Skill.WOODCUTTING);
 		}
@@ -181,7 +192,8 @@ public class CrowdsourcingMessages
 			return h;
 		}
 
-		if (VIYELDI_ROCK_MINING_SUCCESS.equals(message) || VIYELDI_ROCK_MINING_FAIL.equals(message))
+		if (VIYELDI_ROCK_MINING_SUCCESS.equals(message) || VIYELDI_ROCK_MINING_FAIL.equals(message)
+			|| VM_BOULDER_SUCCESS.equals(message) || VM_BOULDER_REWARDS.matcher(message).matches())
 		{
 			return createSkillMap(Skill.MINING);
 		}
