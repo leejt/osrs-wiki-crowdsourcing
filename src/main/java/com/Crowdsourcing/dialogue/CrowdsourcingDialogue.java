@@ -49,6 +49,10 @@ public class CrowdsourcingDialogue
 	private String lastSpriteText = null;
 	private int lastItemId;
 
+	private String lastDoubleSpriteText = null;
+	private int lastDoubleItemId1;
+	private int lastDoubleItemId2;
+
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
@@ -78,6 +82,38 @@ public class CrowdsourcingDialogue
 		{
 			lastSpriteText = null;
 			lastItemId = -1;
+		}
+
+
+		Widget doubleSprite1Widget = client.getWidget(11, 1);
+		Widget doubleSprite2Widget = client.getWidget(11, 3);
+		Widget doubleTextWidget = client.getWidget(11, 2);
+		if (doubleSprite1Widget != null && doubleTextWidget != null && (!doubleTextWidget.getText().equals(lastDoubleSpriteText)
+				|| doubleSprite1Widget.getItemId() != lastDoubleItemId1 || doubleSprite2Widget.getItemId() != lastDoubleItemId2))
+		{
+			lastDoubleItemId1 = doubleSprite1Widget.getItemId();
+			lastDoubleItemId2 = doubleSprite2Widget.getItemId();
+			lastDoubleSpriteText = doubleTextWidget.getText();
+			log.debug(String.format("%d, %d: %s", lastDoubleItemId1, lastDoubleItemId2, lastDoubleSpriteText));
+			if (client == null || client.getLocalPlayer() == null)
+			{
+				return;
+			}
+			LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+			if (local == null)
+			{
+				return;
+			}
+			WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+			boolean isInInstance = client.isInInstancedRegion();
+			DoubleSpriteTextData data = new DoubleSpriteTextData(lastDoubleSpriteText, lastDoubleItemId1, lastDoubleItemId2, isInInstance, location);
+			manager.storeEvent(data);
+		}
+		else if (doubleSprite1Widget == null || doubleSprite2Widget == null || doubleTextWidget == null)
+		{
+			lastDoubleSpriteText = null;
+			lastDoubleItemId1 = -1;
+			lastDoubleItemId2 = -1;
 		}
 	}
 }

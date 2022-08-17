@@ -9,7 +9,6 @@ import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.monster_examine.MonsterExamine;
-import com.Crowdsourcing.nex.CrowdsourcingNex;
 import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
@@ -102,9 +101,6 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	private CrowdsourcingPottery pottery;
 
 	@Inject
-	private CrowdsourcingNex nex;
-
-	@Inject
 	private CrowdsourcingExperience experience;
 
   @Inject
@@ -129,7 +125,6 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(questLog);
 		eventBus.register(overheadDialogue);
 		eventBus.register(pottery);
-		eventBus.register(nex);
 		eventBus.register(experience);
 		eventBus.register(pyramidPlunder);
 
@@ -156,7 +151,6 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(questLog);
 		eventBus.unregister(overheadDialogue);
 		eventBus.unregister(pottery);
-		eventBus.unregister(nex);
 		eventBus.unregister(experience);
 		eventBus.unregister(pyramidPlunder);
 
