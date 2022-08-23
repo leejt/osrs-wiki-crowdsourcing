@@ -31,7 +31,13 @@ public class CrowdsourcingExperience
 	private long lastAccountHash;
 	private RuneScapeProfileType lastWorldType;
 	private boolean initializeExperience;
-	private MenuOptionClicked lastClick;
+
+	private MenuAction menuAction;
+	private int id;
+	private String menuOption;
+	private String menuTarget;
+	private int param0;
+	private int param1;
 
 
 	private HashMap<String, Integer> skillExperience = new HashMap<>();
@@ -77,8 +83,8 @@ public class CrowdsourcingExperience
 
 		// Check map and if val is different, roll to store
 		ExperienceData data = new ExperienceData(event.getSkill(), experienceDiff, currentLevel, location, isInInstance,
-			lastClick.getMenuAction(), lastClick.getId(), lastClick.getMenuOption(),
-			lastClick.getMenuTarget(), lastClick.getParam0(), lastClick.getParam1());
+			menuAction, id, menuOption,
+			menuTarget, param0, param1);
 		manager.storeEvent(data);
 	}
 
@@ -152,7 +158,13 @@ public class CrowdsourcingExperience
 		if (menuOptionClicked.getMenuAction() != MenuAction.WALK
 			&& !menuOptionClicked.getMenuOption().equals("Message"))
 		{
-			lastClick = menuOptionClicked;
+			menuAction = menuOptionClicked.getMenuAction();
+			menuOption = menuOptionClicked.getMenuOption();
+			id = menuOptionClicked.getId();
+			param0 = menuOptionClicked.getParam0();
+			param1 = menuOptionClicked.getParam1();
+			menuTarget = menuOptionClicked.getMenuTarget();
+
 		}
 	}
 }
