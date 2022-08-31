@@ -18,6 +18,7 @@ import com.Crowdsourcing.pyramid_plunder.CrowdsourcingPyramidPlunder;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
+import com.Crowdsourcing.toa.CrowdsourcingToA;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
@@ -106,6 +107,8 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
   @Inject
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
 
+	@Inject
+	private CrowdsourcingToA toa;
 
 	@Override
 	protected void startUp() throws Exception
@@ -127,6 +130,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(pottery);
 		eventBus.register(experience);
 		eventBus.register(pyramidPlunder);
+		eventBus.register(toa);
 
 		varbits.startUp();
 		experience.startUp();
@@ -153,6 +157,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(pottery);
 		eventBus.unregister(experience);
 		eventBus.unregister(pyramidPlunder);
+		eventBus.unregister(toa);
 
 		varbits.shutDown();
 	}
