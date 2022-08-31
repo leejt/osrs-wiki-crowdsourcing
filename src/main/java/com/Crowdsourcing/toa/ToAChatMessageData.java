@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ToAData
+public class ToAChatMessageData
 {
-	private final String dataString;
+	private final int gameTickToA;
+	private final String chatMessageToA;
 }
