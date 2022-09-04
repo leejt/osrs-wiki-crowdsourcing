@@ -8,7 +8,7 @@ import net.runelite.api.Skill;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.plugins.crowdsourcing.CrowdsourcingManager;
+import com.Crowdsourcing.CrowdsourcingManager;
 
 public class CrowdsourcingTombs
 {
