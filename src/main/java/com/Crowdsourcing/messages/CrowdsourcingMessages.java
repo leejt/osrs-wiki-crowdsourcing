@@ -41,10 +41,10 @@ public class CrowdsourcingMessages
 
 	// Lava dragon scales, store herblore level and hard diary completion
 	private static final int HARD_WILDERNESS_DIARY_VARBIT = 4509;
-	private static final Pattern LAVA_DRAGON_SCALE_GRIND = Pattern.compile("You grind the lava dragon scale into \\d shards\\.");
+	private static final String LAVA_DRAGON_SCALE_GRIND_PREFIX = "You grind the lava dragon scale";
 
 	// Sacred eel -> Zulrah scales, cooking level
-	private static final Pattern SACRED_EEL_DISSECTION = Pattern.compile("You dissect the eel carcass and extract \\d scales\\.");
+	private static final String SACRED_EEL_DISSECTION_PREFIX = "You dissect the eel carcass";
 
 	// Undead twigs, presumably add WC level
 	private static final String UNDEAD_TWIGS_SUCCESS = "You cut some undead twigs.";
@@ -107,7 +107,7 @@ public class CrowdsourcingMessages
 
 	// This message gives us number of successes without a fragment
 	private static final String VM_BOULDER_SUCCESS = "You chip off a part of the boulder.";
-	private static final Pattern VM_BOULDER_REWARDS = Pattern.compile("You mine out .*");
+	private static final String VM_BOULDER_REWARDS_PREFIX = "You mine out ";
 
 	// Farming pickpockets
 	private static final Pattern MASTER_FARMER_PICKPOCKET = Pattern.compile("You steal 1 " +
@@ -145,14 +145,14 @@ public class CrowdsourcingMessages
 			return createSkillMap(Skill.AGILITY);
 		}
 
-		if (LAVA_DRAGON_SCALE_GRIND.matcher(message).matches())
+		if (message.startsWith(LAVA_DRAGON_SCALE_GRIND_PREFIX))
 		{
 			HashMap<String, Object> h = createSkillMap(Skill.HERBLORE);
 			h.put("Diarycomplete", client.getVarbitValue(HARD_WILDERNESS_DIARY_VARBIT));
 			return h;
 		}
 
-		if (SACRED_EEL_DISSECTION.matcher(message).matches())
+		if (message.startsWith(SACRED_EEL_DISSECTION_PREFIX))
 		{
 			return createSkillMap(Skill.COOKING);
 		}
@@ -197,7 +197,7 @@ public class CrowdsourcingMessages
 		}
 
 		if (VIYELDI_ROCK_MINING_SUCCESS.equals(message) || VIYELDI_ROCK_MINING_FAIL.equals(message)
-			|| VM_BOULDER_SUCCESS.equals(message) || VM_BOULDER_REWARDS.matcher(message).matches())
+			|| VM_BOULDER_SUCCESS.equals(message) || message.startsWith(VM_BOULDER_REWARDS_PREFIX))
 		{
 			return createSkillMap(Skill.MINING);
 		}
