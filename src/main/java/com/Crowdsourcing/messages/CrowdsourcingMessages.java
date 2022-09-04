@@ -109,6 +109,10 @@ public class CrowdsourcingMessages
 	private static final String VM_BOULDER_SUCCESS = "You chip off a part of the boulder.";
 	private static final Pattern VM_BOULDER_REWARDS = Pattern.compile("You mine out .*");
 
+	// Farming pickpockets
+	private static final Pattern MASTER_FARMER_PICKPOCKET = Pattern.compile("You steal 1 " +
+		"(cadantine|dwarf weed|guam|harralander|irit|kwuarm|lantadyme|marrentill|ranarr|snapdragon|tarromin|toadflax|torstol) seed.*");
+
 	// Control
 	private static final String TUNA_SUCCESS = "You manage to cook a tuna.";
 	private static final String TUNA_FAIL = "You accidentally burn the tuna.";
@@ -231,6 +235,11 @@ public class CrowdsourcingMessages
 		if (TUNA_SUCCESS.equals(message) || TUNA_FAIL.equals(message))
 		{
 			return createSkillMap(Skill.COOKING);
+		}
+
+		if (MASTER_FARMER_PICKPOCKET.matcher(message).matches())
+		{
+			return createSkillMap(Skill.FARMING);
 		}
 
 		return null;
