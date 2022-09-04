@@ -122,15 +122,23 @@ public class CrowdsourcingVarbits
 		oldVarps = null;
 	}
 
+	private boolean disconnected = false;
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
 		if (gameStateChanged.getGameState().equals(GameState.HOPPING)
-			|| gameStateChanged.getGameState().equals(GameState.LOGGING_IN))
+			|| gameStateChanged.getGameState().equals(GameState.LOGGING_IN)
+			|| (gameStateChanged.getGameState() == GameState.LOGGED_IN && disconnected))
 		{
+			disconnected = false;
 			initializingTick = client.getTickCount() + 5;
 			shutDown();
 			startUp();
+		}
+
+		if (gameStateChanged.getGameState() == GameState.CONNECTION_LOST)
+		{
+			disconnected = true;
 		}
 	}
 
