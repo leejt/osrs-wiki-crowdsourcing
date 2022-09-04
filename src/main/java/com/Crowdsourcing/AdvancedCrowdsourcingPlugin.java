@@ -18,7 +18,7 @@ import com.Crowdsourcing.pyramid_plunder.CrowdsourcingPyramidPlunder;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
-import com.Crowdsourcing.toa.CrowdsourcingToA;
+import com.Crowdsourcing.toa.CrowdsourcingTombs;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
@@ -108,7 +108,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
 
 	@Inject
-	private CrowdsourcingToA toa;
+	private CrowdsourcingTombs toa;
 
 	@Override
 	protected void startUp() throws Exception

@@ -6,7 +6,7 @@ import net.runelite.api.Skill;
 
 @Data
 @AllArgsConstructor
-public class ToASkillChangedData
+public class TombsSkillChangedData
 {
 	private final int gameTickToA;
 	private final Skill skill;
