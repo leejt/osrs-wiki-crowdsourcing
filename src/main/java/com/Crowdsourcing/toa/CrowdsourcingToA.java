@@ -12,13 +12,11 @@ import net.runelite.client.plugins.crowdsourcing.CrowdsourcingManager;
 public class CrowdsourcingToA
 {
 	private static final String CHAT_MESSAGE_SMELLING_SALTS_START = "You crush the salts. Your heart rate increases.";
-	private static final String CHAT_MESSAGE_SMELLING_SALTS_END = "The boost from the smelling salts has worn off!"; //may not be needed
 	private static final String CHAT_MESSAGE_NECTAR = "You drink some of the nectar. It hurts! This was not made for mortals.";
 	private static final String CHAT_MESSAGE_TEARS = "You drink some of the tears.";
 	private static final String CHAT_MESSAGE_TEARS_AOE = " has restored your prayer and combat stats.";
 	private static final String CHAT_MESSAGE_AMBROSIA = "You drink the ambrosia. You feel reinvigorated.";
-	private static final String CHAT_MESSAGE_HONEY_LOCUST = "You bite down on the dried bug. Its very chewy, but you feel slightly reinvigorated...";
-	//"its" is grammatically incorrect (should be it's), watch if this gets updated
+	private static final String CHAT_MESSAGE_HONEY_LOCUST = "You bite down on the dried bug. It's very chewy, but you feel slightly reinvigorated...";
 
 	@Inject
 	private CrowdsourcingManager manager;
