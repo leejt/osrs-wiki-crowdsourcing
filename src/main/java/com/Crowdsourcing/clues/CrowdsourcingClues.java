@@ -7,6 +7,7 @@ import net.runelite.api.Client;
 import net.runelite.api.ItemComposition;
 
 import net.runelite.api.ItemID;
+import static net.runelite.api.MenuAction.CC_OP;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.WidgetLoaded;
@@ -41,13 +42,12 @@ public class CrowdsourcingClues {
 
     @Subscribe
     private void onMenuOptionClicked(MenuOptionClicked event) {
-        if ("Read".equals(event.getMenuOption()) && event.getMenuAction() == ITEM_FIRST_OPTION) {
-            final ItemComposition itemComposition = itemManager.getItemComposition(event.getId());
-
+		if ("Read".equals(event.getMenuOption()) && event.getMenuAction() == CC_OP && event.getMenuEntry().getItemId() != -1) {
+            final ItemComposition itemComposition = itemManager.getItemComposition(event.getMenuEntry().getItemId());
             if (itemComposition.getName().startsWith("Clue scroll") || itemComposition.getName().startsWith("Challenge scroll")) {
                 if (!seenClues.contains(itemComposition.getId())) {
                     clueId = itemComposition.getId();
-                    if (clueId != ItemID.CLUE_SCROLL_MASTER) {
+                    if (clueId != ItemID.CLUE_SCROLL_MASTER && clueId != ItemID.CLUE_SCROLL_BEGINNER) {
                         seenClues.add(clueId);
                     }
                 }
