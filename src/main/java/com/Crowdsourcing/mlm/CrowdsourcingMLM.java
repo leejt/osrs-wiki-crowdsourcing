@@ -97,7 +97,7 @@ public class CrowdsourcingMLM
 			waitingForOre = false;
 			final Multiset<Integer> currentInventorySnapshot = getInventorySnapshot();
 			final Multiset<Integer> rewards = Multisets.difference(currentInventorySnapshot, prevInventorySnapshot);
-			final int currentSackCount = client.getVar(Varbits.SACK_NUMBER);
+			final int currentSackCount = client.getVarbitValue(Varbits.SACK_NUMBER);
 			MLMData event = new MLMData(
 				new ArrayList(paydirtMineData),
 				rewards,
