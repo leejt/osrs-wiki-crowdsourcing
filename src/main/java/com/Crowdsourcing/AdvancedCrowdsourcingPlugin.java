@@ -10,7 +10,6 @@ import com.Crowdsourcing.item_sighting.CrowdsourcingItemSighting;
 import com.Crowdsourcing.messages.CrowdsourcingMessages;
 import com.Crowdsourcing.mlm.CrowdsourcingMLM;
 import com.Crowdsourcing.monster_examine.MonsterExamine;
-import com.Crowdsourcing.nex.CrowdsourcingNex;
 import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
@@ -20,7 +19,9 @@ import com.Crowdsourcing.pyramid_plunder.CrowdsourcingPyramidPlunder;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
+import com.Crowdsourcing.toa.CrowdsourcingTombs;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
+import com.Crowdsourcing.impling.CrowdsourcingImpling;
 import javax.inject.Inject;
 import java.time.temporal.ChronoUnit;
 
@@ -103,16 +104,19 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	private CrowdsourcingPottery pottery;
 
 	@Inject
-	private CrowdsourcingNex nex;
+	private CrowdsourcingExperience experience;
 
 	@Inject
 	private CrowdsourcingBrewing brewing;
-  
-  	@Inject
-	private CrowdsourcingExperience experience;
 
-  	@Inject
+  @Inject
+	private CrowdsourcingImpling impling;
+
+  @Inject
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
+
+	@Inject
+	private CrowdsourcingTombs toa;
 
 	@Override
 	protected void startUp() throws Exception
@@ -132,10 +136,11 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(questLog);
 		eventBus.register(overheadDialogue);
 		eventBus.register(pottery);
-		eventBus.register(nex);
 		eventBus.register(brewing);
 		eventBus.register(experience);
 		eventBus.register(pyramidPlunder);
+		eventBus.register(toa);
+		eventBus.register(impling);
 
 		varbits.startUp();
 		experience.startUp();
@@ -160,10 +165,11 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(questLog);
 		eventBus.unregister(overheadDialogue);
 		eventBus.unregister(pottery);
-		eventBus.unregister(nex);
 		eventBus.unregister(brewing);
 		eventBus.unregister(experience);
 		eventBus.unregister(pyramidPlunder);
+		eventBus.unregister(toa);
+		eventBus.unregister(impling);
 
 		varbits.shutDown();
 	}
