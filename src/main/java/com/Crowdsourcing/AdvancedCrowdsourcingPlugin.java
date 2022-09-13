@@ -109,10 +109,10 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingBrewing brewing;
 
-  @Inject
+  	@Inject
 	private CrowdsourcingImpling impling;
 
-  @Inject
+  	@Inject
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
 
 	@Inject
