@@ -29,7 +29,7 @@ public class CrowdsourcingMessages
 
 	// Make sure anything here ONLY matches what you want
 	private static final String CAIRN_ISLE_SUCCESS = "You manage to keep your balance on the bridge.";
-	private static final String CAIRN_ISLE_FAIL = "You fall";
+	private static final String CAIRN_ISLE_FAIL = "You fall!";
 
 	// Ardy log shortcut, log NW of sinclair mansion, Karamja east log
 	private static final String LOG_SUCCESS = "You make it across the log without any problems.";
