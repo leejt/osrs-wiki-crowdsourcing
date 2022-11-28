@@ -65,7 +65,7 @@ public class CrowdsourcingMessages
 
 	// Viyeldi Caves rock mining
 	private static final String VIYELDI_ROCK_MINING_SUCCESS = "You manage to smash the rock to bits.";
-	private static final String VIYELDI_ROCK_MINING_FAIL = "The pick clangs heavily against the rock face and the vibrations rattle your nerves. ";
+	private static final String VIYELDI_ROCK_MINING_FAIL = "The pick clangs heavily against the rock face and the vibrations rattle your nerves.";
 
 	// Viyeldi Caves jagged wall
 	private static final String VIYELDI_JAGGED_WALL_SUCCESS = "You take a good run up and sail majestically over the wall.";
