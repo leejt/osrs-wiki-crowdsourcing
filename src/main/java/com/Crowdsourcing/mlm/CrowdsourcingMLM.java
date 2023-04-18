@@ -97,7 +97,7 @@ public class CrowdsourcingMLM
 			waitingForOre = false;
 			final Multiset<Integer> currentInventorySnapshot = getInventorySnapshot();
 			final Multiset<Integer> rewards = Multisets.difference(currentInventorySnapshot, prevInventorySnapshot);
-			final int currentSackCount = client.getVar(Varbits.SACK_NUMBER);
+			final int currentSackCount = client.getVarbitValue(Varbits.SACK_NUMBER);
 			MLMData event = new MLMData(
 				new ArrayList(paydirtMineData),
 				rewards,
@@ -169,10 +169,10 @@ public class CrowdsourcingMLM
 
 	private int getDiaryCompletions()
 	{
-		int easy = client.getVar(Varbits.DIARY_FALADOR_EASY);
-		int medium = client.getVar(Varbits.DIARY_FALADOR_MEDIUM);
-		int hard = client.getVar(Varbits.DIARY_FALADOR_HARD);
-		int elite = client.getVar(Varbits.DIARY_FALADOR_ELITE);
+		int easy = client.getVarbitValue(Varbits.DIARY_FALADOR_EASY);
+		int medium = client.getVarbitValue(Varbits.DIARY_FALADOR_MEDIUM);
+		int hard = client.getVarbitValue(Varbits.DIARY_FALADOR_HARD);
+		int elite = client.getVarbitValue(Varbits.DIARY_FALADOR_ELITE);
 
 		return easy + 2*medium + 4*hard + 8*elite;
 	}
