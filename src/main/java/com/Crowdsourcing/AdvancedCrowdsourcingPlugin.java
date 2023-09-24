@@ -18,6 +18,7 @@ import com.Crowdsourcing.pyramid_plunder.CrowdsourcingPyramidPlunder;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
 import com.Crowdsourcing.respawns.Respawns;
 import com.Crowdsourcing.scenery.CrowdsourcingScenery;
+import com.Crowdsourcing.shootingstars.CrowdsourcingStars;
 import com.Crowdsourcing.toa.CrowdsourcingTombs;
 import com.Crowdsourcing.varbits.CrowdsourcingVarbits;
 import com.Crowdsourcing.impling.CrowdsourcingImpling;
@@ -108,11 +109,14 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingImpling impling;
 
-  @Inject
+  	@Inject
 	private CrowdsourcingPyramidPlunder pyramidPlunder;
 
 	@Inject
 	private CrowdsourcingTombs toa;
+
+	@Inject
+	private CrowdsourcingStars stars;
 
 	@Override
 	protected void startUp() throws Exception
@@ -136,10 +140,12 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(pyramidPlunder);
 		eventBus.register(toa);
 		eventBus.register(impling);
+		eventBus.register(stars);
 
 		varbits.startUp();
 		experience.startUp();
 		pyramidPlunder.startUp();
+		stars.reset();
 	}
 
 	@Override
@@ -164,8 +170,10 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(pyramidPlunder);
 		eventBus.unregister(toa);
 		eventBus.unregister(impling);
+		eventBus.unregister(stars);
 
 		varbits.shutDown();
+		stars.reset();
 	}
 
 	@Schedule(
