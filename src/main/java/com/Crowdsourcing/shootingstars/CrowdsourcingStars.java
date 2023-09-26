@@ -341,12 +341,13 @@ public class CrowdsourcingStars
 
 	private void checkMissingStar()
 	{
-		if (trackedStar != null)
+		if (trackedStar != null || client.getPlane() != 0)
 		{
 			return;
 		}
 
 		long now = System.currentTimeMillis();
+		var currentLocation = client.getLocalPlayer().getWorldLocation();
 		for (int regionId : client.getMapRegions())
 		{
 			if (!Locations.containsKey(regionId))
@@ -356,8 +357,10 @@ public class CrowdsourcingStars
 
 			for (var p : Locations.get(regionId))
 			{
-				if (WorldPoint.isInScene(client, p.getX(), p.getY()))
+				if (WorldPoint.isInScene(client, p.getX(), p.getY()) &&
+					(Math.abs(currentLocation.getX() / 8 - p.getX() / 8) <= 3) && (Math.abs(currentLocation.getY() / 8 - p.getY() / 8) <= 3))
 				{
+					// always submit first seen missing star location
 					long time = checkedPoints.getOrDefault(p, -1L);
 					if (now - time < CHECK_SECONDS)
 					{
@@ -365,7 +368,7 @@ public class CrowdsourcingStars
 					}
 
 					checkedPoints.put(p, now);
-					if (shouldSubmit(MISSING_STAR_SUBMIT_CHANCE))
+					if (time == -1 || shouldSubmit(MISSING_STAR_SUBMIT_CHANCE))
 					{
 						submitStar(StarData.builder()
 							.tier(0)
