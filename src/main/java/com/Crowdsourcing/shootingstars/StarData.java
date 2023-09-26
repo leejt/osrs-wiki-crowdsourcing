@@ -36,7 +36,8 @@ public class StarData
 {
 	private int tier;
 	private int world;
-	private Integer progress;
+	private Integer hp;
+	private Boolean exact;
 	private WorldPoint location;
 	private RuneScapeProfileType mode;
 }

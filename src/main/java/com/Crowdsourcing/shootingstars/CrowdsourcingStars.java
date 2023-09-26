@@ -51,7 +51,6 @@ import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.config.RuneScapeProfileType;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.hiscore.HiscoreEndpoint;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -174,12 +173,12 @@ public class CrowdsourcingStars
 		int lastTier = trackedStar.getTier();
 		if (lastTier > -1)
 		{
-			trackedStar.setProgress(0);
+			trackedStar.setHp(0);
 		}
 
 		trackedStar.setTier(tier);
 
-		// only guaranteed submit found stars
+		// always submit newly found stars
 		if (lastTier == -1 || shouldSubmit(NEXT_TIER_SUBMIT_CHANCE))
 		{
 			submit();
@@ -222,12 +221,19 @@ public class CrowdsourcingStars
 		}
 
 		int tier = MoreObjects.firstNonNull(Ints.tryParse(m.group("tier")), -1);
-		int progress = MoreObjects.firstNonNull(Ints.tryParse(m.group("progress")), -1);
+		int hp = MoreObjects.firstNonNull(Ints.tryParse(m.group("progress")), -1);
 
 		trackedStar.setTier(tier);
-		trackedStar.setProgress(progress);
+		trackedStar.setHp((100 - hp) / 2);
 
-		submit();
+		submitStar(StarData.builder()
+			.tier(tier)
+			.hp(hp)
+			.exact(true)
+			.world(client.getWorld())
+			.location(trackedStar.getLocation())
+			.mode(RuneScapeProfileType.getCurrent(client))
+			.build());
 	}
 
 	private boolean shouldSubmit(double chance)
@@ -246,7 +252,7 @@ public class CrowdsourcingStars
 
 		if (lastSent != null &&
 			lastSent.getTier() == trackedStar.getTier() &&
-			(lastSent.getProgress() != null && (lastSent.getProgress() == trackedStar.getProgress() || trackedStar.getProgress() < lastSent.getProgress())) &&
+			(lastSent.getHp() != null && (lastSent.getHp() == trackedStar.getHp() || trackedStar.getHp() < lastSent.getHp())) &&
 			lastSent.getWorld() == trackedStar.getWorld() &&
 			lastSent.getLocation().equals(trackedStar.getLocation()))
 		{
@@ -258,7 +264,7 @@ public class CrowdsourcingStars
 			.tier(trackedStar.getTier())
 			.world(client.getWorld())
 			.location(trackedStar.getLocation())
-			.progress(trackedStar.getProgress() > -1 ? trackedStar.getProgress() : null)
+			.hp(trackedStar.getHp() > -1 ? trackedStar.getHp() : null)
 			.mode(RuneScapeProfileType.getCurrent(client))
 			.build();
 		submitStar(lastSent);
@@ -308,14 +314,18 @@ public class CrowdsourcingStars
 		{
 			if (trackedStar.getGameObject() == null)
 			{
-				// star probably died, any tier can disappear if the next wave comes so rel
+				// star probably died, any tier can disappear if the next wave comes
 				if (trackedStar.getLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation()) < 8 &&
 					currentLocation.distanceTo2D(lastLocation) < 8)
 				{
-					trackedStar.setProgress(-1);
+					trackedStar.setHp(-1);
 					trackedStar.setTier(0);
 
 					submit();
+				}
+				else
+				{
+					log.debug("didn't satisfy star death conditions");
 				}
 
 				reset();
@@ -325,15 +335,15 @@ public class CrowdsourcingStars
 		}
 
 		NPC npc = trackedStar.getNpc();
-		int progress = 100 - 100 * npc.getHealthRatio() / npc.getHealthScale();
-		if (progress == 0 || progress == trackedStar.getProgress())
+		int hp = npc.getHealthRatio();
+		if (hp == -1 || hp == trackedStar.getHp())
 		{
 			return;
 		}
 
-		int lastProgress = trackedStar.getProgress();
-		trackedStar.setProgress(progress);
-		if (lastProgress == -1 || shouldSubmit(HP_SUBMIT_CHANCE))
+		int lastKnownHp = trackedStar.getHp();
+		trackedStar.setHp(hp);
+		if (lastKnownHp == -1 || shouldSubmit(HP_SUBMIT_CHANCE))
 		{
 			submit();
 		}

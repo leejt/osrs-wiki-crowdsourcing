@@ -37,7 +37,7 @@ import net.runelite.api.coords.WorldPoint;
 public class Star
 {
 	private int tier = -1;
-	private int progress = -1;
+	private int hp = -1;
 
 	private NPC npc;
 	private GameObject gameObject;
