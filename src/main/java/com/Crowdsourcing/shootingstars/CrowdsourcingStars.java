@@ -173,7 +173,7 @@ public class CrowdsourcingStars
 		int lastTier = trackedStar.getTier();
 		if (lastTier > -1)
 		{
-			trackedStar.setHp(0);
+			trackedStar.setHp(50);
 		}
 
 		trackedStar.setTier(tier);
@@ -252,7 +252,7 @@ public class CrowdsourcingStars
 
 		if (lastSent != null &&
 			lastSent.getTier() == trackedStar.getTier() &&
-			(lastSent.getHp() != null && (lastSent.getHp() == trackedStar.getHp() || trackedStar.getHp() < lastSent.getHp())) &&
+			(lastSent.getHp() != null && lastSent.getHp() == trackedStar.getHp()) &&
 			lastSent.getWorld() == trackedStar.getWorld() &&
 			lastSent.getLocation().equals(trackedStar.getLocation()))
 		{
