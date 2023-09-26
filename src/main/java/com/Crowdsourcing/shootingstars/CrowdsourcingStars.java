@@ -97,6 +97,7 @@ public class CrowdsourcingStars
 		if (trackedStar == null)
 		{
 			trackedStar = new Star(client.getWorld(), npc.getWorldLocation());
+			checkedPoints.clear();
 		}
 
 		trackedStar.setNpc(npc);
@@ -159,6 +160,7 @@ public class CrowdsourcingStars
 		if (trackedStar == null)
 		{
 			trackedStar = new Star(client.getWorld(), gameObject.getWorldLocation());
+			checkedPoints.clear();
 		}
 
 		trackedStar.setGameObject(gameObject);
@@ -315,19 +317,7 @@ public class CrowdsourcingStars
 			if (trackedStar.getGameObject() == null)
 			{
 				// star probably died, any tier can disappear if the next wave comes
-				if (trackedStar.getLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation()) < 8 &&
-					currentLocation.distanceTo2D(lastLocation) < 8)
-				{
-					trackedStar.setHp(-1);
-					trackedStar.setTier(0);
-
-					submit();
-				}
-				else
-				{
-					log.debug("didn't satisfy star death conditions");
-				}
-
+				// dead star will be submitted by the missing star check
 				reset();
 			}
 
