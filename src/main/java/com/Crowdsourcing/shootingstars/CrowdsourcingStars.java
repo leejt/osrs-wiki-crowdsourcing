@@ -81,7 +81,6 @@ public class CrowdsourcingStars
 
 	private Star trackedStar;
 	private StarData lastSent;
-	private WorldPoint lastLocation;
 
 	private Map<Point, Long> checkedPoints = new HashMap<>();
 
@@ -124,7 +123,6 @@ public class CrowdsourcingStars
 	{
 		checkStarProgress();
 		checkMissingStar();
-		lastLocation = client.getLocalPlayer().getWorldLocation();
 	}
 
 	@Subscribe
@@ -306,12 +304,6 @@ public class CrowdsourcingStars
 			return;
 		}
 
-		var currentLocation = client.getLocalPlayer().getWorldLocation();
-		if (lastLocation == null)
-		{
-			lastLocation = currentLocation;
-		}
-
 		if (trackedStar.getNpc() == null)
 		{
 			if (trackedStar.getGameObject() == null)
@@ -387,7 +379,6 @@ public class CrowdsourcingStars
 	{
 		lastSent = null;
 		trackedStar = null;
-		lastLocation = null;
 		checkedPoints.clear();
 	}
 }
