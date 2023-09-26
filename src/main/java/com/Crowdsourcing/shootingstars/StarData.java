@@ -28,7 +28,7 @@ package com.Crowdsourcing.shootingstars;
 import lombok.Builder;
 import lombok.Data;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.client.hiscore.HiscoreEndpoint;
+import net.runelite.client.config.RuneScapeProfileType;
 
 @Data
 @Builder
@@ -38,5 +38,5 @@ public class StarData
 	private int world;
 	private Integer progress;
 	private WorldPoint location;
-	private HiscoreEndpoint mode;
+	private RuneScapeProfileType mode;
 }

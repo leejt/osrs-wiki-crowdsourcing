@@ -49,6 +49,7 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
+import net.runelite.client.config.RuneScapeProfileType;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.hiscore.HiscoreEndpoint;
 import okhttp3.Call;
@@ -66,7 +67,9 @@ public class CrowdsourcingStars
 	private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 	private static final Pattern STAR_PROGRESS = Pattern.compile("This is a size-(?<tier>[0-9]+) star.* It has been mined (?<progress>[0-9]+)%.*", Pattern.CASE_INSENSITIVE);
 	private static final int CHECK_SECONDS = 60 * 1000;
-	private static final double SUBMIT_CHANCE = 0.01;
+	private static final double HP_SUBMIT_CHANCE = 0.01;
+	private static final double NEXT_TIER_SUBMIT_CHANCE = 0.01;
+	private static final double MISSING_STAR_SUBMIT_CHANCE = 0.01;
 
 	@Inject
 	private Client client;
@@ -77,9 +80,9 @@ public class CrowdsourcingStars
 	@Inject
 	private Gson gson;
 
-	private Star trackedStar = null;
-
-	private StarData lastSent = null;
+	private Star trackedStar;
+	private StarData lastSent;
+	private WorldPoint lastLocation;
 
 	private Map<Point, Long> checkedPoints = new HashMap<>();
 
@@ -121,6 +124,7 @@ public class CrowdsourcingStars
 	{
 		checkStarProgress();
 		checkMissingStar();
+		lastLocation = client.getLocalPlayer().getWorldLocation();
 	}
 
 	@Subscribe
@@ -131,6 +135,7 @@ public class CrowdsourcingStars
 			reset();
 		}
 
+		// gameobjects don't fire despawn when teleporting away
 		if (event.getGameState() == GameState.LOADING)
 		{
 			checkedPoints.clear();
@@ -158,18 +163,27 @@ public class CrowdsourcingStars
 		}
 
 		trackedStar.setGameObject(gameObject);
+
+		// if for some reason someone runs away from the star
+		// crossing a loading line next to the star can refire gameobject spawn events
 		if (trackedStar.getTier() == tier)
 		{
 			return;
 		}
 
-		if (trackedStar.getTier() > -1)
+		int lastTier = trackedStar.getTier();
+		if (lastTier > -1)
 		{
 			trackedStar.setProgress(0);
 		}
 
 		trackedStar.setTier(tier);
-		submit();
+
+		// only guaranteed submit found stars
+		if (lastTier == -1 || shouldSubmit(NEXT_TIER_SUBMIT_CHANCE))
+		{
+			submit();
+		}
 	}
 
 	@Subscribe
@@ -245,7 +259,7 @@ public class CrowdsourcingStars
 			.world(client.getWorld())
 			.location(trackedStar.getLocation())
 			.progress(trackedStar.getProgress() > -1 ? trackedStar.getProgress() : null)
-			.mode(HiscoreEndpoint.fromWorldTypes(client.getWorldType()))
+			.mode(RuneScapeProfileType.getCurrent(client))
 			.build();
 		submitStar(lastSent);
 	}
@@ -284,12 +298,19 @@ public class CrowdsourcingStars
 			return;
 		}
 
+		var currentLocation = client.getLocalPlayer().getWorldLocation();
+		if (lastLocation == null)
+		{
+			lastLocation = currentLocation;
+		}
+
 		if (trackedStar.getNpc() == null)
 		{
 			if (trackedStar.getGameObject() == null)
 			{
-				// star probably died
-				if (trackedStar.getTier() == 1 && trackedStar.getLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation()) < 16)
+				// star probably died, any tier can disappear if the next wave comes so rel
+				if (trackedStar.getLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation()) < 8 &&
+					currentLocation.distanceTo2D(lastLocation) < 8)
 				{
 					trackedStar.setProgress(-1);
 					trackedStar.setTier(0);
@@ -312,7 +333,7 @@ public class CrowdsourcingStars
 
 		int lastProgress = trackedStar.getProgress();
 		trackedStar.setProgress(progress);
-		if (lastProgress == -1 || shouldSubmit(SUBMIT_CHANCE))
+		if (lastProgress == -1 || shouldSubmit(HP_SUBMIT_CHANCE))
 		{
 			submit();
 		}
@@ -344,13 +365,13 @@ public class CrowdsourcingStars
 					}
 
 					checkedPoints.put(p, now);
-					if (shouldSubmit(SUBMIT_CHANCE))
+					if (shouldSubmit(MISSING_STAR_SUBMIT_CHANCE))
 					{
 						submitStar(StarData.builder()
 							.tier(0)
 							.world(client.getWorld())
 							.location(new WorldPoint(p.getX(), p.getY(), client.getPlane()))
-							.mode(HiscoreEndpoint.fromWorldTypes(client.getWorldType()))
+							.mode(RuneScapeProfileType.getCurrent(client))
 							.build()
 						);
 					}
@@ -363,6 +384,7 @@ public class CrowdsourcingStars
 	{
 		lastSent = null;
 		trackedStar = null;
+		lastLocation = null;
 		checkedPoints.clear();
 	}
 }
