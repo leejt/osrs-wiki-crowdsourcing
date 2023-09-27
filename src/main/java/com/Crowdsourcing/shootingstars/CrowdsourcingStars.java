@@ -208,7 +208,14 @@ public class CrowdsourcingStars
 			return;
 		}
 
-		Matcher m = STAR_PROGRESS.matcher(event.getMessage());
+		final String message = event.getMessage();
+		if (message.startsWith("You see a shooting star!") || message.equals("You look through the telescope but you don't see anything interesting."))
+		{
+			submitTelescopeMessage(message);
+			return;
+		}
+
+		Matcher m = STAR_PROGRESS.matcher(message);
 		if (!m.matches())
 		{
 			return;
@@ -234,6 +241,33 @@ public class CrowdsourcingStars
 			.location(trackedStar.getLocation())
 			.mode(RuneScapeProfileType.getCurrent(client))
 			.build());
+	}
+
+	private void submitTelescopeMessage(final String message)
+	{
+		String json = gson.toJson(new TelescopeData(client.getWorld(), message, RuneScapeProfileType.getCurrent(client)));
+		log.debug("submitting {}", json);
+
+		Request r = new Request.Builder()
+			.url(CROWDSOURCING_URL)
+			.post(RequestBody.create(JSON, json))
+			.build();
+
+		okHttpClient.newCall(r).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				log.debug("Error sending crowdsourcing data", e);
+			}
+
+			@Override
+			public void onResponse(Call call, Response response)
+			{
+				log.debug("Successfully sent crowdsourcing data");
+				response.close();
+			}
+		});
 	}
 
 	private boolean shouldSubmit(double chance)
