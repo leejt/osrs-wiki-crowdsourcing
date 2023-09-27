@@ -54,11 +54,13 @@ public class CrowdsourcingManager
 
 	private static final String CROWDSOURCING_BASE = "https://crowdsource.runescape.wiki/runelite";
 	private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-	private static final Gson GSON = new Gson();
 	private static final int MAX_LENGTH = 10000;
 
 	@Inject
 	private OkHttpClient okHttpClient;
+
+	@Inject
+	private Gson gson;
 
 	@Inject
 	private ChatMessageManager chatMessageManager;
@@ -98,7 +100,7 @@ public class CrowdsourcingManager
 
 		Request r = new Request.Builder()
 			.url(CROWDSOURCING_BASE)
-			.post(RequestBody.create(JSON, GSON.toJson(temp)))
+			.post(RequestBody.create(JSON, gson.toJson(temp)))
 			.build();
 
 		okHttpClient.newCall(r).enqueue(new Callback()
