@@ -203,7 +203,7 @@ public class CrowdsourcingStars
 	@Subscribe
 	public void onChatMessage(ChatMessage event)
 	{
-		if (event.getType() != ChatMessageType.DIALOG && event.getType() != ChatMessageType.MESBOX)
+		if (event.getType() != ChatMessageType.MESBOX)
 		{
 			return;
 		}
