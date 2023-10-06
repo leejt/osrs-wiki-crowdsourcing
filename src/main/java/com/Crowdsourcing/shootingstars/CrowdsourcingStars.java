@@ -109,7 +109,7 @@ public class CrowdsourcingStars
 		{
 			cannonThrottle = now;
 
-			submitObject(new CannonData(value, now));
+			submitObject(new CannonData(value, now, client.getWorld(), RuneScapeProfileType.getCurrent(client)));
 		}
 	}
 
