@@ -29,6 +29,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.primitives.Ints;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -49,6 +50,7 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
+import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.config.RuneScapeProfileType;
 import net.runelite.client.eventbus.Subscribe;
 import okhttp3.Call;
@@ -62,6 +64,8 @@ import okhttp3.Response;
 @Slf4j
 public class CrowdsourcingStars
 {
+	private static final int CANNON_VARBIT = 2180;
+	private static final int VARBIT_THROTTLE_SECONDS = 10;
 	private static final String CROWDSOURCING_URL = "https://crowdsource.runescape.wiki/shooting_stars";
 	private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 	private static final Pattern STAR_PROGRESS = Pattern.compile("This is a size-(?<tier>[0-9]+) star.* It has been mined (?<progress>[0-9]+)%.*", Pattern.CASE_INSENSITIVE);
@@ -83,6 +87,31 @@ public class CrowdsourcingStars
 	private StarData lastSent;
 
 	private Map<Point, Long> checkedPoints = new HashMap<>();
+
+	private long cannonThrottle = -1;
+
+	@Subscribe
+	public void onVarbitChanged(VarbitChanged event)
+	{
+		if (event.getVarbitId() != CANNON_VARBIT)
+		{
+			return;
+		}
+
+		final int value = event.getValue();
+		if (value == 0)
+		{
+			return;
+		}
+
+		long now = Instant.now().getEpochSecond();
+		if (now - cannonThrottle >= VARBIT_THROTTLE_SECONDS)
+		{
+			cannonThrottle = now;
+
+			submitObject(new CannonData(value, now, client.getWorld(), RuneScapeProfileType.getCurrent(client)));
+		}
+	}
 
 	@Subscribe
 	public void onNpcSpawned(NpcSpawned event)
@@ -233,7 +262,7 @@ public class CrowdsourcingStars
 		trackedStar.setTier(tier);
 		trackedStar.setHp((100 - hp) / 2);
 
-		submitStar(StarData.builder()
+		submitObject(StarData.builder()
 			.tier(tier)
 			.hp(hp)
 			.exact(true)
@@ -301,12 +330,12 @@ public class CrowdsourcingStars
 			.hp(trackedStar.getHp() > -1 ? trackedStar.getHp() : null)
 			.mode(RuneScapeProfileType.getCurrent(client))
 			.build();
-		submitStar(lastSent);
+		submitObject(lastSent);
 	}
 
-	private void submitStar(StarData data)
+	private void submitObject(Object obj)
 	{
-		String json = gson.toJson(data);
+		String json = gson.toJson(obj);
 		log.debug("submitting {}", json);
 
 		Request r = new Request.Builder()
@@ -396,7 +425,7 @@ public class CrowdsourcingStars
 					checkedPoints.put(p, now);
 					if (time == -1 || shouldSubmit(MISSING_STAR_SUBMIT_CHANCE))
 					{
-						submitStar(StarData.builder()
+						submitObject(StarData.builder()
 							.tier(0)
 							.world(client.getWorld())
 							.location(new WorldPoint(p.getX(), p.getY(), client.getPlane()))
@@ -414,5 +443,6 @@ public class CrowdsourcingStars
 		lastSent = null;
 		trackedStar = null;
 		checkedPoints.clear();
+		cannonThrottle = -1;
 	}
 }
