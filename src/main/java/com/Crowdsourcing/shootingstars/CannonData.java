@@ -6,7 +6,7 @@ import net.runelite.client.config.RuneScapeProfileType;
 @Value
 public class CannonData
 {
-	int varbit2180;
+	int cannonVarbit;
 	long time;
 	int world;
 	RuneScapeProfileType mode;

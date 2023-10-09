@@ -162,6 +162,12 @@ public class CrowdsourcingStars
 			reset();
 		}
 
+		// if a cannon is out, the varbit value is saved across hopping and logging out
+		if (event.getGameState() == GameState.LOGGED_IN || event.getGameState() == GameState.HOPPING)
+		{
+			cannonThrottle = Instant.now().getEpochSecond();
+		}
+
 		// gameobjects don't fire despawn when teleporting away
 		if (event.getGameState() == GameState.LOADING)
 		{
