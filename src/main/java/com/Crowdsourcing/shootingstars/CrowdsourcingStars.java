@@ -157,15 +157,15 @@ public class CrowdsourcingStars
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged event)
 	{
+		if (event.getGameState() == GameState.LOGIN_SCREEN || event.getGameState() == GameState.HOPPING)
+		{
+			reset();
+		}
+
 		// if a cannon is out, the varbit value is saved across hopping and logging out
 		if (event.getGameState() == GameState.LOGGED_IN || event.getGameState() == GameState.HOPPING)
 		{
 			cannonThrottle = Instant.now().getEpochSecond();
-		}
-
-		if (event.getGameState() == GameState.LOGIN_SCREEN || event.getGameState() == GameState.HOPPING)
-		{
-			reset();
 		}
 
 		// gameobjects don't fire despawn when teleporting away
