@@ -65,7 +65,7 @@ import okhttp3.Response;
 public class CrowdsourcingStars
 {
 	private static final int CANNON_VARBIT = 2180;
-	private static final int VARBIT_THROTTLE_SECONDS = 10;
+	private static final int VARBIT_THROTTLE_SECONDS = 5;
 	private static final String CROWDSOURCING_URL = "https://crowdsource.runescape.wiki/shooting_stars";
 	private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 	private static final Pattern STAR_PROGRESS = Pattern.compile("This is a size-(?<tier>[0-9]+) star.* It has been mined (?<progress>[0-9]+)%.*", Pattern.CASE_INSENSITIVE);
@@ -163,7 +163,7 @@ public class CrowdsourcingStars
 		}
 
 		// if a cannon is out, the varbit value is saved across hopping and logging out
-		if (event.getGameState() == GameState.LOGGED_IN || event.getGameState() == GameState.HOPPING)
+		if (event.getGameState() == GameState.LOGGED_IN)
 		{
 			cannonThrottle = Instant.now().getEpochSecond();
 		}
