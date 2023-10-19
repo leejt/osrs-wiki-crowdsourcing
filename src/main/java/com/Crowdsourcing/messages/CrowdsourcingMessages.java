@@ -29,7 +29,7 @@ public class CrowdsourcingMessages
 
 	// Make sure anything here ONLY matches what you want
 	private static final String CAIRN_ISLE_SUCCESS = "You manage to keep your balance on the bridge.";
-	private static final String CAIRN_ISLE_FAIL = "You fall";
+	private static final String CAIRN_ISLE_FAIL = "You fall!";
 
 	// Ardy log shortcut, log NW of sinclair mansion, Karamja east log
 	private static final String LOG_SUCCESS = "You make it across the log without any problems.";
@@ -65,7 +65,7 @@ public class CrowdsourcingMessages
 
 	// Viyeldi Caves rock mining
 	private static final String VIYELDI_ROCK_MINING_SUCCESS = "You manage to smash the rock to bits.";
-	private static final String VIYELDI_ROCK_MINING_FAIL = "The pick clangs heavily against the rock face and the vibrations rattle your nerves. ";
+	private static final String VIYELDI_ROCK_MINING_FAIL = "The pick clangs heavily against the rock face and the vibrations rattle your nerves.";
 
 	// Viyeldi Caves jagged wall
 	private static final String VIYELDI_JAGGED_WALL_SUCCESS = "You take a good run up and sail majestically over the wall.";
