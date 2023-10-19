@@ -117,6 +117,11 @@ public class CrowdsourcingMessages
 	private static final String TUNA_SUCCESS = "You manage to cook a tuna.";
 	private static final String TUNA_FAIL = "You accidentally burn the tuna.";
 
+	// Pet fish tiny bluefish, greenfish, spinefish
+	private static final String PET_FISH_BLUEFISH = "...and you catch a Tiny Bluefish!";
+	private static final String PET_FISH_GREENFISH = "...and you catch a Tiny Greenfish!";
+	private static final String PET_FISH_SPINEFISH = "...and you catch a Tiny Spinefish!";
+
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
 		HashMap<String, Object> h = new HashMap<>();
@@ -240,6 +245,11 @@ public class CrowdsourcingMessages
 		if (MASTER_FARMER_PICKPOCKET.matcher(message).matches())
 		{
 			return createSkillMap(Skill.FARMING);
+		}
+
+		if (PET_FISH_BLUEFISH.equals(message) || PET_FISH_GREENFISH.equals(message) || PET_FISH_SPINEFISH.equals(message))
+		{
+			return createSkillMap(Skill.FISHING);
 		}
 
 		return null;
