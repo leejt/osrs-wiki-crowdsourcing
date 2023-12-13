@@ -258,7 +258,7 @@ public class CrowdsourcingMessages
 	@Subscribe
 	public void onChatMessage(ChatMessage chatMessage)
 	{
-		if (chatMessage.getType() != ChatMessageType.GAMEMESSAGE && chatMessage.getType() != ChatMessageType.SPAM)
+		if (chatMessage.getType() != ChatMessageType.GAMEMESSAGE && chatMessage.getType() != ChatMessageType.SPAM && chatMessage.getType() != ChatMessageType.MESBOX)
 		{
 			return;
 		}
