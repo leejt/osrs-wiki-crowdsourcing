@@ -68,15 +68,7 @@ public class CrowdsourcingAreaSoundEffects
 
 		if (!data.equals(lastAreaSoundEffectsData))
 		{
-			// todo: manager.storeEvent(data);
-			System.out.println("area sound effect id = " + soundId +
-				"   source id = " + sourceId +
-				"   animation id = " + animationId +
-				"   x = " + x +
-				"   y = " + y +
-				"   z = " + z +
-				"   range = " + range +
-				"   delay = " + delay);
+			manager.storeEvent(data);
 		}
 
 		lastAreaSoundEffectsData = data;
