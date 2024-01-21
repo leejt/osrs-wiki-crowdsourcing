@@ -48,17 +48,17 @@ public class AreaSoundEffectsData
 	private final int animationId;
 
 	/**
-	 * The x-coordinate of the area sound effect actor source
+	 * The x-coordinate of the area sound effect
 	 */
 	private final int x;
 
 	/**
-	 * The y-coordinate of the area sound effect actor source
+	 * The y-coordinate of the area sound effect
 	 */
 	private final int y;
 
 	/**
-	 * The z-coordinate of the area sound effect actor source
+	 * The z-coordinate of the area sound effect
 	 */
 	private final int z;
 

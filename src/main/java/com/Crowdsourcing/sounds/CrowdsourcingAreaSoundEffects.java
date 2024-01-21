@@ -56,8 +56,8 @@ public class CrowdsourcingAreaSoundEffects
 		Actor source = event.getSource();
 
 		int soundId = event.getSoundId();
-		int sourceId = (source instanceof NPC) ? ((NPC) source).getId() : -1;
-		int animationId = (source != null) ? source.getAnimation() : -1;
+		int sourceId = source instanceof NPC ? ((NPC) source).getId() : -1;
+		int animationId = source != null ? source.getAnimation() : -1;
 		int x = location.getX();
 		int y = location.getY();
 		int z = client.getPlane();
@@ -68,7 +68,15 @@ public class CrowdsourcingAreaSoundEffects
 
 		if (!data.equals(lastAreaSoundEffectsData))
 		{
-			manager.storeEvent(data);
+			// todo: manager.storeEvent(data);
+			System.out.println("area sound effect id = " + soundId +
+				"   source id = " + sourceId +
+				"   animation id = " + animationId +
+				"   x = " + x +
+				"   y = " + y +
+				"   z = " + z +
+				"   range = " + range +
+				"   delay = " + delay);
 		}
 
 		lastAreaSoundEffectsData = data;

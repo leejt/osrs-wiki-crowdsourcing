@@ -33,23 +33,27 @@ import lombok.Data;
 public class SoundEffectsData
 {
 	/**
-	 * The menu action of the recently clicked scenery object, item or interface
-	 * Example:
-	 * GAME_OBJECT_FIRST_OPTION
+	 * The sound effect id
 	 */
-	private final String sceneryMenuAction;
+	private final int soundId;
 
 	/**
-	 * The id of the recently clicked scenery object, item or interface
-	 * Example:
-	 * 12448
+	 * The id of the recently spawned scenery object
 	 */
 	private final int sceneryId;
 
 	/**
-	 * The sound effect id of the recently played sound effect
-	 * Example:
-	 * 81
+	 * The id of the sound effect actor source; -1 for player or >= 0 for NPC id
 	 */
-	private final int soundEffectId;
+	private final int sourceId;
+
+	/**
+	 * The delay in ticks for the sound effect to start playing
+	 */
+	private final int delay;
+
+	/**
+	 * The chat message for the recently performed action
+	 */
+	private final String chatMessage;
 }
