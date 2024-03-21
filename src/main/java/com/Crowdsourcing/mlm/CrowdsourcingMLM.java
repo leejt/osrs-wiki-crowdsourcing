@@ -48,8 +48,8 @@ import net.runelite.api.Varbits;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
 import com.Crowdsourcing.CrowdsourcingManager;
 
@@ -86,7 +86,7 @@ public class CrowdsourcingMLM
 			return;
 		}
 
-		Widget widgetSpriteText = client.getWidget(WidgetInfo.DIALOG_SPRITE_TEXT);
+		Widget widgetSpriteText = client.getWidget(ComponentID.DIALOG_SPRITE_TEXT);
 
 		if (widgetSpriteText == null)
 		{

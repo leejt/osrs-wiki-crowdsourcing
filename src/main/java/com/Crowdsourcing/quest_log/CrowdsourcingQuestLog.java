@@ -6,8 +6,9 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.widgets.InterfaceID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
@@ -186,9 +187,9 @@ public class CrowdsourcingQuestLog
 	private void onWidgetLoaded(WidgetLoaded event)
 	{
 		// Only check if the diary/quest widget text is changing
-		if (event.getGroupId() != WidgetInfo.DIARY_QUEST_WIDGET_TEXT.getGroupId())
+		if (event.getGroupId() != InterfaceID.DIARY)
 			return;
-		Widget w = client.getWidget(WidgetInfo.DIARY_QUEST_WIDGET_TEXT);
+		Widget w = client.getWidget(ComponentID.DIARY_TEXT);
 		if (w == null)
 			return;
 
@@ -207,7 +208,7 @@ public class CrowdsourcingQuestLog
 		}
 
 		// Get the title and figure out if this is a quest.
-		Widget titleWidget = client.getWidget(WidgetInfo.DIARY_QUEST_WIDGET_TITLE);
+		Widget titleWidget = client.getWidget(ComponentID.DIARY_TITLE);
 		if (titleWidget == null || titleWidget.getText() == null)
 			return;
 		String key = titleWidget.getText().substring("<col=7f0000>".length(), titleWidget.getText().length()-6);
