@@ -11,8 +11,8 @@ import static net.runelite.api.MenuAction.CC_OP;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.widgets.ComponentID;
 import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import com.Crowdsourcing.CrowdsourcingManager;
@@ -75,7 +75,7 @@ public class CrowdsourcingClues {
        if (clueId == -1) {
            return;
        }
-       final Widget clueTextWidget = client.getWidget(WidgetInfo.CLUE_SCROLL_TEXT);
+       final Widget clueTextWidget = client.getWidget(ComponentID.CLUESCROLL_TEXT);
        if (clueTextWidget != null) {
            String candidateClueText = clueTextWidget.getText();
            if (clueId == ItemID.CLUE_SCROLL_MASTER && candidateClueText.equals(clueText)) {
