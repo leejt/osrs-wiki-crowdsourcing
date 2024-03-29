@@ -114,11 +114,11 @@ public class CrowdsourcingHunterRumours {
             }
             if (currRumourCreature.equals(creatureFromMessage)) {
                 rumourKC++;
-                log.debug("\nRUMOUR KC={}", rumourKC);
+                //log.debug("\nRUMOUR KC={}", rumourKC);
                 if (partFound) {
                     HunterRumourData data = new HunterRumourData(currRumourHunter, currRumourCreature, rumourKC);
                     manager.storeEvent(data);
-                    log.debug("\n==SENT HUNTER DATA==\nHunter={}\nCreature={}\nkc={}", currRumourHunter, currRumourCreature, rumourKC);
+                    log.debug("\n==SENT HUNTER RUMOUR DATA==\nHunter={}\nCreature={}\nkc={}", currRumourHunter, currRumourCreature, rumourKC);
                     currRumourCreature = "";
                     currRumourHunter = "";
                     rumourKC = 0;
@@ -140,21 +140,18 @@ public class CrowdsourcingHunterRumours {
 
         String text = npcTextWidget.getText().replace("<br>", " ");
         String npcName = client.getWidget(ComponentID.DIALOG_NPC_NAME).getText();
+
         Pattern pattern = hunterPatternMap.get(npcName);
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            currRumourHunter = npcName;
-            currRumourCreature = matcher.group(1);
-            log.debug("\nUnique Dialogue found rumour:\nHunter={}\nCreature={}", currRumourHunter, currRumourCreature);
+        Matcher matcherUnique = pattern.matcher(text);
+        if (matcherUnique.find()) {
+            setNewRumourFromMatcher(npcName, matcherUnique);
         }
 
         for (String regexStr : GENERIC_RUMOUR_REGEX_STRINGS) {
             Pattern patternGeneric = Pattern.compile(regexStr);
             Matcher matcherGeneric = patternGeneric.matcher(text);
             if (matcherGeneric.find()) {
-                currRumourHunter = npcName;
-                currRumourCreature = matcherGeneric.group(1);
-                log.debug("\nGeneric Dialogue found rumour:\nHunter={}\nCreature={}", currRumourHunter, currRumourCreature);
+                setNewRumourFromMatcher(npcName, matcherGeneric);
                 break;
             }
         }
@@ -199,5 +196,18 @@ public class CrowdsourcingHunterRumours {
         if (xp == 132) return "dark kebbit";
         if (xp == 156) return "dashing kebbit";
         return null;
+    }
+
+    private void setNewRumourFromMatcher(String npcName, Matcher matcher) {
+        String creatureFound = matcher.group(1);
+        // Reset kc if player:
+        // Switched rumours (current != new), or
+        // is getting a new rumour without a tracked rumour set (empty rumour string != new)
+        if (!currRumourCreature.equals(creatureFound)) {
+            rumourKC = 0;
+        }
+        currRumourHunter = npcName;
+        currRumourCreature = creatureFound;
+        //log.debug("\nDialogue found rumour:\nHunter={}\nCreature={}", currRumourHunter, currRumourCreature);
     }
 }
