@@ -25,9 +25,11 @@
 
 package com.Crowdsourcing.dialogue;
 
+import java.util.HashMap;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.Skill;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
@@ -39,12 +41,15 @@ import com.Crowdsourcing.CrowdsourcingManager;
 @Slf4j
 public class CrowdsourcingDialogue
 {
+	private static final String CRATE_4714_CATLIKE_AGILITY = "... and using your catlike agility land on all fours at the bottom of a large cavern!";
 
 	@Inject
 	private Client client;
 
 	@Inject
 	private CrowdsourcingManager manager;
+
+	private String lastText = null;
 
 	private String lastSpriteText = null;
 	private int lastItemId;
@@ -53,9 +58,53 @@ public class CrowdsourcingDialogue
 	private int lastDoubleItemId1;
 	private int lastDoubleItemId2;
 
+	private HashMap<String, Object> createSkillMap(Skill s)
+	{
+		HashMap<String, Object> h = new HashMap<>();
+		h.put(s.getName(), client.getRealSkillLevel(s));
+		h.put("B" + s.getName(), client.getBoostedSkillLevel(s));
+		return h;
+	}
+
+	public HashMap<String, Object> getMetadataForMessage(String message)
+	{
+		if (CRATE_4714_CATLIKE_AGILITY.equals(message))
+		{
+			return createSkillMap(Skill.AGILITY);
+		}
+
+		return null;
+	}
+
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
+		Widget noSpriteTextWidget = client.getWidget(229, 1);
+		if (noSpriteTextWidget != null && (!noSpriteTextWidget.getText().equals(lastText)))
+		{
+			lastText = noSpriteTextWidget.getText();
+			log.debug(String.format("%s", lastText));
+			if (client == null || client.getLocalPlayer() == null)
+			{
+				return;
+			}
+			LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+			if (local == null)
+			{
+				return;
+			}
+			WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+			boolean isInInstance = client.isInInstancedRegion();
+			HashMap<String, Object> metadata = getMetadataForMessage(lastText);
+			TextData data = new TextData(lastText, isInInstance, location, metadata);
+			manager.storeEvent(data);
+		}
+		else if (noSpriteTextWidget == null)
+		{
+			lastText = null;
+		}
+
+
 		Widget spriteWidget = client.getWidget(ComponentID.DIALOG_SPRITE_SPRITE);
 		Widget textWidget = client.getWidget(ComponentID.DIALOG_SPRITE_TEXT);
 		if (spriteWidget != null && textWidget != null && (!textWidget.getText().equals(lastSpriteText)
@@ -75,7 +124,8 @@ public class CrowdsourcingDialogue
 			}
 			WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 			boolean isInInstance = client.isInInstancedRegion();
-			SpriteTextData data = new SpriteTextData(lastSpriteText, lastItemId, isInInstance, location);
+			HashMap<String, Object> metadata = getMetadataForMessage(lastSpriteText);
+			SpriteTextData data = new SpriteTextData(lastSpriteText, lastItemId, isInInstance, location, metadata);
 			manager.storeEvent(data);
 		}
 		else if (spriteWidget == null || textWidget == null)
@@ -106,7 +156,8 @@ public class CrowdsourcingDialogue
 			}
 			WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 			boolean isInInstance = client.isInInstancedRegion();
-			DoubleSpriteTextData data = new DoubleSpriteTextData(lastDoubleSpriteText, lastDoubleItemId1, lastDoubleItemId2, isInInstance, location);
+			HashMap<String, Object> metadata = getMetadataForMessage(lastDoubleSpriteText);
+			DoubleSpriteTextData data = new DoubleSpriteTextData(lastDoubleSpriteText, lastDoubleItemId1, lastDoubleItemId2, isInInstance, location, metadata);
 			manager.storeEvent(data);
 		}
 		else if (doubleSprite1Widget == null || doubleSprite2Widget == null || doubleTextWidget == null)
