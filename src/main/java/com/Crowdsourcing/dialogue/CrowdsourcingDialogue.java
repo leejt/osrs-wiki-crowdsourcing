@@ -41,7 +41,8 @@ import com.Crowdsourcing.CrowdsourcingManager;
 @Slf4j
 public class CrowdsourcingDialogue
 {
-	private static final String CRATE_4714_CATLIKE_AGILITY = "... and using your catlike agility land on all fours at the bottom of a large cavern!";
+	private static final String CRATE_4714_CATLIKE_AGILITY_ATTEMPT = "You begin to lower yourself into the hole...";
+	private static final String CRATE_4714_CATLIKE_AGILITY_SUCCESS = "... and using your catlike agility land on all fours at the bottom of a large cavern!";
 
 	@Inject
 	private Client client;
@@ -68,7 +69,8 @@ public class CrowdsourcingDialogue
 
 	public HashMap<String, Object> getMetadataForMessage(String message)
 	{
-		if (CRATE_4714_CATLIKE_AGILITY.equals(message))
+		if (CRATE_4714_CATLIKE_AGILITY_ATTEMPT.equals(message) ||
+			CRATE_4714_CATLIKE_AGILITY_SUCCESS.equals(message))
 		{
 			return createSkillMap(Skill.AGILITY);
 		}
