@@ -125,9 +125,11 @@ public class CrowdsourcingMessages
 	private static final String CAMDOZAAL_PREPARE_GUPPY_SUCCESS = "You successfully prepare the Guppy.";
 	private static final String CAMDOZAAL_PREPARE_CAVEFISH_SUCCESS = "You successfully prepare the Cavefish.";
 	private static final String CAMDOZAAL_PREPARE_TETRA_SUCCESS = "You successfully prepare the Tetra.";
+	private static final String CAMDOZAAL_PREPARE_CATFISH_SUCCESS = "You successfully prepare the Catfish.";
 	private static final String CAMDOZAAL_PREPARE_GUPPY_FAIL = "You accidentally ruin the Guppy.";
 	private static final String CAMDOZAAL_PREPARE_CAVEFISH_FAIL = "You accidentally ruin the Cavefish.";
 	private static final String CAMDOZAAL_PREPARE_TETRA_FAIL = "You accidentally ruin the Tetra.";
+	private static final String CAMDOZAAL_PREPARE_CATFISH_FAIL = "You accidentally ruin the Catfish.";
 
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
@@ -262,9 +264,11 @@ public class CrowdsourcingMessages
 		if (CAMDOZAAL_PREPARE_GUPPY_SUCCESS.equals(message)
 			|| CAMDOZAAL_PREPARE_CAVEFISH_SUCCESS.equals(message)
 			|| CAMDOZAAL_PREPARE_TETRA_SUCCESS.equals(message)
+			|| CAMDOZAAL_PREPARE_CATFISH_SUCCESS.equals(message)
 			|| CAMDOZAAL_PREPARE_GUPPY_FAIL.equals(message)
 			|| CAMDOZAAL_PREPARE_CAVEFISH_FAIL.equals(message)
-			|| CAMDOZAAL_PREPARE_TETRA_FAIL.equals(message))
+			|| CAMDOZAAL_PREPARE_TETRA_FAIL.equals(message)
+			|| CAMDOZAAL_PREPARE_CATFISH_FAIL.equals(message))
 		{
 			return createSkillMap(Skill.COOKING);
 		}
