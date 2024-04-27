@@ -130,6 +130,8 @@ public class CrowdsourcingMessages
 	private static final String CAMDOZAAL_PREPARE_CAVEFISH_FAIL = "You accidentally ruin the Cavefish.";
 	private static final String CAMDOZAAL_PREPARE_TETRA_FAIL = "You accidentally ruin the Tetra.";
 	private static final String CAMDOZAAL_PREPARE_CATFISH_FAIL = "You accidentally ruin the Catfish.";
+	private static final int CHARM_OF_PREPARATION = 12100;
+	private static final int CHARM_OF_BOOST = 12104;
 
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
@@ -270,7 +272,10 @@ public class CrowdsourcingMessages
 			|| CAMDOZAAL_PREPARE_TETRA_FAIL.equals(message)
 			|| CAMDOZAAL_PREPARE_CATFISH_FAIL.equals(message))
 		{
-			return createSkillMap(Skill.COOKING);
+			HashMap<String, Object> h = createSkillMap(Skill.COOKING);
+			h.put("CharmOfPreparation", client.getVarbitValue(CHARM_OF_PREPARATION) > 0);
+			h.put("CharmOfBoost", client.getVarbitValue(CHARM_OF_BOOST) > 0);
+			return h;
 		}
 
 		return null;
