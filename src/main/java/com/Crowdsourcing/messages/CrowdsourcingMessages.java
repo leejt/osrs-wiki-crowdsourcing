@@ -62,6 +62,16 @@ public class CrowdsourcingMessages
 	private static final String ZOGRE_COFFIN_FAIL = "You fail to pick the lock - your fingers get numb from fumbling with the lock.";
 	private static final String ZOGRE_COFFIN_LOCKPICK_SNAPS = "Your lockpick snaps.";
 
+	// Pickable doors
+	private static final String PICKLOCK_DOOR_SUCCESS = "You manage to pick the lock.";
+	private static final String PICKLOCK_DOOR_FAIL = "You fail to pick the lock.";
+	private static final String PICKLOCK_DOOR_TRAP = "You have activated a trap on the lock.";
+
+	// Pickable chests
+	private static final String PICKLOCK_CHEST_SUCCESS = "You manage to unlock the chest.";
+	private static final String PICKLOCK_CHEST_FAIL = "You fail to picklock the chest.";
+	private static final String PICKLOCK_CHEST_TRAP = "You have activated a trap on the chest.";
+
 	// Viyeldi Caves rock mining
 	private static final String VIYELDI_ROCK_MINING_SUCCESS = "You manage to smash the rock to bits.";
 	private static final String VIYELDI_ROCK_MINING_FAIL = "The pick clangs heavily against the rock face and the vibrations rattle your nerves.";
@@ -190,7 +200,15 @@ public class CrowdsourcingMessages
 			return createSkillMap(Skill.THIEVING);
 		}
 
-		if (ZOGRE_COFFIN_SUCCESS.equals(message) || ZOGRE_COFFIN_FAIL.equals(message) || ZOGRE_COFFIN_LOCKPICK_SNAPS.equals(message))
+		if (ZOGRE_COFFIN_SUCCESS.equals(message)
+			|| ZOGRE_COFFIN_FAIL.equals(message)
+			|| ZOGRE_COFFIN_LOCKPICK_SNAPS.equals(message)
+			|| PICKLOCK_DOOR_SUCCESS.equals(message)
+			|| PICKLOCK_DOOR_FAIL.equals(message)
+			|| PICKLOCK_DOOR_TRAP.equals(message)
+			|| PICKLOCK_CHEST_SUCCESS.equals(message)
+			|| PICKLOCK_CHEST_FAIL.equals(message)
+			|| PICKLOCK_CHEST_TRAP.equals(message))
 		{
 			boolean hasLockpick = false;
 			boolean hasHairClip = false;
