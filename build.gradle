@@ -24,7 +24,7 @@ dependencies {
 }
 
 group = 'com.Crowdsourcing'
-version = '1.10'
+version = '1.11-SNAPSHOT'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
