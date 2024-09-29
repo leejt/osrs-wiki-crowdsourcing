@@ -62,12 +62,12 @@ public class CrowdsourcingMessages
 	private static final String ZOGRE_COFFIN_FAIL = "You fail to pick the lock - your fingers get numb from fumbling with the lock.";
 	private static final String ZOGRE_COFFIN_LOCKPICK_SNAPS = "Your lockpick snaps.";
 
-	// Pickable doors
+	// Pickable doors (Yanille dungeon and Ross' door for example)
 	private static final String PICKLOCK_DOOR_SUCCESS = "You manage to pick the lock.";
 	private static final String PICKLOCK_DOOR_FAIL = "You fail to pick the lock.";
 	private static final String PICKLOCK_DOOR_TRAP = "You have activated a trap on the lock.";
 
-	// Pickable chests
+	// Pickable chests (Aldarin for example)
 	private static final String PICKLOCK_CHEST_SUCCESS = "You manage to unlock the chest.";
 	private static final String PICKLOCK_CHEST_FAIL = "You fail to picklock the chest.";
 	private static final String PICKLOCK_CHEST_TRAP = "You have activated a trap on the chest.";
