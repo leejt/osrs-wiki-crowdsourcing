@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
@@ -121,6 +120,18 @@ public class CrowdsourcingMessages
 	private static final String PET_FISH_BLUEFISH = "...and you catch a Tiny Bluefish!";
 	private static final String PET_FISH_GREENFISH = "...and you catch a Tiny Greenfish!";
 	private static final String PET_FISH_SPINEFISH = "...and you catch a Tiny Spinefish!";
+
+	// Camdozaal preparing fish
+	private static final String CAMDOZAAL_PREPARE_GUPPY_SUCCESS = "You successfully prepare the Guppy.";
+	private static final String CAMDOZAAL_PREPARE_CAVEFISH_SUCCESS = "You successfully prepare the Cavefish.";
+	private static final String CAMDOZAAL_PREPARE_TETRA_SUCCESS = "You successfully prepare the Tetra.";
+	private static final String CAMDOZAAL_PREPARE_CATFISH_SUCCESS = "You successfully prepare the Catfish.";
+	private static final String CAMDOZAAL_PREPARE_GUPPY_FAIL = "You accidentally ruin the Guppy.";
+	private static final String CAMDOZAAL_PREPARE_CAVEFISH_FAIL = "You accidentally ruin the Cavefish.";
+	private static final String CAMDOZAAL_PREPARE_TETRA_FAIL = "You accidentally ruin the Tetra.";
+	private static final String CAMDOZAAL_PREPARE_CATFISH_FAIL = "You accidentally ruin the Catfish.";
+	private static final int CHARM_OF_PREPARATION = 12100;
+	private static final int CHARM_OF_BOOST = 12104;
 
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
@@ -250,6 +261,21 @@ public class CrowdsourcingMessages
 		if (PET_FISH_BLUEFISH.equals(message) || PET_FISH_GREENFISH.equals(message) || PET_FISH_SPINEFISH.equals(message))
 		{
 			return createSkillMap(Skill.FISHING);
+		}
+
+		if (CAMDOZAAL_PREPARE_GUPPY_SUCCESS.equals(message)
+			|| CAMDOZAAL_PREPARE_CAVEFISH_SUCCESS.equals(message)
+			|| CAMDOZAAL_PREPARE_TETRA_SUCCESS.equals(message)
+			|| CAMDOZAAL_PREPARE_CATFISH_SUCCESS.equals(message)
+			|| CAMDOZAAL_PREPARE_GUPPY_FAIL.equals(message)
+			|| CAMDOZAAL_PREPARE_CAVEFISH_FAIL.equals(message)
+			|| CAMDOZAAL_PREPARE_TETRA_FAIL.equals(message)
+			|| CAMDOZAAL_PREPARE_CATFISH_FAIL.equals(message))
+		{
+			HashMap<String, Object> h = createSkillMap(Skill.COOKING);
+			h.put("CharmOfPreparation", client.getVarbitValue(CHARM_OF_PREPARATION) > 0);
+			h.put("CharmOfBoost", client.getVarbitValue(CHARM_OF_BOOST) > 0);
+			return h;
 		}
 
 		return null;
