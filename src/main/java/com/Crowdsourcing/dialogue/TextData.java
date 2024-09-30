@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Weird Gloop <admin@weirdgloop.org>
+ * Copyright (c) 2024, Weird Gloop <admin@weirdgloop.org>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,10 +32,9 @@ import net.runelite.api.coords.WorldPoint;
 
 @Data
 @AllArgsConstructor
-public class SpriteTextData
+public class TextData
 {
 	private String text;
-	private int itemId;
 	private final boolean isInInstance;
 	private final WorldPoint location;
 	private HashMap<String, Object> metadata;
