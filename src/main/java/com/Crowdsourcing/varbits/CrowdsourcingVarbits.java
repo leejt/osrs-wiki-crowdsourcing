@@ -27,12 +27,14 @@ package com.Crowdsourcing.varbits;
 import com.Crowdsourcing.CrowdsourcingManager;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import java.util.HashMap;
 import java.util.HashSet;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.IndexDataBase;
+import net.runelite.api.Skill;
 import net.runelite.api.VarbitComposition;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -66,6 +68,10 @@ public class CrowdsourcingVarbits
 
 	private static final int VARBIT = 0;
 	private static final int VARPLAYER = 1;
+
+	private static final int VARBIT_MIXOLOGY_POTION_ORDER_1 = 11315;
+	private static final int VARBIT_MIXOLOGY_POTION_ORDER_2 = 11317;
+	private static final int VARBIT_MIXOLOGY_POTION_ORDER_3 = 11319;
 
 	public void startUp()
 	{
@@ -142,6 +148,26 @@ public class CrowdsourcingVarbits
 		}
 	}
 
+	private HashMap<String, Object> createSkillMap(Skill s)
+	{
+		HashMap<String, Object> h = new HashMap<>();
+		h.put(s.getName(), client.getRealSkillLevel(s));
+		h.put("B" + s.getName(), client.getBoostedSkillLevel(s));
+		return h;
+	}
+
+	public HashMap<String, Object> getMetadataForVar(int index, int newValue)
+	{
+		if (newValue != 0 &&
+			(index == VARBIT_MIXOLOGY_POTION_ORDER_1 ||
+			index == VARBIT_MIXOLOGY_POTION_ORDER_2 ||
+			index == VARBIT_MIXOLOGY_POTION_ORDER_3))
+		{
+			return createSkillMap(Skill.HERBLORE);
+		}
+		return null;
+	}
+
 	@Subscribe
 	public void onVarbitChanged(VarbitChanged varbitChanged)
 	{
@@ -176,8 +202,9 @@ public class CrowdsourcingVarbits
 						LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
 						WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 						boolean isInInstance = client.isInInstancedRegion();
+						HashMap<String, Object> metadata = getMetadataForVar(i, newValue);
 
-						VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, isInInstance, location);
+						VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, isInInstance, location, metadata);
 						crowdsourcingManager.storeEvent(varbitData);
 						// log.info(varbitData.toString());
 					});
@@ -196,7 +223,7 @@ public class CrowdsourcingVarbits
 				WorldPoint location = WorldPoint.fromLocalInstance(client, local);
 				boolean isInInstance = client.isInInstancedRegion();
 
-				VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, isInInstance, location);
+				VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, isInInstance, location, null);
 				crowdsourcingManager.storeEvent(varPlayerData);
 				// log.info(varPlayerData.toString());
 			});
