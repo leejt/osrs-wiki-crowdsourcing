@@ -66,6 +66,12 @@ public class CrowdsourcingLoot {
 	// Rogue outfit
 	private static final String ROGUE_MESSAGE = "Your rogue clothing allows you to steal twice as much loot!";
 
+	// Fishing/mining standard messages
+	// "You catch a swordfish.", "You catch some shrimps.", "You catch a shark!", "You catch a clue bottle!"
+	private static final Pattern FISHING_MESSAGE = Pattern.compile("You catch .*");
+	private static final Pattern MINING_MESSAGE = Pattern.compile("You manage to mine some .*");
+	private static final String CLUE_GEODE_MESSAGE = "You find a clue geode!";
+
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
 		HashMap<String, Object> h = new HashMap<>();
@@ -173,8 +179,8 @@ public class CrowdsourcingLoot {
 			HashMap<String, Object> metadata = getMetadataForLoot(data);
 			data.setMetadata(metadata);
 
-//			log.info(data.toString());
-			manager.storeEvent(data);
+			log.info(data.toString());
+//			manager.storeEvent(data);
 		});
 	}
 
@@ -188,7 +194,11 @@ public class CrowdsourcingLoot {
 		}
 
 		String message = event.getMessage();
-		if (CLUE_MESSAGE.matcher(message).matches() || ROGUE_MESSAGE.equals(message))
+		if (CLUE_MESSAGE.matcher(message).matches() ||
+			ROGUE_MESSAGE.equals(message) ||
+			FISHING_MESSAGE.matcher(message).matches() ||
+			MINING_MESSAGE.matcher(message).matches() ||
+			CLUE_GEODE_MESSAGE.equals(message))
 		{
 			LootData data = new LootData(
 				null,
@@ -205,8 +215,8 @@ public class CrowdsourcingLoot {
 				HashMap<String, Object> metadata = getMetadataForLoot(data);
 				data.setMetadata(metadata);
 
-//				log.info(data.toString());
-				manager.storeEvent(data);
+				log.info(data.toString());
+//				manager.storeEvent(data);
 			});
 		}
 	}
