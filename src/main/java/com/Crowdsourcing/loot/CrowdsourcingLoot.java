@@ -121,17 +121,13 @@ public class CrowdsourcingLoot {
 		for (Map.Entry<Integer, String> entry : VARBITS_CA.entrySet()) {
 			int varbitId = entry.getKey();
 			String caTier = entry.getValue();
-			if (client.getVarbitValue(varbitId) == CA_CLAIMED) {
-				metadata.put(caTier, true);
-			}
+			metadata.put(caTier, client.getVarbitValue(varbitId) == CA_CLAIMED);
 		}
 
 		for (Map.Entry<Integer, String> entry : VARBITS_CLUE_WARNINGS.entrySet()) {
 			int varbitId = entry.getKey();
 			String clueTier = entry.getValue();
-			if (client.getVarbitValue(varbitId) == CLUE_WARNING_ENABLED) {
-				metadata.put(clueTier, true);
-			}
+			metadata.put(clueTier, client.getVarbitValue(varbitId) == CLUE_WARNING_ENABLED);
 		}
 
 		// conditional metadata
@@ -179,8 +175,8 @@ public class CrowdsourcingLoot {
 			HashMap<String, Object> metadata = getMetadataForLoot(data);
 			data.setMetadata(metadata);
 
-			log.info(data.toString());
-//			manager.storeEvent(data);
+//			log.info(data.toString());
+			manager.storeEvent(data);
 		});
 	}
 
@@ -215,8 +211,8 @@ public class CrowdsourcingLoot {
 				HashMap<String, Object> metadata = getMetadataForLoot(data);
 				data.setMetadata(metadata);
 
-				log.info(data.toString());
-//				manager.storeEvent(data);
+//				log.info(data.toString());
+				manager.storeEvent(data);
 			});
 		}
 	}
