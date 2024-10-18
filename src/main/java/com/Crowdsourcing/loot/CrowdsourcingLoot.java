@@ -2,6 +2,7 @@ package com.Crowdsourcing.loot;
 
 import com.Crowdsourcing.CrowdsourcingManager;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -17,7 +18,6 @@ import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemStack;
 import net.runelite.client.plugins.loottracker.LootReceived;
-import net.runelite.http.api.loottracker.LootRecordType;
 
 @Slf4j
 public class CrowdsourcingLoot {
@@ -104,47 +104,41 @@ public class CrowdsourcingLoot {
 		return 0;
 	}
 
-	private HashMap<String, Object> getMetadataForLoot(String name)
-	{
+	private HashMap<String, Object> getMetadataForLoot(LootData data) {
 		HashMap<String, Object> metadata = new HashMap<>();
+
+		String name = data.getName();
 
 		// universal metadata
 		metadata.put("ringOfWealth", getRingOfWealth());  // 0=not wearing, 1=wearing uncharged, 2=wearing charged
 
-		for (Map.Entry<Integer, String> entry : VARBITS_CA.entrySet())
-		{
+		for (Map.Entry<Integer, String> entry : VARBITS_CA.entrySet()) {
 			int varbitId = entry.getKey();
 			String caTier = entry.getValue();
-			if (client.getVarbitValue(varbitId) == CA_CLAIMED)
-			{
+			if (client.getVarbitValue(varbitId) == CA_CLAIMED) {
 				metadata.put(caTier, true);
 			}
 		}
 
-		for (Map.Entry<Integer, String> entry : VARBITS_CLUE_WARNINGS.entrySet())
-		{
+		for (Map.Entry<Integer, String> entry : VARBITS_CLUE_WARNINGS.entrySet()) {
 			int varbitId = entry.getKey();
 			String clueTier = entry.getValue();
-			if (client.getVarbitValue(varbitId) == CLUE_WARNING_ENABLED)
-			{
+			if (client.getVarbitValue(varbitId) == CLUE_WARNING_ENABLED) {
 				metadata.put(clueTier, true);
 			}
 		}
 
-		if (name == null)
-		{
-			return metadata;
-		}
-
 		// conditional metadata
-		switch (name)
+		if (name != null)
 		{
-			case HUNTERS_LOOT_SACK_BASIC:
-			case HUNTERS_LOOT_SACK_ADEPT:
-			case HUNTERS_LOOT_SACK_EXPERT:
-			case HUNTERS_LOOT_SACK_MASTER:
+			if (HUNTERS_LOOT_SACK_BASIC.equals(name) ||
+				HUNTERS_LOOT_SACK_ADEPT.equals(name) ||
+				HUNTERS_LOOT_SACK_EXPERT.equals(name) ||
+				HUNTERS_LOOT_SACK_MASTER.equals(name))
+			{
 				metadata.putAll(createSkillMap(Skill.HERBLORE));
 				metadata.putAll(createSkillMap(Skill.WOODCUTTING));
+			}
 		}
 
 		return metadata;
@@ -153,24 +147,30 @@ public class CrowdsourcingLoot {
 	@Subscribe
 	public void onLootReceived(LootReceived event)
 	{
-		String name = event.getName();
-		int combatLevel = event.getCombatLevel();
-		LootRecordType type = event.getType();
-
-		LootData data = new LootData(name, combatLevel, type);
-
+		ArrayList<HashMap<String, Integer>> drops = new ArrayList<>();
 		for (ItemStack item: event.getItems())
 		{
-			int itemId = item.getId();
-			int quantity = item.getQuantity();
-			data.addItem(itemId, quantity);
+			drops.add(new HashMap<>() {
+				{
+					put("id", item.getId());
+					put("qty", item.getQuantity());
+				}
+			});
 		}
 
-		data.setTick(client.getTickCount());
-		data.setLocation(client.getLocalPlayer().getWorldLocation());
+		LootData data = new LootData(
+			event.getName(),
+			event.getCombatLevel(),
+			event.getType(),
+			drops,
+			null,
+			client.getLocalPlayer().getWorldLocation(),
+			null,
+			client.getTickCount()
+		);
 
 		clientThread.invokeLater(() -> {
-			HashMap<String, Object> metadata = getMetadataForLoot(name);
+			HashMap<String, Object> metadata = getMetadataForLoot(data);
 			data.setMetadata(metadata);
 
 //			log.info(data.toString());
@@ -190,14 +190,19 @@ public class CrowdsourcingLoot {
 		String message = event.getMessage();
 		if (CLUE_MESSAGE.matcher(message).matches() || ROGUE_MESSAGE.equals(message))
 		{
-			LootData data = new LootData(null, -1, null);
-
-			data.setMessage(message);
-			data.setTick(client.getTickCount());
-			data.setLocation(client.getLocalPlayer().getWorldLocation());
+			LootData data = new LootData(
+				null,
+				-1,
+				null,
+				null,
+				message,
+				client.getLocalPlayer().getWorldLocation(),
+				null,
+				client.getTickCount()
+			);
 
 			clientThread.invokeLater(() -> {
-				HashMap<String, Object> metadata = getMetadataForLoot(null);
+				HashMap<String, Object> metadata = getMetadataForLoot(data);
 				data.setMetadata(metadata);
 
 //				log.info(data.toString());
