@@ -12,7 +12,6 @@ import net.runelite.api.Client;
 import net.runelite.api.InventoryID;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
-import net.runelite.api.Skill;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.Subscribe;
@@ -54,12 +53,6 @@ public class CrowdsourcingLoot {
 	};
 	private static final int CLUE_WARNING_ENABLED = 0;
 
-	// Hunters' loot sacks
-	private static final String HUNTERS_LOOT_SACK_BASIC = "Hunters' loot sack (basic)";
-	private static final String HUNTERS_LOOT_SACK_ADEPT = "Hunters' loot sack (adept)";
-	private static final String HUNTERS_LOOT_SACK_EXPERT = "Hunters' loot sack (expert)";
-	private static final String HUNTERS_LOOT_SACK_MASTER = "Hunters' loot sack (master)";
-
 	// Clues
 	private static final Pattern CLUE_MESSAGE = Pattern.compile("You have a sneaking suspicion.*");
 
@@ -71,14 +64,6 @@ public class CrowdsourcingLoot {
 	private static final Pattern FISHING_MESSAGE = Pattern.compile("You catch .*");
 	private static final Pattern MINING_MESSAGE = Pattern.compile("You manage to mine some .*");
 	private static final String CLUE_GEODE_MESSAGE = "You find a clue geode!";
-
-	private HashMap<String, Object> createSkillMap(Skill s)
-	{
-		HashMap<String, Object> h = new HashMap<>();
-		h.put(s.getName(), client.getRealSkillLevel(s));
-		h.put("B" + s.getName(), client.getBoostedSkillLevel(s));
-		return h;
-	}
 
 	private int getRingOfWealth()
 	{
@@ -110,10 +95,8 @@ public class CrowdsourcingLoot {
 		return 0;
 	}
 
-	private HashMap<String, Object> getMetadataForLoot(LootData data) {
+	private HashMap<String, Object> getMetadataForLoot() {
 		HashMap<String, Object> metadata = new HashMap<>();
-
-		String name = data.getName();
 
 		// universal metadata
 		metadata.put("ringOfWealth", getRingOfWealth());  // 0=not wearing, 1=wearing uncharged, 2=wearing charged
@@ -128,19 +111,6 @@ public class CrowdsourcingLoot {
 			int varbitId = entry.getKey();
 			String clueTier = entry.getValue();
 			metadata.put(clueTier, client.getVarbitValue(varbitId) == CLUE_WARNING_ENABLED);
-		}
-
-		// conditional metadata
-		if (name != null)
-		{
-			if (HUNTERS_LOOT_SACK_BASIC.equals(name) ||
-				HUNTERS_LOOT_SACK_ADEPT.equals(name) ||
-				HUNTERS_LOOT_SACK_EXPERT.equals(name) ||
-				HUNTERS_LOOT_SACK_MASTER.equals(name))
-			{
-				metadata.putAll(createSkillMap(Skill.HERBLORE));
-				metadata.putAll(createSkillMap(Skill.WOODCUTTING));
-			}
 		}
 
 		return metadata;
@@ -172,7 +142,7 @@ public class CrowdsourcingLoot {
 		);
 
 		clientThread.invokeLater(() -> {
-			HashMap<String, Object> metadata = getMetadataForLoot(data);
+			HashMap<String, Object> metadata = getMetadataForLoot();
 			data.setMetadata(metadata);
 
 //			log.info(data.toString());
@@ -208,7 +178,7 @@ public class CrowdsourcingLoot {
 			);
 
 			clientThread.invokeLater(() -> {
-				HashMap<String, Object> metadata = getMetadataForLoot(data);
+				HashMap<String, Object> metadata = getMetadataForLoot();
 				data.setMetadata(metadata);
 
 //				log.info(data.toString());
