@@ -14,6 +14,7 @@ public class LootData {
 	private int combatLevel;
 	private LootRecordType type;
 	private ArrayList<HashMap<String, Integer>> items;
+	private int amount;
 	private String message;
 	private WorldPoint location;
 	private HashMap<String, Object> metadata;
