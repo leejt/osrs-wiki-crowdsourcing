@@ -143,6 +143,10 @@ public class CrowdsourcingMessages
 	private static final int CHARM_OF_PREPARATION = 12100;
 	private static final int CHARM_OF_BOOST = 12104;
 
+  // Hallowed Sepulchre coffins
+  private static final String SEPULCHRE_FAILURE = "You have been poisoned.";
+  private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
+
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
 		HashMap<String, Object> h = new HashMap<>();
@@ -295,6 +299,28 @@ public class CrowdsourcingMessages
 			h.put("CharmOfBoost", client.getVarbitValue(CHARM_OF_BOOST) > 0);
 			return h;
 		}
+
+    if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message))
+    {
+      boolean hasLockpick = false;
+      boolean hasStrangeOldLockpick = false;
+      ItemContainer equipContainer = client.getItemContainer(InventoryID.INVENTORY);
+      if (equipContainer != null)
+      {
+        final Item[] items = equipContainer.getItems();
+        for (Item item : items)
+        {
+          if (item.getId() == ItemID.LOCKPICK)
+            hasLockpick = true;
+          if (item.getId() == ItemID.STRANGE_OLD_LOCKPICK || item.getId() == ItemID.STRANGE_OLD_LOCKPICK_FULL)
+            hasStrangeOldLockpick = true;
+        }
+        HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
+        h.put("Lockpick", hasLockpick);
+        h.put("StrangeLockpick", hasStrangeOldLockpick);
+        return h;
+      }
+    }
 
 		return null;
 	}
