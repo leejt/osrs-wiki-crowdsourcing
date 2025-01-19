@@ -144,7 +144,8 @@ public class CrowdsourcingMessages
 	private static final int CHARM_OF_BOOST = 12104;
 
   // Hallowed Sepulchre coffins
-  private static final String SEPULCHRE_FAILURE = "You have been poisoned.";
+  private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
+  private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
   private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
 
 	private HashMap<String, Object> createSkillMap(Skill s)
@@ -300,7 +301,7 @@ public class CrowdsourcingMessages
 			return h;
 		}
 
-    if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message))
+    if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
     {
       boolean hasLockpick = false;
       boolean hasStrangeOldLockpick = false;
