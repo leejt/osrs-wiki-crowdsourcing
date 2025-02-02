@@ -46,7 +46,7 @@ public class MonsterExamine
         String target = event.getMenuTarget();
         if (target.startsWith("<col=00ff00>Monster Examine</col><col=ffffff> -> "))
         {
-            lastId = client.getCachedNPCs()[event.getId()].getComposition().getId();
+			lastId = client.getTopLevelWorldView().npcs().byIndex(event.getId()).getComposition().getId();
         }
     }
 
