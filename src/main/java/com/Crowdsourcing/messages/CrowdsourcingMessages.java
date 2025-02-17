@@ -143,6 +143,10 @@ public class CrowdsourcingMessages
 	private static final int CHARM_OF_PREPARATION = 12100;
 	private static final int CHARM_OF_BOOST = 12104;
 
+	// Temple of Marimbo Dungeon entrance via crate during Monkey Madness 1
+	private static final String CRATE_4714_CATLIKE_AGILITY_ATTEMPT = "You begin to lower yourself into the hole...";
+	private static final String CRATE_4714_CATLIKE_AGILITY_SUCCESS = "... and using your catlike agility land on all fours at the bottom of a large cavern!";
+
   // Hallowed Sepulchre coffins
   private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
   private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
@@ -299,6 +303,12 @@ public class CrowdsourcingMessages
 			h.put("CharmOfPreparation", client.getVarbitValue(CHARM_OF_PREPARATION) > 0);
 			h.put("CharmOfBoost", client.getVarbitValue(CHARM_OF_BOOST) > 0);
 			return h;
+		}
+
+		if (CRATE_4714_CATLIKE_AGILITY_ATTEMPT.equals(message)
+			|| CRATE_4714_CATLIKE_AGILITY_SUCCESS.equals(message))
+		{
+			return createSkillMap(Skill.AGILITY);
 		}
 
     if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
