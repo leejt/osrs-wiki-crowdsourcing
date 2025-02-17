@@ -25,6 +25,7 @@
 
 package com.Crowdsourcing.dialogue;
 
+import java.util.HashMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import net.runelite.api.coords.WorldPoint;
@@ -38,4 +39,5 @@ public class DoubleSpriteTextData
     private int itemId2;
     private final boolean isInInstance;
     private final WorldPoint location;
+    private HashMap<String, Object> metadata;
 }
