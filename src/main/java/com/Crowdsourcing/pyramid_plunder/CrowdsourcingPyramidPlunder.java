@@ -135,30 +135,28 @@ public class CrowdsourcingPyramidPlunder
 		}
 	}
 
-	// 20956, 20974, 20975, 20976, 20977, 20978, 20979, 20987, 21251, 21252, 21253, 21254 (outside doors)
-	// 21280 (Speartrap)
-	// 20946, 20947 (Grand gold chest)
-	// 21255, 21256, 21257 (Sarcophagus) Could probably just track first (unopened)
-	// 21261 - 21279 Urns galore
-	// 20948, 20949(inside doors)
-	// 20931, 20932 (inside doors)
 	ImmutableSet<Integer> objectIdsToCheck = ImmutableSet.<Integer>builder()
+		// outside doors
 		.add(ObjectID.NTK_PYRAMID_DOOR_NORTH_ANIM).add(ObjectID.NTK_PYRAMID_DOOR_NORTH_NOANIM)
 		.add(ObjectID.NTK_PYRAMID_DOOR_NORTH_OPEN_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_EAST_ANIM)
 		.add(ObjectID.NTK_PYRAMID_DOOR_EAST_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_EAST_OPEN_NOANIM)
 		.add(ObjectID.NTK_PYRAMID_DOOR_SOUTH_ANIM).add(ObjectID.NTK_PYRAMID_DOOR_SOUTH_NOANIM)
 		.add(ObjectID.NTK_PYRAMID_DOOR_SOUTH_OPEN_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_WEST_ANIM)
 		.add(ObjectID.NTK_PYRAMID_DOOR_WEST_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_WEST_OPEN_NOANIM)
+		// spear trap
 		.add(ObjectID.NTK_SPEARTRAP_INMOTION)
+		// Grand gold chest
 		.add(ObjectID.NTK_GOLDEN_CHEST_CLOSED).add(ObjectID.NTK_GOLDEN_CHEST_OPEN)
+		// Sarcophagus
 		.add(ObjectID.NTK_SARCOPHAGUS).add(ObjectID.NTK_SARCOPHAGUS_OPEN).add(ObjectID.NTK_SARCOPHAGUS_ANIM)
+		// urns, urns, and more urns
 		.add(ObjectID.NTK_URN1_CLOSED).add(ObjectID.NTK_URN2_CLOSED).add(ObjectID.NTK_URN3_CLOSED)
 		.add(ObjectID.NTK_URN_ROUGH_CLOSED).add(ObjectID.NTK_URN1_OPEN).add(ObjectID.NTK_URN2_OPEN)
 		.add(ObjectID.NTK_URN3_OPEN).add(ObjectID.NTK_URN_ROUGH_OPEN).add(ObjectID.NTK_URN1_SNAKE)
-		.add(ObjectID.NTK_URN2_SNAKE).add(ObjectID.TEMPLE_PYRE_ARCTIC_PINE).add(ObjectID.TEMPLE_PYRE_BONES_ARCTIC_PINE)
-		.add(ObjectID.NTK_URN3_SNAKE).add(ObjectID.ARCTIC_PINE_TREE_STUMP).add(ObjectID.NTK_URN_ROUGH_SNAKE)
+		.add(ObjectID.NTK_URN2_SNAKE).add(ObjectID.NTK_URN3_SNAKE).add(ObjectID.NTK_URN_ROUGH_SNAKE)
 		.add(ObjectID.NTK_URN1_SNAKE_CHARMED).add(ObjectID.NTK_URN2_SNAKE_CHARMED).add(ObjectID.NTK_URN3_SNAKE_CHARMED)
 		.add(ObjectID.NTK_URN_ROUGH_SNAKE_CHARMED)
+		// inside doors
 		.add(ObjectID.NTK_TOMB_DOOR_NOANIM).add(ObjectID.NTK_TOMB_DOOR_ANIM)
 		.add(ObjectID.NTK_TOMB_DOOR_EXIT).add(ObjectID.NTK_ANTECHAMBER_EXIT).build();
 	@Subscribe
