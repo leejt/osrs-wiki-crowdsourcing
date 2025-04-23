@@ -9,6 +9,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.NPC;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.*;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.client.eventbus.Subscribe;
 
 import java.util.Set;
@@ -18,7 +19,16 @@ public class CrowdsourcingImpling {
     private static final int MAX_ACTOR_VIEW_RANGE = 15;
     private WorldPoint lastPlayerLocation;
 
-    private static final Set<Integer> INVISIBLE_IDS = ImmutableSet.of(9389, 9390, 9391, 9392, 9393, 9394, 9395, 9396, 9397);
+	private static final Set<Integer> INVISIBLE_IDS = ImmutableSet.of(
+		NpcID.II_RARE_IMPLING_PRECURSOR,
+		NpcID.II_RARE_IMPLING_PRECURSOR_MAZE,
+		NpcID.II_UNCOMMON_IMPLING_PRECURSOR,
+		NpcID.II_COMMON_IMPLING_PRECURSOR,
+		NpcID.II_IMPLING_TYPE_12_PRECURSOR,
+		NpcID.II_MAZE_BLOCKING_TIMER,
+		NpcID.II_MAZE_GATE_TIMER,
+		NpcID.II_IMPLING_ADDER,
+		NpcID.II_CROP_CIRCLE_NPC);
 
     @Inject
     private Client client;

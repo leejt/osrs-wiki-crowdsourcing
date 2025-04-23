@@ -37,18 +37,18 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.EquipmentInventorySlot;
-import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
-import net.runelite.api.ItemID;
 import net.runelite.api.MenuAction;
-import net.runelite.api.NullObjectID;
 import net.runelite.api.Skill;
-import net.runelite.api.Varbits;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
-import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.ObjectID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.Subscribe;
 import com.Crowdsourcing.CrowdsourcingManager;
@@ -66,7 +66,7 @@ public class CrowdsourcingMLM
 	private static final String COLLECT_ORE_FROM_SACK = "You collect your ore from the sack.";
 	private static final int MOTHERLODE_MINE_REGION_ID = 14936;
 	// This is the multiloc; the transformed ID is 26678.
-	private static final int SACK_ID = NullObjectID.NULL_26688;
+	private static final int SACK_ID = ObjectID.MOTHERLODE_SACK;
 
 	private Multiset<Integer> prevInventorySnapshot;
 
@@ -86,7 +86,7 @@ public class CrowdsourcingMLM
 			return;
 		}
 
-		Widget widgetSpriteText = client.getWidget(ComponentID.DIALOG_SPRITE_TEXT);
+		Widget widgetSpriteText = client.getWidget(InterfaceID.Objectbox.TEXT);
 
 		if (widgetSpriteText == null)
 		{
@@ -97,7 +97,7 @@ public class CrowdsourcingMLM
 			waitingForOre = false;
 			final Multiset<Integer> currentInventorySnapshot = getInventorySnapshot();
 			final Multiset<Integer> rewards = Multisets.difference(currentInventorySnapshot, prevInventorySnapshot);
-			final int currentSackCount = client.getVarbitValue(Varbits.SACK_NUMBER);
+			final int currentSackCount = client.getVarbitValue(VarbitID.MOTHERLODE_SACK_TRANSMIT);
 			MLMData event = new MLMData(
 				new ArrayList(paydirtMineData),
 				rewards,
@@ -140,7 +140,7 @@ public class CrowdsourcingMLM
 
 	private Multiset<Integer> getInventorySnapshot()
 	{
-		final ItemContainer inventory = client.getItemContainer(InventoryID.INVENTORY);
+		final ItemContainer inventory = client.getItemContainer(InventoryID.INV);
 		Multiset<Integer> inventorySnapshot = HashMultiset.create();
 
 		if (inventory != null)
@@ -154,7 +154,7 @@ public class CrowdsourcingMLM
 
 	private int getRingId()
 	{
-		ItemContainer equipContainer = client.getItemContainer(InventoryID.EQUIPMENT);
+		ItemContainer equipContainer = client.getItemContainer(InventoryID.WORN);
 		if (equipContainer != null)
 		{
 			final Item[] items = equipContainer.getItems();
@@ -169,10 +169,10 @@ public class CrowdsourcingMLM
 
 	private int getDiaryCompletions()
 	{
-		int easy = client.getVarbitValue(Varbits.DIARY_FALADOR_EASY);
-		int medium = client.getVarbitValue(Varbits.DIARY_FALADOR_MEDIUM);
-		int hard = client.getVarbitValue(Varbits.DIARY_FALADOR_HARD);
-		int elite = client.getVarbitValue(Varbits.DIARY_FALADOR_ELITE);
+		int easy = client.getVarbitValue(VarbitID.FALADOR_DIARY_EASY_COMPLETE);
+		int medium = client.getVarbitValue(VarbitID.FALADOR_DIARY_MEDIUM_COMPLETE);
+		int hard = client.getVarbitValue(VarbitID.FALADOR_DIARY_HARD_COMPLETE);
+		int elite = client.getVarbitValue(VarbitID.FALADOR_DIARY_ELITE_COMPLETE);
 
 		return easy + 2*medium + 4*hard + 8*elite;
 	}
