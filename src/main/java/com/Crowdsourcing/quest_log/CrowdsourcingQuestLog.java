@@ -128,7 +128,7 @@ public class CrowdsourcingQuestLog
 		questVarbs.put("Priest in Peril", new VarTuple(1, VarPlayerID.PRIESTPERIL));
 		questVarbs.put("The Queen of Thieves", new VarTuple(0, VarbitID.PISCQUEST));
 		questVarbs.put("Rag and Bone Man I", new VarTuple(1, VarPlayerID.RAG_QUEST));
-		questVarbs.put("Rag and Bone Man II", new VarTuple(1, VarPlayerID.RAG_QUEST));
+		questVarbs.put("Rag and Bone Man II", new VarTuple(1, VarPlayerID.RAG_BONE_2));
 		questVarbs.put("Ratcatchers", new VarTuple(0, VarbitID.RATCATCH_VAR));
 		questVarbs.put("Recipe for Disaster", new VarTuple(0, VarbitID.HUNDRED_MAIN_QUEST_VAR));
 		questVarbs.put("Recruitment Drive", new VarTuple(0, VarbitID.RD_MAIN));
