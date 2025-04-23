@@ -40,7 +40,6 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.NPC;
-import net.runelite.api.NullNpcID;
 import net.runelite.api.Point;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
@@ -51,6 +50,7 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.gameval.NpcID;
 import net.runelite.client.config.RuneScapeProfileType;
 import net.runelite.client.eventbus.Subscribe;
 import okhttp3.Call;
@@ -116,7 +116,7 @@ public class CrowdsourcingStars
 	@Subscribe
 	public void onNpcSpawned(NpcSpawned event)
 	{
-		if (event.getNpc().getId() != NullNpcID.NULL_10629)
+		if (event.getNpc().getId() != NpcID.STAR_HEADBAR_NPC)
 		{
 			return;
 		}
@@ -134,7 +134,7 @@ public class CrowdsourcingStars
 	@Subscribe
 	public void onNpcDespawned(NpcDespawned event)
 	{
-		if (event.getNpc().getId() != NullNpcID.NULL_10629)
+		if (event.getNpc().getId() != NpcID.STAR_HEADBAR_NPC)
 		{
 			return;
 		}

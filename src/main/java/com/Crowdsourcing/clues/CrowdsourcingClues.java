@@ -6,12 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.ItemComposition;
 
-import net.runelite.api.ItemID;
 import static net.runelite.api.MenuAction.CC_OP;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
@@ -20,8 +20,6 @@ import com.Crowdsourcing.CrowdsourcingManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
-import static net.runelite.api.MenuAction.ITEM_FIRST_OPTION;
 
 @Slf4j
 public class CrowdsourcingClues {
@@ -47,7 +45,7 @@ public class CrowdsourcingClues {
             if (itemComposition.getName().startsWith("Clue scroll") || itemComposition.getName().startsWith("Challenge scroll")) {
                 if (!seenClues.contains(itemComposition.getId())) {
                     clueId = itemComposition.getId();
-                    if (clueId != ItemID.CLUE_SCROLL_MASTER && clueId != ItemID.CLUE_SCROLL_BEGINNER) {
+                    if (clueId != ItemID.TRAIL_CLUE_MASTER && clueId != ItemID.TRAIL_CLUE_BEGINNER) {
                         seenClues.add(clueId);
                     }
                 }
@@ -75,10 +73,10 @@ public class CrowdsourcingClues {
        if (clueId == -1) {
            return;
        }
-       final Widget clueTextWidget = client.getWidget(ComponentID.CLUESCROLL_TEXT);
+       final Widget clueTextWidget = client.getWidget(InterfaceID.TrailCluetext.TEXT);
        if (clueTextWidget != null) {
            String candidateClueText = clueTextWidget.getText();
-           if (clueId == ItemID.CLUE_SCROLL_MASTER && candidateClueText.equals(clueText)) {
+           if (clueId == ItemID.TRAIL_CLUE_MASTER && candidateClueText.equals(clueText)) {
                clueId = -1;
                return;
            }

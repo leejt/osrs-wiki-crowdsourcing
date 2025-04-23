@@ -7,14 +7,14 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
-import net.runelite.api.ItemID;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
@@ -221,7 +221,7 @@ public class CrowdsourcingMessages
 		{
 			boolean hasLockpick = false;
 			boolean hasHairClip = false;
-			ItemContainer equipContainer = client.getItemContainer(InventoryID.INVENTORY);
+			ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
 			if (equipContainer != null)
 			{
 				final Item[] items = equipContainer.getItems();
@@ -229,7 +229,7 @@ public class CrowdsourcingMessages
 				{
 					if (item.getId() == ItemID.LOCKPICK)
 						hasLockpick = true;
-					else if (item.getId() == ItemID.HAIR_CLIP)
+					else if (item.getId() == ItemID.KR_HAIRCLIP)
 						hasHairClip = true;
 				}
 			}
@@ -315,7 +315,7 @@ public class CrowdsourcingMessages
     {
       boolean hasLockpick = false;
       boolean hasStrangeOldLockpick = false;
-      ItemContainer equipContainer = client.getItemContainer(InventoryID.INVENTORY);
+      ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
       if (equipContainer != null)
       {
         final Item[] items = equipContainer.getItems();

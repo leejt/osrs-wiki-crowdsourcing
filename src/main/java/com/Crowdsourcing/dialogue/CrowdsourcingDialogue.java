@@ -31,7 +31,7 @@ import net.runelite.api.Client;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameTick;
-import net.runelite.api.widgets.ComponentID;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.eventbus.Subscribe;
 import com.Crowdsourcing.CrowdsourcingManager;
@@ -56,8 +56,8 @@ public class CrowdsourcingDialogue
 	@Subscribe
 	public void onGameTick(GameTick tick)
 	{
-		Widget spriteWidget = client.getWidget(ComponentID.DIALOG_SPRITE_SPRITE);
-		Widget textWidget = client.getWidget(ComponentID.DIALOG_SPRITE_TEXT);
+		Widget spriteWidget = client.getWidget(InterfaceID.Objectbox.ITEM);
+		Widget textWidget = client.getWidget(InterfaceID.Objectbox.TEXT);
 		if (spriteWidget != null && textWidget != null && (!textWidget.getText().equals(lastSpriteText)
 			|| spriteWidget.getItemId() != lastItemId))
 		{
