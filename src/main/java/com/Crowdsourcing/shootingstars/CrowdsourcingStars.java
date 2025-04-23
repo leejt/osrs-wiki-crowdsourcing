@@ -51,6 +51,7 @@ import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.config.RuneScapeProfileType;
 import net.runelite.client.eventbus.Subscribe;
 import okhttp3.Call;
@@ -64,7 +65,6 @@ import okhttp3.Response;
 @Slf4j
 public class CrowdsourcingStars
 {
-	private static final int CANNON_VARBIT = 2180;
 	private static final int VARBIT_THROTTLE_SECONDS = 5;
 	private static final String CROWDSOURCING_URL = "https://crowdsource.runescape.wiki/shooting_stars";
 	private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -93,7 +93,7 @@ public class CrowdsourcingStars
 	@Subscribe
 	public void onVarbitChanged(VarbitChanged event)
 	{
-		if (event.getVarbitId() != CANNON_VARBIT)
+		if (event.getVarbitId() != VarbitID.MCANNON_SETUPTIME)
 		{
 			return;
 		}

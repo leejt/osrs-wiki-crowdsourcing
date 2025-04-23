@@ -17,6 +17,9 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.gameval.NpcID;
+import net.runelite.api.gameval.ObjectID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
@@ -37,12 +40,24 @@ public class CrowdsourcingPyramidPlunder
 
 	ImmutableSet<Integer> varbsToTrack = ImmutableSet.<Integer>builder()
 		// Urns
-		.add(2346).add(2347).add(2348).add(2349).add(2350).add(2351).add(2352).add(2353).add(2354).add(2355)
-		.add(2356).add(2357).add(2358).add(2359)
+		.add(VarbitID.NTK_URN1_STATE)
+		.add(VarbitID.NTK_URN2_STATE)
+		.add(VarbitID.NTK_URN3_STATE)
+		.add(VarbitID.NTK_URN4_STATE)
+		.add(VarbitID.NTK_URN5_STATE)
+		.add(VarbitID.NTK_URN6_STATE)
+		.add(VarbitID.NTK_URN7_STATE)
+		.add(VarbitID.NTK_URN8_STATE)
+		.add(VarbitID.NTK_URN9_STATE)
+		.add(VarbitID.NTK_URN10_STATE)
+		.add(VarbitID.NTK_URN11_STATE)
+		.add(VarbitID.NTK_URN12_STATE)
+		.add(VarbitID.NTK_URN13_STATE)
+		.add(VarbitID.NTK_URN14_STATE)
 		// Sarcophagus
-		.add(2362)
+		.add(VarbitID.NTK_SARCOPHAGUS_STATE)
 		// Grand gold chest
-		.add(2363).build();
+		.add(VarbitID.NTK_GOLDEN_CHEST_STATE).build();
 
 	HashMap<Integer, Integer> varbVals = new HashMap<>();
 
@@ -128,13 +143,24 @@ public class CrowdsourcingPyramidPlunder
 	// 20948, 20949(inside doors)
 	// 20931, 20932 (inside doors)
 	ImmutableSet<Integer> objectIdsToCheck = ImmutableSet.<Integer>builder()
-		.add(20956).add(20974).add(20975).add(20976).add(20977).add(20978).add(20979)
-		.add(20987).add(21251).add(21252) .add(21253).add(21254)
-		.add(21280).add(20946).add(20947).add(21255).add(21256).add(21257)
-		.add(21261).add(21262).add(21263).add(21264).add(21265).add(21266).add(21267).add(21268).add(21269)
-		.add(21270).add(21271).add(21272).add(21273).add(21274).add(21275).add(21276).add(21277).add(21278).add(21279)
-		.add(20948).add(20949)
-		.add(20931).add(20932).build();
+		.add(ObjectID.NTK_PYRAMID_DOOR_NORTH_ANIM).add(ObjectID.NTK_PYRAMID_DOOR_NORTH_NOANIM)
+		.add(ObjectID.NTK_PYRAMID_DOOR_NORTH_OPEN_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_EAST_ANIM)
+		.add(ObjectID.NTK_PYRAMID_DOOR_EAST_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_EAST_OPEN_NOANIM)
+		.add(ObjectID.NTK_PYRAMID_DOOR_SOUTH_ANIM).add(ObjectID.NTK_PYRAMID_DOOR_SOUTH_NOANIM)
+		.add(ObjectID.NTK_PYRAMID_DOOR_SOUTH_OPEN_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_WEST_ANIM)
+		.add(ObjectID.NTK_PYRAMID_DOOR_WEST_NOANIM).add(ObjectID.NTK_PYRAMID_DOOR_WEST_OPEN_NOANIM)
+		.add(ObjectID.NTK_SPEARTRAP_INMOTION)
+		.add(ObjectID.NTK_GOLDEN_CHEST_CLOSED).add(ObjectID.NTK_GOLDEN_CHEST_OPEN)
+		.add(ObjectID.NTK_SARCOPHAGUS).add(ObjectID.NTK_SARCOPHAGUS_OPEN).add(ObjectID.NTK_SARCOPHAGUS_ANIM)
+		.add(ObjectID.NTK_URN1_CLOSED).add(ObjectID.NTK_URN2_CLOSED).add(ObjectID.NTK_URN3_CLOSED)
+		.add(ObjectID.NTK_URN_ROUGH_CLOSED).add(ObjectID.NTK_URN1_OPEN).add(ObjectID.NTK_URN2_OPEN)
+		.add(ObjectID.NTK_URN3_OPEN).add(ObjectID.NTK_URN_ROUGH_OPEN).add(ObjectID.NTK_URN1_SNAKE)
+		.add(ObjectID.NTK_URN2_SNAKE).add(ObjectID.TEMPLE_PYRE_ARCTIC_PINE).add(ObjectID.TEMPLE_PYRE_BONES_ARCTIC_PINE)
+		.add(ObjectID.NTK_URN3_SNAKE).add(ObjectID.ARCTIC_PINE_TREE_STUMP).add(ObjectID.NTK_URN_ROUGH_SNAKE)
+		.add(ObjectID.NTK_URN1_SNAKE_CHARMED).add(ObjectID.NTK_URN2_SNAKE_CHARMED).add(ObjectID.NTK_URN3_SNAKE_CHARMED)
+		.add(ObjectID.NTK_URN_ROUGH_SNAKE_CHARMED)
+		.add(ObjectID.NTK_TOMB_DOOR_NOANIM).add(ObjectID.NTK_TOMB_DOOR_ANIM)
+		.add(ObjectID.NTK_TOMB_DOOR_EXIT).add(ObjectID.NTK_ANTECHAMBER_EXIT).build();
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event) {
 		int tick = client.getTickCount();
@@ -163,7 +189,7 @@ public class CrowdsourcingPyramidPlunder
 			int unboostedLevel = client.getRealSkillLevel(Skill.THIEVING);
 			int boostedLevel = client.getBoostedSkillLevel(Skill.THIEVING);
 			WorldPoint w = WorldPoint.fromScene(client, event.getParam0(), event.getParam1(), client.getPlane());
-			PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(1779, 1779, event.getMenuAction().getId(), w, unboostedLevel, boostedLevel, tick);
+			PyramidPlunderSceneryData data = new PyramidPlunderSceneryData(NpcID.NTK_MUMMY_GUARDIAN, NpcID.NTK_MUMMY_GUARDIAN, event.getMenuAction().getId(), w, unboostedLevel, boostedLevel, tick);
 			// log.error(data.toString());
 			manager.storeEvent(data);
 		}

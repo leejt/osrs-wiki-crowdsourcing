@@ -15,6 +15,7 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
@@ -140,8 +141,8 @@ public class CrowdsourcingMessages
 	private static final String CAMDOZAAL_PREPARE_CAVEFISH_FAIL = "You accidentally ruin the Cavefish.";
 	private static final String CAMDOZAAL_PREPARE_TETRA_FAIL = "You accidentally ruin the Tetra.";
 	private static final String CAMDOZAAL_PREPARE_CATFISH_FAIL = "You accidentally ruin the Catfish.";
-	private static final int CHARM_OF_PREPARATION = 12100;
-	private static final int CHARM_OF_BOOST = 12104;
+	private static final int CHARM_OF_PREPARATION = VarbitID.CAMDOZAAL_FISH_PREP_BUFF;
+	private static final int CHARM_OF_BOOST = VarbitID.CAMDOZAAL_TIMED_MULTI_BUFF;
 
 	// Temple of Marimbo Dungeon entrance via crate during Monkey Madness 1
 	private static final String CRATE_4714_CATLIKE_AGILITY_ATTEMPT = "You begin to lower yourself into the hole...";

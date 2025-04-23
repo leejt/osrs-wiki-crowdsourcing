@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.ScriptPostFired;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.ui.overlay.OverlayManager;
 
@@ -65,11 +66,11 @@ public class MonsterExamine
     {
         if (event.getScriptId() == 1179)
         {
-            String name = client.getWidget(522, 3).getText();
-            String stats = client.getWidget(522, 20).getText();
-            String aggressive = client.getWidget(522, 22).getText();
-            String defensive = client.getWidget(522, 24).getText();
-            String other = client.getWidget(522, 26).getText();
+            String name = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_NAME).getText();
+            String stats = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_STATS).getText();
+            String aggressive = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_AGGRESSIVE).getText();
+            String defensive = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_DEFENSIVE).getText();
+            String other = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_OTHER).getText();
             httpClient.submitToAPI(
                     new MonsterExamineData(lastId, name, stats ,aggressive, defensive, other, client.getLocalPlayer().getName()));
         }
