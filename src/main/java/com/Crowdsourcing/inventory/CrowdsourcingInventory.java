@@ -6,7 +6,7 @@ import java.util.HashSet;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
-import net.runelite.api.InventoryID;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
@@ -23,9 +23,12 @@ public class CrowdsourcingInventory
     @Inject
     public Client client;
 
+	// There's no gameval equivalent to the old InventoryID.TRADEOTHER so this is effectively the old value
+	private static final int TRADE_OTHER_INVENTORY_ID = (InventoryID.TRADEOFFER | 0x8000);
+
     private static final ImmutableSet<Integer> blacklist = ImmutableSet.of(
-        InventoryID.INVENTORY.getId(), InventoryID.BANK.getId(), InventoryID.EQUIPMENT.getId(),
-        InventoryID.TRADE.getId(), InventoryID.TRADEOTHER.getId()
+		InventoryID.INV, InventoryID.BANK, InventoryID.WORN,
+		InventoryID.TRADEOFFER, TRADE_OTHER_INVENTORY_ID
     );
 
     // Cache seen inventories so we avoid sending them more than once

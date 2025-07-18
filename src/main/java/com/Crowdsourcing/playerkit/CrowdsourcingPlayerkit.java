@@ -31,8 +31,8 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.InventoryID;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.gameval.InventoryID;
 import net.runelite.client.eventbus.Subscribe;
 
 @Slf4j
@@ -50,7 +50,7 @@ public class CrowdsourcingPlayerkit
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged itemContainerChanged)
 	{
-		if (itemContainerChanged.getItemContainer() != client.getItemContainer(InventoryID.EQUIPMENT))
+		if (itemContainerChanged.getItemContainer() != client.getItemContainer(InventoryID.WORN))
 		{
 			return;
 		}

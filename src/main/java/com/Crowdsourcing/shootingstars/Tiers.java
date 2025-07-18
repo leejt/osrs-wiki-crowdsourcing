@@ -27,20 +27,20 @@ package com.Crowdsourcing.shootingstars;
 
 
 import java.util.List;
-import net.runelite.api.ObjectID;
+import net.runelite.api.gameval.ObjectID;
 
 public class Tiers
 {
 	private static final List<Integer> TIERS = List.of(
-		ObjectID.CRASHED_STAR_41229,
-		ObjectID.CRASHED_STAR_41228,
-		ObjectID.CRASHED_STAR_41227,
-		ObjectID.CRASHED_STAR_41226,
-		ObjectID.CRASHED_STAR_41225,
-		ObjectID.CRASHED_STAR_41224,
-		ObjectID.CRASHED_STAR_41223,
-		ObjectID.CRASHED_STAR_41021,
-		ObjectID.CRASHED_STAR
+		ObjectID.STAR_SIZE_ONE_STAR,
+		ObjectID.STAR_SIZE_TWO_STAR,
+		ObjectID.STAR_SIZE_THREE_STAR,
+		ObjectID.STAR_SIZE_FOUR_STAR,
+		ObjectID.STAR_SIZE_FIVE_STAR,
+		ObjectID.STAR_SIZE_SIX_STAR,
+		ObjectID.STAR_SIZE_SEVEN_STAR,
+		ObjectID.STAR_SIZE_EIGHT_STAR,
+		ObjectID.STAR_SIZE_NINE_STAR
 	);
 
 	public static int of(int id)
