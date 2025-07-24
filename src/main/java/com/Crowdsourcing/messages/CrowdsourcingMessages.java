@@ -147,6 +147,10 @@ public class CrowdsourcingMessages
 	private static final String CRATE_4714_CATLIKE_AGILITY_ATTEMPT = "You begin to lower yourself into the hole...";
 	private static final String CRATE_4714_CATLIKE_AGILITY_SUCCESS = "... and using your catlike agility land on all fours at the bottom of a large cavern!";
 
+	// Stuffed snake message box cooking messages
+	private static final String STUFFED_SNAKE_SUCCESS = "You cook the stuffed snake to perfection.";
+	private static final String STUFFED_SNAKE_FAILURE = "You burn the stuffed snake.";
+
   // Hallowed Sepulchre coffins
   private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
   private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
@@ -309,6 +313,12 @@ public class CrowdsourcingMessages
 			|| CRATE_4714_CATLIKE_AGILITY_SUCCESS.equals(message))
 		{
 			return createSkillMap(Skill.AGILITY);
+		}
+
+		if (STUFFED_SNAKE_SUCCESS.equals(message)
+			|| STUFFED_SNAKE_FAILURE.equals(message))
+		{
+			return createSkillMap(Skill.COOKING);
 		}
 
     if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
