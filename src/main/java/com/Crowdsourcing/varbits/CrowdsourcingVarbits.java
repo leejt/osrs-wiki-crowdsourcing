@@ -38,6 +38,7 @@ import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -70,15 +71,11 @@ public class CrowdsourcingVarbits
 	public void startUp()
 	{
 
-		/* Blacklist certain common varbs that give us little useful data.
-		 * 357 - Equipped weapon type
-		 * 5983 - Dialogue option appear/disappear
-		 * 8354 - 100 tick counter
-		 */
+		// Blacklist certain common varbs that give us little useful data.
 		blackList = new HashSet<>();
-		blackList.add(357);
-		blackList.add(5983);
-		blackList.add(8354);
+		blackList.add(VarbitID.COMBAT_WEAPON_CATEGORY); // Equipped weapon type
+		blackList.add(VarbitID.SETTINGS_BARBARIAN_POTION_MAKEX); // Dialogue option appear/disappear
+		blackList.add(VarbitID.CLOCK); // 100 tick counter
 		varbits = HashMultimap.create();
 
 		if (client.getGameState() == GameState.STARTING || client.getGameState() == GameState.UNKNOWN)
