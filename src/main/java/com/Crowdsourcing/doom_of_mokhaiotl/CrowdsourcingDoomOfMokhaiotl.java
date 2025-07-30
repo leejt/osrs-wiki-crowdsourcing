@@ -25,34 +25,34 @@ public class CrowdsourcingDoomOfMokhaiotl
 	List<Map<Integer, Integer>> lootByWave = new ArrayList<>();
 
 @Subscribe
-public void onItemContainerChanged(ItemContainerChanged itemContainerChanged)
-{
-	int id = itemContainerChanged.getContainerId();
-
-	if (id != InventoryID.DOM_LOOTPILE)
+	public void onItemContainerChanged(ItemContainerChanged itemContainerChanged)
 	{
-		return;
+		int id = itemContainerChanged.getContainerId();
+
+		if (id != InventoryID.DOM_LOOTPILE)
+		{
+			return;
+		}
+		String title = client.getWidget(InterfaceID.DomEndLevelUi.FRAME).getChild(1).getText();
+		int currDelve = Integer.parseInt(title.split(" ")[1]);
+
+		ItemContainer inv = itemContainerChanged.getItemContainer();
+
+		// All loot is everything that is offered to the player
+		HashMap<Integer, Integer> allLoot = new HashMap<>();
+		for (Item item: inv.getItems())
+		{
+			allLoot.put(item.getId(), item.getQuantity());
+		}
+
+		while (lootByWave.size() < currDelve)
+		{
+			lootByWave.add(new HashMap<>());
+		}
+
+		lootByWave.set(currDelve - 1, allLoot);
+
+		manager.storeEvent(new DomLootData(lootByWave));
 	}
-	String title = client.getWidget(InterfaceID.DomEndLevelUi.FRAME).getChild(1).getText();
-	int currDelve = Integer.parseInt(title.split(" ")[1]);
-
-	ItemContainer inv = itemContainerChanged.getItemContainer();
-
-	// All loot is everything that is offered to the player
-	HashMap<Integer, Integer> allLoot = new HashMap<>();
-	for (Item item: inv.getItems())
-	{
-		allLoot.put(item.getId(), item.getQuantity());
-	}
-
-	while (lootByWave.size() < currDelve)
-	{
-		lootByWave.add(new HashMap<>());
-	}
-
-	lootByWave.set(currDelve - 1, allLoot);
-
-	manager.storeEvent(lootByWave);
-}
 
 }
