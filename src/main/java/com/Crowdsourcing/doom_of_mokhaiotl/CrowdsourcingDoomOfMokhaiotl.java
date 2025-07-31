@@ -56,7 +56,13 @@ public class CrowdsourcingDoomOfMokhaiotl
 
 		lootByWave.put(currDelve, allLoot);
 
-		manager.storeEvent(new DomLootData(lootByWave));
+		Map<Integer, Map<Integer, Integer>> lootByWaveCopy = new HashMap<>();
+		for (Map.Entry<Integer, Map<Integer, Integer>> entry : lootByWave.entrySet())
+		{
+			lootByWaveCopy.put(entry.getKey(), new HashMap<>(entry.getValue()));
+		}
+
+		manager.storeEvent(new DomLootData(lootByWaveCopy));
 	}
 
 	@Subscribe
