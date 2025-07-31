@@ -9,5 +9,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class DomLootData
 {
-	private List<Map<Integer, Integer>> waveLoot;
+	private Map<Integer, Map<Integer, Integer>> waveLoot;
 }

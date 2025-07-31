@@ -25,7 +25,7 @@ public class CrowdsourcingDoomOfMokhaiotl
 	@Inject
 	public Client client;
 
-	List<Map<Integer, Integer>> lootByWave = new ArrayList<>();
+	Map<Integer, Map<Integer, Integer>> lootByWave = new HashMap<>();
 
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged itemContainerChanged)
@@ -43,23 +43,18 @@ public class CrowdsourcingDoomOfMokhaiotl
 
 		// All loot is everything that is offered to the player
 		HashMap<Integer, Integer> allLoot = new HashMap<>();
-		for (Item item: inv.getItems())
+		for (Item item : inv.getItems())
 		{
 			allLoot.put(item.getId(), item.getQuantity());
 		}
 
-		if (!lootByWave.isEmpty() && allLoot.equals(lootByWave.get(lootByWave.size() - 1)))
+		// Check if the same loot already exists for this delve
+		if (allLoot.equals(lootByWave.get(currDelve)))
 		{
-			// Loot is the same as last stored so we don't need to store
 			return;
 		}
 
-		while (lootByWave.size() < currDelve)
-		{
-			lootByWave.add(new HashMap<>());
-		}
-
-		lootByWave.set(currDelve - 1, allLoot);
+		lootByWave.put(currDelve, allLoot);
 
 		manager.storeEvent(new DomLootData(lootByWave));
 	}
