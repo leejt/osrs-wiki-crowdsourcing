@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import javax.inject.Inject;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.gameval.InventoryID;
@@ -24,7 +27,7 @@ public class CrowdsourcingDoomOfMokhaiotl
 
 	List<Map<Integer, Integer>> lootByWave = new ArrayList<>();
 
-@Subscribe
+	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged itemContainerChanged)
 	{
 		int id = itemContainerChanged.getContainerId();
@@ -45,6 +48,12 @@ public class CrowdsourcingDoomOfMokhaiotl
 			allLoot.put(item.getId(), item.getQuantity());
 		}
 
+		if (!lootByWave.isEmpty() && allLoot.equals(lootByWave.get(lootByWave.size() - 1)))
+		{
+			// Loot is the same as last stored so we don't need to store
+			return;
+		}
+
 		while (lootByWave.size() < currDelve)
 		{
 			lootByWave.add(new HashMap<>());
@@ -55,4 +64,12 @@ public class CrowdsourcingDoomOfMokhaiotl
 		manager.storeEvent(new DomLootData(lootByWave));
 	}
 
+	@Subscribe
+	public void onChatMessage(ChatMessage chatMessage)
+	{
+		if(chatMessage.getType() == ChatMessageType.GAMEMESSAGE && chatMessage.getMessage().contains("Delve level: 1"))
+		{
+			lootByWave.clear();
+		}
+	}
 }
