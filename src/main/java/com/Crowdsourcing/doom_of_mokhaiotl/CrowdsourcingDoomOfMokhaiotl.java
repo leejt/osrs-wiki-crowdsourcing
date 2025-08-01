@@ -54,6 +54,12 @@ public class CrowdsourcingDoomOfMokhaiotl
 			return;
 		}
 
+		// If -1 is in the container, an item was claimed. Don't resubmit partial loot with -1s
+		if (allLoot.containsKey(-1))
+		{
+			return;
+		}
+
 		lootByWave.put(currDelve, allLoot);
 
 		Map<Integer, Map<Integer, Integer>> lootByWaveCopy = new HashMap<>();
