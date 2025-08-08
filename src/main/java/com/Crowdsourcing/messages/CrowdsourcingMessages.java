@@ -152,6 +152,10 @@ public class CrowdsourcingMessages
 	private static final String STUFFED_SNAKE_SUCCESS = "You cook the stuffed snake to perfection.";
 	private static final String STUFFED_SNAKE_FAILURE = "You burn the stuffed snake.";
 
+	// Isafdar leaves trap messages
+	private static final String LEAVES_TRAP_SUCCESS = "You safely jump across.";
+	private static final String LEAVES_TRAP_FAILURE = "You try to jump across but you slip and fall.";
+
   // Hallowed Sepulchre coffins
   private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
   private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
@@ -320,6 +324,12 @@ public class CrowdsourcingMessages
 			|| STUFFED_SNAKE_FAILURE.equals(message))
 		{
 			return createSkillMap(Skill.COOKING);
+		}
+
+		if (LEAVES_TRAP_SUCCESS.equals(message)
+			|| LEAVES_TRAP_FAILURE.equals(message))
+		{
+			return createSkillMap(Skill.AGILITY);
 		}
 
     if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
