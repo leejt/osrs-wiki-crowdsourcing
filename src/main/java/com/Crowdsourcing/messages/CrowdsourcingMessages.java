@@ -156,6 +156,10 @@ public class CrowdsourcingMessages
 	private static final String LEAVES_TRAP_SUCCESS = "You safely jump across.";
 	private static final String LEAVES_TRAP_FAILURE = "You try to jump across but you slip and fall.";
 
+	// Slug Menace air, earth, fire, mind and water blank rune
+	private static final String BLANK_RUNE_SUCCESS = "You manage to shape the rune essence into the desired shape.";
+	private static final String BLANK_RUNE_FAILURE = "You attempt to craft the stone but fail, destroying the essence.";
+
   // Hallowed Sepulchre coffins
   private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
   private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
@@ -330,6 +334,12 @@ public class CrowdsourcingMessages
 			|| LEAVES_TRAP_FAILURE.equals(message))
 		{
 			return createSkillMap(Skill.AGILITY);
+		}
+
+		if (BLANK_RUNE_SUCCESS.equals(message)
+			|| BLANK_RUNE_FAILURE.equals(message))
+		{
+			return createSkillMap(Skill.CRAFTING);
 		}
 
     if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
