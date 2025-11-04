@@ -51,9 +51,6 @@ public class CrowdsourcingExperience
 	@Subscribe
 	private void onStatChanged(StatChanged event)
 	{
-		// Ignore overall xp
-		if (event.getSkill() == Skill.OVERALL)
-			return;
 
 		int lastExperience = skillExperience.get(event.getSkill().getName());
 		skillExperience.put(event.getSkill().getName(), event.getXp());
@@ -95,8 +92,6 @@ public class CrowdsourcingExperience
 		skillExperience.clear();
 		for (Skill s : Skill.values())
 		{
-			if (s == Skill.OVERALL)
-				continue;
 			if (client != null)
 			{
 				log.debug("Putting skill exp " + s.getName() + " " + client.getSkillExperience(s));
