@@ -1,6 +1,7 @@
 package com.Crowdsourcing.messages;
 
 import com.Crowdsourcing.CrowdsourcingManager;
+import com.Crowdsourcing.util.BoatLocation;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -374,8 +375,9 @@ public class CrowdsourcingMessages
 		{
 			return;
 		}
-		WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+		WorldPoint location = BoatLocation.fromLocal(client, local);
 		boolean isInInstance = client.isInInstancedRegion();
+
 		HashMap<String, Object> metadata = getMetadataForMessage(message);
 		MessagesData data = new MessagesData(message, isInInstance, location, metadata);
 		// log.debug("" + data);

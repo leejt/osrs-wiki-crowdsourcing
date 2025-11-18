@@ -1,6 +1,7 @@
 package com.Crowdsourcing.inventory;
 
 import com.Crowdsourcing.CrowdsourcingManager;
+import com.Crowdsourcing.util.BoatLocation;
 import com.google.common.collect.ImmutableSet;
 import java.util.HashSet;
 import javax.inject.Inject;
@@ -57,7 +58,7 @@ public class CrowdsourcingInventory
         {
             return;
         }
-        WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+		WorldPoint location = BoatLocation.fromLocal(client, local);
 
         manager.storeEvent(new InventoryData(id, items, location, client.getAccountType().isIronman()));
     }

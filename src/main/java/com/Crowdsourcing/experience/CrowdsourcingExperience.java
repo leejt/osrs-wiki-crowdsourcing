@@ -1,6 +1,7 @@
 package com.Crowdsourcing.experience;
 
 import com.Crowdsourcing.CrowdsourcingManager;
+import com.Crowdsourcing.util.BoatLocation;
 import static com.google.common.base.MoreObjects.firstNonNull;
 import java.util.HashMap;
 import javax.inject.Inject;
@@ -75,7 +76,7 @@ public class CrowdsourcingExperience
 		{
 			return;
 		}
-		WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+		WorldPoint location = BoatLocation.fromLocal(client, local);
 		boolean isInInstance = client.isInInstancedRegion();
 
 		// Check map and if val is different, roll to store
