@@ -25,6 +25,7 @@
 package com.Crowdsourcing.varbits;
 
 import com.Crowdsourcing.CrowdsourcingManager;
+import com.Crowdsourcing.util.BoatLocation;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.HashSet;
@@ -171,7 +172,7 @@ public class CrowdsourcingVarbits
 					clientThread.invokeLater(() ->
 					{
 						LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
-						WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+						WorldPoint location = BoatLocation.fromLocal(client, local);
 						boolean isInInstance = client.isInInstancedRegion();
 
 						VarData varbitData = new VarData(VARBIT, i, oldValue, newValue, tick, isInInstance, location);
@@ -190,7 +191,7 @@ public class CrowdsourcingVarbits
 		{
 			clientThread.invokeLater(() -> {
 				LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
-				WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+				WorldPoint location = BoatLocation.fromLocal(client, local);
 				boolean isInInstance = client.isInInstancedRegion();
 
 				VarData varPlayerData = new VarData(VARPLAYER, index, oldValue, newValue, tick, isInInstance, location);

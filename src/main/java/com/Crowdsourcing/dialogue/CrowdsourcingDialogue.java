@@ -25,6 +25,7 @@
 
 package com.Crowdsourcing.dialogue;
 
+import com.Crowdsourcing.util.BoatLocation;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -73,8 +74,9 @@ public class CrowdsourcingDialogue
 			{
 				return;
 			}
-			WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+			WorldPoint location = BoatLocation.fromLocal(client, local);
 			boolean isInInstance = client.isInInstancedRegion();
+
 			SpriteTextData data = new SpriteTextData(lastSpriteText, lastItemId, isInInstance, location);
 			manager.storeEvent(data);
 		}
@@ -104,8 +106,9 @@ public class CrowdsourcingDialogue
 			{
 				return;
 			}
-			WorldPoint location = WorldPoint.fromLocalInstance(client, local);
+			WorldPoint location = BoatLocation.fromLocal(client, local);
 			boolean isInInstance = client.isInInstancedRegion();
+
 			DoubleSpriteTextData data = new DoubleSpriteTextData(lastDoubleSpriteText, lastDoubleItemId1, lastDoubleItemId2, isInInstance, location);
 			manager.storeEvent(data);
 		}
