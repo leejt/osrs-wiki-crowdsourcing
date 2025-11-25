@@ -13,6 +13,8 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Skill;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.events.WidgetLoaded;
@@ -69,6 +71,9 @@ public class CrowdsourcingPortTasks
 	private void onMenuOptionClicked(final MenuOptionClicked event)
 	{
 		final int identifier = event.getId();
+		// If jagex adds more notice boards we'll send null
+		// But for now it sends the notice board the player is at
+		currentNoticeboard = null;
 		if (NOTICEBOARDS.contains(identifier))
 		{
 			currentNoticeboard = identifier;
@@ -158,12 +163,16 @@ public class CrowdsourcingPortTasks
 
 	private void submitTasks()
 	{
-		if (currentNoticeboard == null)
+		if (client == null || client.getLocalPlayer() == null)
 		{
 			return;
 		}
+		// No need to use boat location as you can't interact with notice boards in a boat or instance
+		LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
+		WorldPoint location = WorldPoint.fromLocal(client, local);
 
 		PortTaskData data = new PortTaskData(
+			location,
 			client.getRealSkillLevel(Skill.SAILING),
 			currentNoticeboard,
 			Arrays.copyOf(currentTasks, currentTasks.length),
