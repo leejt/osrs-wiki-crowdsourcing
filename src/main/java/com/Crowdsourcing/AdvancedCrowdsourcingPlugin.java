@@ -14,6 +14,7 @@ import com.Crowdsourcing.npc_sighting.CrowdsourcingNpcSighting;
 import com.Crowdsourcing.npc_respawn.CrowdsourcingNpcRespawn;
 import com.Crowdsourcing.overhead_dialogue.CrowdsourcingOverheadDialogue;
 import com.Crowdsourcing.playerkit.CrowdsourcingPlayerkit;
+import com.Crowdsourcing.port_tasks.CrowdsourcingPortTasks;
 import com.Crowdsourcing.pottery.CrowdsourcingPottery;
 import com.Crowdsourcing.pyramid_plunder.CrowdsourcingPyramidPlunder;
 import com.Crowdsourcing.quest_log.CrowdsourcingQuestLog;
@@ -122,6 +123,9 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 	@Inject
 	private CrowdsourcingDoomOfMokhaiotl doomOfMokhaiotl;
 
+	@Inject
+	private CrowdsourcingPortTasks portTasks;
+
 	@Override
 	protected void startUp() throws Exception
 	{
@@ -146,6 +150,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.register(impling);
 		eventBus.register(stars);
 		eventBus.register(doomOfMokhaiotl);
+		eventBus.register(portTasks);
 
 		varbits.startUp();
 		experience.startUp();
@@ -177,6 +182,7 @@ public class AdvancedCrowdsourcingPlugin extends Plugin
 		eventBus.unregister(impling);
 		eventBus.unregister(stars);
 		eventBus.unregister(doomOfMokhaiotl);
+		eventBus.unregister(portTasks);
 
 		varbits.shutDown();
 		stars.reset();
