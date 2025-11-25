@@ -104,9 +104,6 @@ public class CrowdsourcingPortTasks
 		{
 			return;
 		}
-		lastOfferedTasks.clear();
-		lastOfferedTasks.addAll(offeredTasks);
-		offeredTasks.clear();
 		// Interface isn't ready on widget load and needs to be done later
 		clientThread.invokeLater(this::scanPortTaskBoard);
 	}
@@ -123,6 +120,10 @@ public class CrowdsourcingPortTasks
 		{
 			children.addAll(Arrays.asList(widget.getDynamicChildren()));
 		}
+
+		lastOfferedTasks.clear();
+		lastOfferedTasks.addAll(offeredTasks);
+		offeredTasks.clear();
 
 		for (Widget child : children)
 		{
