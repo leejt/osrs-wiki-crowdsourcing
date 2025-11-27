@@ -162,10 +162,10 @@ public class CrowdsourcingMessages
 	private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
 	private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
 
-	// Rusty Chest (Dognose)
-	private static final String RUSTY_CHEST_FAILURE = "You fail to picklock the chest.";
-	private static final String RUSTY_CHEST_SUCCESS = "You manage to unlock the chest.";
-	private static final String RUSTY_CHEST_TELEPORT = "You have activated a trap on the chest."; // The RUSTY_CHEST_FAILURE message is also sent when this occurs
+	// Cell door (Port Roberts)
+	private static final String CELL_DOOR_FAILURE = "You attempt to pick the lock on the cell door, but fail to do so.";
+	private static final String CELL_DOOR_SUCCESS = "You attempt to pick the lock on the cell door, and succeed in doing so.";
+
 
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
@@ -233,9 +233,8 @@ public class CrowdsourcingMessages
 			|| PICKLOCK_CHEST_SUCCESS.equals(message)
 			|| PICKLOCK_CHEST_FAIL.equals(message)
 			|| PICKLOCK_CHEST_TRAP.equals(message)
-			|| RUSTY_CHEST_FAILURE.equals(message)
-			|| RUSTY_CHEST_SUCCESS.equals(message)
-			|| RUSTY_CHEST_TELEPORT.equals(message))
+			|| CELL_DOOR_FAILURE.equals(message)
+			|| CELL_DOOR_SUCCESS.equals(message))
 		{
 			boolean hasLockpick = false;
 			boolean hasHairClip = false;
