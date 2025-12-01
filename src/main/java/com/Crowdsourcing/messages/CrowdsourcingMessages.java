@@ -157,10 +157,15 @@ public class CrowdsourcingMessages
 	private static final String LEAVES_TRAP_SUCCESS = "You safely jump across.";
 	private static final String LEAVES_TRAP_FAILURE = "You try to jump across but you slip and fall.";
 
-  // Hallowed Sepulchre coffins
-  private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
-  private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
-  private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
+	// Hallowed Sepulchre coffins
+	private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
+	private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
+	private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
+
+	// Cell door (Port Roberts)
+	private static final String CELL_DOOR_FAILURE = "You attempt to pick the lock on the cell door, but fail to do so.";
+	private static final String CELL_DOOR_SUCCESS = "You attempt to pick the lock on the cell door, and succeed in doing so.";
+
 
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
@@ -227,7 +232,9 @@ public class CrowdsourcingMessages
 			|| PICKLOCK_DOOR_TRAP.equals(message)
 			|| PICKLOCK_CHEST_SUCCESS.equals(message)
 			|| PICKLOCK_CHEST_FAIL.equals(message)
-			|| PICKLOCK_CHEST_TRAP.equals(message))
+			|| PICKLOCK_CHEST_TRAP.equals(message)
+			|| CELL_DOOR_FAILURE.equals(message)
+			|| CELL_DOOR_SUCCESS.equals(message))
 		{
 			boolean hasLockpick = false;
 			boolean hasHairClip = false;
@@ -333,27 +340,27 @@ public class CrowdsourcingMessages
 			return createSkillMap(Skill.AGILITY);
 		}
 
-    if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
-    {
-      boolean hasLockpick = false;
-      boolean hasStrangeOldLockpick = false;
-      ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
-      if (equipContainer != null)
-      {
-        final Item[] items = equipContainer.getItems();
-        for (Item item : items)
-        {
-          if (item.getId() == ItemID.LOCKPICK)
-            hasLockpick = true;
-          if (item.getId() == ItemID.STRANGE_OLD_LOCKPICK || item.getId() == ItemID.STRANGE_OLD_LOCKPICK_FULL)
-            hasStrangeOldLockpick = true;
-        }
-        HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
-        h.put("Lockpick", hasLockpick);
-        h.put("StrangeLockpick", hasStrangeOldLockpick);
-        return h;
-      }
-    }
+		if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
+		{
+		boolean hasLockpick = false;
+		boolean hasStrangeOldLockpick = false;
+		ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
+		if (equipContainer != null)
+		{
+			final Item[] items = equipContainer.getItems();
+			for (Item item : items)
+			{
+			if (item.getId() == ItemID.LOCKPICK)
+				hasLockpick = true;
+			if (item.getId() == ItemID.STRANGE_OLD_LOCKPICK || item.getId() == ItemID.STRANGE_OLD_LOCKPICK_FULL)
+				hasStrangeOldLockpick = true;
+			}
+			HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
+			h.put("Lockpick", hasLockpick);
+			h.put("StrangeLockpick", hasStrangeOldLockpick);
+			return h;
+		}
+		}
 
 		return null;
 	}
