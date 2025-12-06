@@ -50,6 +50,18 @@ public class LootMetadata
 		Map.entry(ItemID.RING_OF_WEALTH_I5, "charged (i)")
 	);
 
+	// https://oldschool.runescape.wiki/w/RuneScape:Varbit/4067
+	private static final Map<Integer, String> SLAYER_MASTERS = Map.of(
+		1, "Turael/Aya",
+		2, "Mazchna/Achtryn",
+		3, "Vannaka",
+		4, "Chaeldar",
+		5, "Duradel/Kuradal",
+		6, "Nieve/Steve",
+		7, "Krystilia",
+		8, "Konar quo Maten",
+		9, "Spria"
+	);
 	private static final int SLAYER_BOSS_TASK_ID = 98;
 
 	private final Client client;
@@ -60,6 +72,7 @@ public class LootMetadata
 	private final Map<String, Boolean> clueWarnings = new HashMap<>();
 	private String ringOfWealth;
 	private String slayerTask;
+	private String slayerMaster;
 
 	public LootMetadata(Client client)
 	{
@@ -115,7 +128,6 @@ public class LootMetadata
 				}
 			}
 		}
-		ringOfWealth = "none";
 	}
 
 	private void setSlayerTask()
@@ -151,6 +163,7 @@ public class LootMetadata
 			}
 
 			slayerTask = (String) client.getDBTableField(taskDBRow, DBTableID.SlayerTask.COL_NAME_UPPERCASE, 0)[0];
+			slayerMaster = SLAYER_MASTERS.get(client.getVarbitValue(VarbitID.SLAYER_MASTER));
 		}
 	}
 
@@ -163,6 +176,7 @@ public class LootMetadata
 			put("clueWarnings", clueWarnings);
 			put("ringOfWealth", ringOfWealth);
 			put("slayerTask", slayerTask);
+			put("slayerMaster", slayerMaster);
 		}};
 	}
 }
