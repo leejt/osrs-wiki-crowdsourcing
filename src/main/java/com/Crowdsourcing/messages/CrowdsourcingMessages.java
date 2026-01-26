@@ -63,6 +63,7 @@ public class CrowdsourcingMessages
 	private static final String ZOGRE_COFFIN_SUCCESS = "You unlock the coffin...";
 	private static final String ZOGRE_COFFIN_FAIL = "You fail to pick the lock - your fingers get numb from fumbling with the lock.";
 	private static final String ZOGRE_COFFIN_LOCKPICK_SNAPS = "Your lockpick snaps.";
+	private static final String ZOGRE_COFFIN_DISEASE = "Your clumsiness releases a disease ridden spore cloud.";
 
 	// Pickable doors (Yanille dungeon and Ross' door for example)
 	private static final String PICKLOCK_DOOR_SUCCESS = "You manage to pick the lock.";
@@ -157,15 +158,18 @@ public class CrowdsourcingMessages
 	private static final String LEAVES_TRAP_SUCCESS = "You safely jump across.";
 	private static final String LEAVES_TRAP_FAILURE = "You try to jump across but you slip and fall.";
 
-	// Hallowed Sepulchre coffins
-	private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
-	private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
-	private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
-
 	// Cell door (Port Roberts)
 	private static final String CELL_DOOR_FAILURE = "You attempt to pick the lock on the cell door, but fail to do so.";
 	private static final String CELL_DOOR_SUCCESS = "You attempt to pick the lock on the cell door, and succeed in doing so.";
 
+	// Slug Menace air, earth, fire, mind and water blank rune
+	private static final String BLANK_RUNE_SUCCESS = "You manage to shape the rune essence into the desired shape.";
+	private static final String BLANK_RUNE_FAILURE = "You attempt to craft the stone but fail, destroying the essence.";
+
+  // Hallowed Sepulchre coffins
+  private static final String SEPULCHRE_FAILURE = "You have been poisoned!";
+  private static final String SEPULCHRE_FAILURE_ANTIPOISON = "You trigger a trap on the chest which poisons you!";
+  private static final String SEPULCHRE_SUCCESS = "You push the coffin lid aside.";
 
 	private HashMap<String, Object> createSkillMap(Skill s)
 	{
@@ -224,10 +228,7 @@ public class CrowdsourcingMessages
 			return createSkillMap(Skill.THIEVING);
 		}
 
-		if (ZOGRE_COFFIN_SUCCESS.equals(message)
-			|| ZOGRE_COFFIN_FAIL.equals(message)
-			|| ZOGRE_COFFIN_LOCKPICK_SNAPS.equals(message)
-			|| PICKLOCK_DOOR_SUCCESS.equals(message)
+		if (PICKLOCK_DOOR_SUCCESS.equals(message)
 			|| PICKLOCK_DOOR_FAIL.equals(message)
 			|| PICKLOCK_DOOR_TRAP.equals(message)
 			|| PICKLOCK_CHEST_SUCCESS.equals(message)
@@ -253,6 +254,35 @@ public class CrowdsourcingMessages
 			HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
 			h.put("Lockpick", hasLockpick);
 			h.put("Hairclip", hasHairClip);
+			return h;
+		}
+
+		if (ZOGRE_COFFIN_SUCCESS.equals(message)
+			|| ZOGRE_COFFIN_FAIL.equals(message)
+			|| ZOGRE_COFFIN_LOCKPICK_SNAPS.equals(message)
+			|| ZOGRE_COFFIN_DISEASE.equals(message))
+		{
+			boolean hasLockpick = false;
+			boolean hasHairClip = false;
+			ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
+			if (equipContainer != null)
+			{
+				final Item[] items = equipContainer.getItems();
+				for (Item item : items)
+				{
+					if (item.getId() == ItemID.LOCKPICK)
+						hasLockpick = true;
+					else if (item.getId() == ItemID.KR_HAIRCLIP)
+						hasHairClip = true;
+				}
+			}
+			HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
+			h.put("Lockpick", hasLockpick);
+			h.put("Hairclip", hasHairClip);
+
+			Skill agility = Skill.AGILITY;
+			h.put(agility.getName(), client.getRealSkillLevel(agility));
+			h.put("B" + agility.getName(), client.getBoostedSkillLevel(agility));
 			return h;
 		}
 
@@ -340,27 +370,33 @@ public class CrowdsourcingMessages
 			return createSkillMap(Skill.AGILITY);
 		}
 
-		if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
+		if (BLANK_RUNE_SUCCESS.equals(message)
+			|| BLANK_RUNE_FAILURE.equals(message))
 		{
-		boolean hasLockpick = false;
-		boolean hasStrangeOldLockpick = false;
-		ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
-		if (equipContainer != null)
-		{
-			final Item[] items = equipContainer.getItems();
-			for (Item item : items)
-			{
-			if (item.getId() == ItemID.LOCKPICK)
-				hasLockpick = true;
-			if (item.getId() == ItemID.STRANGE_OLD_LOCKPICK || item.getId() == ItemID.STRANGE_OLD_LOCKPICK_FULL)
-				hasStrangeOldLockpick = true;
-			}
-			HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
-			h.put("Lockpick", hasLockpick);
-			h.put("StrangeLockpick", hasStrangeOldLockpick);
-			return h;
+			return createSkillMap(Skill.CRAFTING);
 		}
-		}
+
+    if (SEPULCHRE_FAILURE.equals(message) || SEPULCHRE_SUCCESS.equals(message) || SEPULCHRE_FAILURE_ANTIPOISON.equals(message))
+    {
+      boolean hasLockpick = false;
+      boolean hasStrangeOldLockpick = false;
+      ItemContainer equipContainer = client.getItemContainer(InventoryID.INV);
+      if (equipContainer != null)
+      {
+        final Item[] items = equipContainer.getItems();
+        for (Item item : items)
+        {
+          if (item.getId() == ItemID.LOCKPICK)
+            hasLockpick = true;
+          if (item.getId() == ItemID.STRANGE_OLD_LOCKPICK || item.getId() == ItemID.STRANGE_OLD_LOCKPICK_FULL)
+            hasStrangeOldLockpick = true;
+        }
+        HashMap<String, Object> h = createSkillMap(Skill.THIEVING);
+        h.put("Lockpick", hasLockpick);
+        h.put("StrangeLockpick", hasStrangeOldLockpick);
+        return h;
+      }
+    }
 
 		return null;
 	}
