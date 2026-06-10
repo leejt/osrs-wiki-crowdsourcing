@@ -402,7 +402,7 @@ public class CrowdsourcingStars
 
 	private void checkMissingStar()
 	{
-		if (trackedStar != null || client.getPlane() != 0)
+		if (trackedStar != null || client.getPlane() != 0 || client.getLocalPlayer() == null)
 		{
 			return;
 		}

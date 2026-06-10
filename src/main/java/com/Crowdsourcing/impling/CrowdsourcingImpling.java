@@ -45,6 +45,9 @@ public class CrowdsourcingImpling {
     @Subscribe
     public void onGameTick(GameTick event)
     {
+        if (client.getLocalPlayer() == null) {
+            return;
+        }
         lastPlayerLocation = client.getLocalPlayer().getWorldLocation();
     }
 

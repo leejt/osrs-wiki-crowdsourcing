@@ -184,6 +184,9 @@ public class CrowdsourcingVarbits
 					 */
 					clientThread.invokeLater(() ->
 					{
+						if (client.getLocalPlayer() == null) {
+							return;
+						}
 						LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
 						WorldPoint location = BoatLocation.fromLocal(client, local);
 						boolean isInInstance = client.isInInstancedRegion();
@@ -203,6 +206,9 @@ public class CrowdsourcingVarbits
 		if (oldValue != newValue && tick > initializingTick)
 		{
 			clientThread.invokeLater(() -> {
+				if (client.getLocalPlayer() == null) {
+					return;
+				}
 				LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
 				WorldPoint location = BoatLocation.fromLocal(client, local);
 				boolean isInInstance = client.isInInstancedRegion();

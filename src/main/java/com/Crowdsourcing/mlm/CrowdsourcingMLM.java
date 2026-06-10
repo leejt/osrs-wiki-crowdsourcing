@@ -77,6 +77,10 @@ public class CrowdsourcingMLM
 	@Subscribe
 	public void onGameTick(GameTick gameTick)
 	{
+		if (client.getLocalPlayer() == null) {
+			return;
+		}
+
 		if (client.getLocalPlayer().getWorldLocation().getRegionID() != MOTHERLODE_MINE_REGION_ID)
 		{
 			return;

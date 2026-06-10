@@ -71,8 +71,9 @@ public class MonsterExamine
             String aggressive = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_AGGRESSIVE).getText();
             String defensive = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_DEFENSIVE).getText();
             String other = client.getWidget(InterfaceID.DreamMonsterStat.MONSTER_OTHER).getText();
+            String username = client.getLocalPlayer() == null ? "" : client.getLocalPlayer().getName();
             httpClient.submitToAPI(
-                    new MonsterExamineData(lastId, name, stats ,aggressive, defensive, other, client.getLocalPlayer().getName()));
+                    new MonsterExamineData(lastId, name, stats ,aggressive, defensive, other, username));
         }
     }
 

@@ -51,6 +51,10 @@ public class LootMetadata
 	{
 		Map<String, Integer> location = new HashMap<>();
 
+		if (client.getLocalPlayer() == null) {
+			return location;
+		}
+
 		LocalPoint local = LocalPoint.fromWorld(client, client.getLocalPlayer().getWorldLocation());
 		WorldPoint boatLocation = BoatLocation.fromLocal(client, local);
 		if (boatLocation != null)

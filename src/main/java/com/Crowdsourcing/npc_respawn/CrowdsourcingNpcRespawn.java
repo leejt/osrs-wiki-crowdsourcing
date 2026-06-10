@@ -45,6 +45,9 @@ public class CrowdsourcingNpcRespawn {
     @Subscribe
     public void onGameTick(GameTick event)
     {
+        if (client.getLocalPlayer() == null) {
+            return;
+        }
         lastPlayerLocation = client.getLocalPlayer().getWorldLocation();
     }
 
@@ -83,6 +86,10 @@ public class CrowdsourcingNpcRespawn {
         final NPC npc = npcDespawned.getNpc();
         int index = npc.getIndex();
         if (seenNpcs.contains(index)) {
+            return;
+        }
+
+        if (client.getLocalPlayer() == null) {
             return;
         }
 

@@ -50,7 +50,7 @@ public class CrowdsourcingPlayerkit
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged itemContainerChanged)
 	{
-		if (itemContainerChanged.getItemContainer() != client.getItemContainer(InventoryID.WORN))
+		if (itemContainerChanged.getItemContainer() != client.getItemContainer(InventoryID.WORN) || client.getLocalPlayer() == null)
 		{
 			return;
 		}

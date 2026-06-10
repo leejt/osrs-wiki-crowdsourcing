@@ -85,7 +85,7 @@ public class CrowdsourcingPyramidPlunder
 	@Subscribe
 	public void onVarbitChanged(VarbitChanged varbitChanged)
 	{
-		if (client == null)
+		if (client == null || client.getLocalPlayer() == null)
 			return;
 		// Check each varb
 		for (Integer varbIndex : varbsToTrack)
