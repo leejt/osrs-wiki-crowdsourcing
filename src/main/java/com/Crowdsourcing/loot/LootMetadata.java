@@ -144,6 +144,21 @@ public class LootMetadata
 		return slayerMasterID;
 	}
 
+	private static int getSlayerModifierID(Client client)
+	{
+		return client.getVarbitValue(VarbitID.SLAYER_MODIFIER_ID);
+	}
+
+	private static int getSlayerModifierValue(Client client)
+	{
+		return client.getVarbitValue(VarbitID.SLAYER_MODIFIER_VALUE);
+	}
+
+	private static int getSlayerModifierNegative(Client client)
+	{
+		return client.getVarbitValue(VarbitID.SLAYER_MODIFIER_NEGATIVE);
+	}
+
 	private static List<String> getWorldTypes(Client client)
 	{
 		List<String> worldTypes = new ArrayList<>();
@@ -223,12 +238,25 @@ public class LootMetadata
 			put("slayerTaskID", getSlayerTaskID(client));
 			put("slayerBossTaskID", getSlayerBossTaskID(client));
 			put("slayerTaskRemainingCount", getSlayerTaskRemainingCount(client));
-			put("slayerMasterID", getSlayerMasterID(client));
+//			put("slayerMasterID", getSlayerMasterID(client));
+//			put("slayerModifierID", getSlayerModifierID(client));
+//			put("slayerModifierValue", getSlayerModifierValue(client));
+//			put("slayerModifierNegative",  getSlayerModifierNegative(client));
 			put("worldNumber", getWorldNumber(client));
 			put("lootTrackerMetadata", lootTrackerMetadata != null ? lootTrackerMetadata : -1);
 			put("portTaskIDs", getPortTaskIDs(client));
 			put("portTaskCounts", getPortTaskCounts(client));
 		}};
+
+		int slayerMasterId = getSlayerMasterID(client);
+		metadata.put("slayerMasterID", slayerMasterId);
+		if (slayerMasterId == 10)
+		{
+			int negative = getSlayerModifierNegative(client);
+			int value = negative == 1 ? -getSlayerModifierValue(client) : getSlayerModifierValue(client);
+			metadata.put("slayerModifierValue", value);
+			metadata.put("slayerModifierID", getSlayerModifierID(client));
+		}
 
 		List<String> worldTypes = getWorldTypes(client);
 		metadata.put("worldTypes", worldTypes);
