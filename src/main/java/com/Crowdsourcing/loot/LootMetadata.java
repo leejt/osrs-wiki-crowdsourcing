@@ -144,19 +144,19 @@ public class LootMetadata
 		return slayerMasterID;
 	}
 
+	// see: https://oldschool.runescape.wiki/w/RuneScape:Varbit/15776
 	private static int getSlayerModifierID(Client client)
 	{
 		return client.getVarbitValue(VarbitID.SLAYER_MODIFIER_ID);
 	}
 
+	// see: https://oldschool.runescape.wiki/w/RuneScape:Varbit/15777
+	// and https://oldschool.runescape.wiki/w/RuneScape:Varbit/15778
 	private static int getSlayerModifierValue(Client client)
 	{
-		return client.getVarbitValue(VarbitID.SLAYER_MODIFIER_VALUE);
-	}
-
-	private static int getSlayerModifierNegative(Client client)
-	{
-		return client.getVarbitValue(VarbitID.SLAYER_MODIFIER_NEGATIVE);
+		int negative = client.getVarbitValue(VarbitID.SLAYER_MODIFIER_NEGATIVE);
+		int baseVal = client.getVarbitValue(VarbitID.SLAYER_MODIFIER_VALUE);
+		return negative == 1 ? -baseVal : baseVal;
 	}
 
 	private static List<String> getWorldTypes(Client client)
@@ -238,10 +238,6 @@ public class LootMetadata
 			put("slayerTaskID", getSlayerTaskID(client));
 			put("slayerBossTaskID", getSlayerBossTaskID(client));
 			put("slayerTaskRemainingCount", getSlayerTaskRemainingCount(client));
-//			put("slayerMasterID", getSlayerMasterID(client));
-//			put("slayerModifierID", getSlayerModifierID(client));
-//			put("slayerModifierValue", getSlayerModifierValue(client));
-//			put("slayerModifierNegative",  getSlayerModifierNegative(client));
 			put("worldNumber", getWorldNumber(client));
 			put("lootTrackerMetadata", lootTrackerMetadata != null ? lootTrackerMetadata : -1);
 			put("portTaskIDs", getPortTaskIDs(client));
@@ -252,9 +248,7 @@ public class LootMetadata
 		metadata.put("slayerMasterID", slayerMasterId);
 		if (slayerMasterId == 10)
 		{
-			int negative = getSlayerModifierNegative(client);
-			int value = negative == 1 ? -getSlayerModifierValue(client) : getSlayerModifierValue(client);
-			metadata.put("slayerModifierValue", value);
+			metadata.put("slayerModifierValue", getSlayerModifierValue(client));
 			metadata.put("slayerModifierID", getSlayerModifierID(client));
 		}
 
