@@ -144,6 +144,21 @@ public class LootMetadata
 		return slayerMasterID;
 	}
 
+	// see: https://oldschool.runescape.wiki/w/RuneScape:Varbit/15776
+	private static int getSlayerModifierID(Client client)
+	{
+		return client.getVarbitValue(VarbitID.SLAYER_MODIFIER_ID);
+	}
+
+	// see: https://oldschool.runescape.wiki/w/RuneScape:Varbit/15777
+	// and https://oldschool.runescape.wiki/w/RuneScape:Varbit/15778
+	private static int getSlayerModifierValue(Client client)
+	{
+		int negative = client.getVarbitValue(VarbitID.SLAYER_MODIFIER_NEGATIVE);
+		int baseVal = client.getVarbitValue(VarbitID.SLAYER_MODIFIER_VALUE);
+		return negative == 1 ? -baseVal : baseVal;
+	}
+
 	private static List<String> getWorldTypes(Client client)
 	{
 		List<String> worldTypes = new ArrayList<>();
@@ -223,12 +238,19 @@ public class LootMetadata
 			put("slayerTaskID", getSlayerTaskID(client));
 			put("slayerBossTaskID", getSlayerBossTaskID(client));
 			put("slayerTaskRemainingCount", getSlayerTaskRemainingCount(client));
-			put("slayerMasterID", getSlayerMasterID(client));
 			put("worldNumber", getWorldNumber(client));
 			put("lootTrackerMetadata", lootTrackerMetadata != null ? lootTrackerMetadata : -1);
 			put("portTaskIDs", getPortTaskIDs(client));
 			put("portTaskCounts", getPortTaskCounts(client));
 		}};
+
+		int slayerMasterId = getSlayerMasterID(client);
+		metadata.put("slayerMasterID", slayerMasterId);
+		if (slayerMasterId == 10)
+		{
+			metadata.put("slayerModifierValue", getSlayerModifierValue(client));
+			metadata.put("slayerModifierID", getSlayerModifierID(client));
+		}
 
 		List<String> worldTypes = getWorldTypes(client);
 		metadata.put("worldTypes", worldTypes);
